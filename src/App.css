@@ -13,3 +13,16 @@
     justify-content:center ;
     align-items: center;
 }
+
+.client-pet-form {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+input,span {
+    margin-bottom: 10px;
+}
