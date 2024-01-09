@@ -26,3 +26,14 @@
 input,span {
     margin-bottom: 10px;
 }
+
+#modal {
+    -webkit-box-shadow: 0px 2px 12px 2px #000000; 
+box-shadow: 0px 2px 12px 2px #000000;
+    
+}
+
+#modal::backdrop {
+    background-color: rgba(0,0,0,0.10);
+    filter: drop-shadow();
+}
