@@ -1,25 +1,33 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from 'react-hook-form';
-
-
+import{ useState} from 'react'
+import visibleIcon from '../assets/visible.png';
+import HideIcon from '../assets/hide.png';  
 
 
 
 const LoginComponent = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors },reset } = useForm()
+  const { register, handleSubmit, formState: { errors } } = useForm()
   const onSubmit = handleSubmit((data) => {
     console.log(data);
-    reset();
-    navigate("/TreatmentComponent")
+    if(data.password === 'Dayronglez01*' ) {
+
+      navigate("/ReceptionComponent")
+    }
+    else {
+      alert('no puedes acceder')
+    }
   })
+
+  const [showPassword, setShowPassword] = useState(false);
   
   return (
     <>
       <main className='main-container'>
         
         <form onSubmit={onSubmit} className='form-container'>
-          <input placeholder='Input your username' type="text" name="name" id="name" {...register('username', {
+          <input  placeholder='Input your username' type="text" name="name" id="name" {...register('username', {
             required: {
               value: true,
               message: 'Username is required'
@@ -32,12 +40,16 @@ const LoginComponent = () => {
               value: 30,
               message: 'Maximum 30 characters int the username field'
             }
-          })} autoComplete='off' className=" " />
+          })} autoComplete='off' className=" h-8 w-52 rounded-md border-[1px]" />
 
 
           {errors.username && <span>{errors.username.message}</span>}
 
-          <input placeholder='Input your password' type="password" name="password" id="password" {...register('password', {
+          <button className=" border-none bg-transparent" onClick={() => setShowPassword(!showPassword)}>
+            <img src={showPassword ? visibleIcon : HideIcon} alt={showPassword ? 'visibleIcon' : 'HideIcon'}
+             className=" h-6 w-6 absolute pl-14 pt-2" />
+          </button>
+          <input className=" h-8 w-52 rounded-md border-[1px] focus:placeholder-orange-600" placeholder='Input your password' type={showPassword ? 'text' : 'password'} name="password" id="password" {...register('password', {
             required: {
               value: true,
               message: 'Password is required',
