@@ -132,7 +132,7 @@ const ReceptionComponent = () => {
             <button type='submit'>Enviar</button>
           </div>
         </div>
-        <div id='modal' className=' border-none w-[600px] rounded-md flex-col hidden z-50 absolute'>
+        <div id='modal' className=' border-none w-[800px] rounded-md flex-col hidden z-50 absolute'>
           <div>
             <h2>Motivo de llegada</h2>
             <ul className=' flex flex-row list-none gap-2 pl-0'>
@@ -145,6 +145,11 @@ const ReceptionComponent = () => {
               <li>
                 <label>
                   <input type="checkbox" name="Continuación" id="Continuación"{...register('Continuación')} />Continuación
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input type="checkbox" name="Planificada" id="Planificada"{...register('Planificada')} />Planificada
                 </label>
               </li>
               <li>
