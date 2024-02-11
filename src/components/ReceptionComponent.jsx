@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { useNavigate } from "react-router-dom";
-
+import axios from 'axios';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -13,59 +13,112 @@ import Select from 'react-select'
 
 const ReceptionComponent = () => {
   const [formData, setFormData] = useState([]);
-
-
+  const [selectedCheckbox, setSelectedCheckbox] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, reset, getValues, control } = useForm()
+  useEffect(() => {
+    if (isSubmitting && selectedCheckbox !== null) {
+      const formData = getValues();
+      formData.consulta = selectedCheckbox;
+      onSubmit(formData);
+      setIsSubmitting(false);
+    }
+  }, [selectedCheckbox, isSubmitting, getValues]);
 
+  const handleCheckboxChange = (e) => {
+    if (e.target.checked) {
+      setSelectedCheckbox(e.target.name);
+    } else if (selectedCheckbox === e.target.name) {
+      setSelectedCheckbox(null);
+    }
+  };
+  
 
   const handleUrgencyChange = (e) => {
+    // Selecciona todos los inputs que no sean de tipo checkbox
+    const inputs = document.querySelectorAll('input:not([type="checkbox"])');
+    const pet_h2 = document.querySelector('#pet_h2')
+    const observation_container = document.querySelector('#observation_container')
+    const specializedSelect = document.querySelector('#specialized')
+  
     if (e.target.checked) {
-      // Selecciona todos los inputs que no sean de tipo checkbox
-      const inputs = document.querySelectorAll('input:not([type="checkbox"])');
-      const pet_h2 = document.querySelector('#pet_h2')
-      const observation_container = document.querySelector('#observation_container')
-      observation_container.classList.remove('hidden')
+      setSelectedCheckbox(e.target.name);
+  
       pet_h2.classList.add('hidden')
+      observation_container.classList.remove('hidden')
+      specializedSelect.classList.add('hidden')
+  
       // Agrega la clase 'hidden' a todos los inputs seleccionados
       inputs.forEach(input => {
         input.classList.add('hidden');
-        input.required = false;
       });
-    }
-    else {
-      // Selecciona todos los inputs que no sean de tipo checkbox
-      const pet_h2 = document.querySelector('#pet_h2')
-      const observation_container = document.querySelector('#observation_container')
-      observation_container.classList.add('hidden')
+  
+      // Resetea los campos del formulario de la mascota
+      reset({
+        nombre_mascota: '',
+        edad: '',
+        color: '',
+        sexo: '',
+        raza: '',
+        especie: '',
+      });
+    } else {
+      setSelectedCheckbox(null); // Si "Urgencia" se deselecciona, borra el valor de selectedCheckbox
+  
       pet_h2.classList.remove('hidden')
-      const inputs = document.querySelectorAll('input:not([type="checkbox"])');
-
-      // Remueve la clase 'hidden' a todos los inputs seleccionados
+      observation_container.classList.add('hidden')
+      specializedSelect.classList.remove('hidden')
+  
+      // Remueve la clase 'hidden' de todos los inputs seleccionados
       inputs.forEach(input => {
         input.classList.remove('hidden');
-        input.required = true;
       });
     }
-  }
-
-  const onSubmit = (data) => {
-    // setFormData(prevData => [...prevData, data]);
-    // console.log(data)
-    reset()
   };
+  
+
+  // eslint-disable-next-line no-unused-vars
+  // const onSubmit = (formData) => {
+
+  //   console.log('la form data es');
+  //   console.log(formData);
+  //   // reset()
+  // };
+
+  async function onSubmit(formData) {
+    // try {
+    //   const response = await axios.post('/user?ID=12345', {
+    //     formData
+    //   });
+    //   console.log(response);
+    // } catch (error) {
+    //   console.error(error);
+    // }
+    // Crea un nuevo objeto para enviar, que incluye todos los datos del formulario excepto los checkboxes
+    const dataToSend = Object.keys(formData).reduce((obj, key) => {
+      if (!['Consulta', 'Continuación', 'Planificada', 'Emergencia', 'Urgencia'].includes(key)) {
+        obj[key] = formData[key];
+      }
+      return obj;
+    }, {});
+
+
+    dataToSend.consulta = selectedCheckbox;
+    console.log(dataToSend);
+  }
 
   useEffect(() => {
     const modal = document.querySelector('#modal');
     const btnOpenModal = document.querySelector("#btn-open-modal");
     const btnCloseModal = document.querySelector('#btn-close-modal');
 
-    btnOpenModal?.addEventListener('click', () => {
+    btnOpenModal.addEventListener('click', () => {
       modal.classList.remove('hidden')
     });
 
-    btnCloseModal?.addEventListener('click', () => {
+    btnCloseModal.addEventListener('click', () => {
       modal.classList.add('hidden')
     });
   }, []);
@@ -73,6 +126,7 @@ const ReceptionComponent = () => {
   const handleAccept = () => {
     const data = getValues(); // Obtiene los valores actuales del formulario
     setFormData(prevData => [...prevData, data]);
+    // eslint-disable-next-line no-undef
     modal.classList.add('hidden')
 
 
@@ -85,10 +139,10 @@ const ReceptionComponent = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className='client-pet-form flex flex-col'>
-        <div className=' flex flex-col '>
+      <form onSubmit={handleSubmit(onSubmit)} className='client-pet-form flex '>
+        <div className=' flex flex-col' id='client_form'>
           <h2>Cliente</h2>
-          <input placeholder='Nombre del cliente' type="text" name="client_name" id="client_name"  {...register('client_name', {
+          <input placeholder='Nombre del cliente' type="text" name="nombre_tutor" id="nombre_tutor"  {...register('nombre_tutor', {
             required: {
               value: true,
               message: 'Nombre del cliente es un campo requerido'
@@ -106,9 +160,9 @@ const ReceptionComponent = () => {
             }
           })} />
 
-          {errors.client_name && <span>{errors.client_name.message}</span>}
+          {errors.nombre_tutor && <span>{errors.nombre_tutor.message}</span>}
 
-          <input placeholder='CI del cliente' type="text" name="DNI" id="DNI"  {...register('DNI', {
+          <input placeholder='CI del cliente' type="text" name="dni" id="dni"  {...register('dni', {
             required: {
               value: true,
               message: 'CI es un campo requerido'
@@ -116,50 +170,50 @@ const ReceptionComponent = () => {
             autoComplete: 'off'
           })} />
 
-          {errors.DNI && <span>{errors.DNI.message}</span>}
+          {errors.dni && <span>{errors.dni.message}</span>}
 
-          <input placeholder='Número de teléfono' type="text" name="phone" id="phone"  {...register('phone', {
+          <input placeholder='Número de teléfono' type="text" name="telefono" id="telefono"  {...register('telefono', {
             required: {
               value: true,
               message: 'EL número de teléfono es un campo requerido'
             }
           })} />
 
-          {errors.phone && <span>{errors.phone.message}</span>}
+          {errors.telefono && <span>{errors.telefono.message}</span>}
 
           <div className=' flex flex-row w-full justify-center gap-2'>
             <button type='button' id='btn-open-modal'>Añadir Mascota</button>
             <button type='submit'>Enviar</button>
           </div>
         </div>
-        <div id='modal' className=' border-none w-[800px] rounded-md flex-col hidden z-50 absolute'>
+        <div id='modal' className=' border-none w-[800px] rounded-md flex-col hidden z-20'>
           <div>
             <h2>Motivo de llegada</h2>
             <ul className=' flex flex-row list-none gap-2 pl-0'>
 
               <li>
                 <label>
-                  <input type="checkbox" name="Consulta" id="Consulta"{...register('Consulta')} />Consulta
+                  <input type="checkbox" name='Consulta' {...register('Consulta')} onChange={handleCheckboxChange} />Consulta
                 </label>
               </li>
               <li>
                 <label>
-                  <input type="checkbox" name="Continuación" id="Continuación"{...register('Continuación')} />Continuación
+                  <input type="checkbox" name='Continuación' {...register('Continuación')} onChange={handleCheckboxChange} />Continuación
                 </label>
               </li>
               <li>
                 <label>
-                  <input type="checkbox" name="Planificada" id="Planificada"{...register('Planificada')} />Planificada
+                  <input type="checkbox" name='Planificada' {...register('Planificada')} onChange={handleCheckboxChange} />Planificada
                 </label>
               </li>
               <li>
                 <label>
-                  <input type="checkbox" name="Emergencia" id="Emergencia"{...register('Emergencia')} />Emergencia
+                  <input type="checkbox" name='Emergencia' {...register('Emergencia')} onChange={handleCheckboxChange} />Emergencia
                 </label>
               </li>
               <li>
                 <label>
-                  <input type="checkbox" name="urgency" id="urgency"{...register('urgency')} onChange={handleUrgencyChange} />Urgencia
+                  <input type="checkbox" name="Urgencia" id="Urgencia"{...register('Urgencia')} onChange={handleUrgencyChange} />Urgencia
                 </label>
               </li>
               <Controller
@@ -186,6 +240,19 @@ const ReceptionComponent = () => {
                     ]}
                     onChange={option => field.onChange(option)}
                     placeholder='Especializadas'
+                    isSearchable
+                    isClearable
+                    noOptionsMessage={() => 'No existe esa opción'}
+                    styles={{
+                      clearIndicator: (baseStyles) => ({
+                        ...baseStyles,
+                        color: 'red',
+
+                      }),
+
+                    }}
+                    className=' w-[200px]'
+                    id='specialized'
                   />
                 )}
               />
@@ -193,88 +260,78 @@ const ReceptionComponent = () => {
           </div>
           <div className='  flex-col hidden ' id='observation_container'>
             <h2>Observación</h2>
-            <textarea name="observation_text" id="observation_text" cols="58" rows="6" {...register('observation_text')}></textarea>
+            <textarea name="observation_text" id="observation_text" cols="106" rows="6" {...register('observation_text')}></textarea>
           </div>
           <div className=' flex flex-col'>
 
             <h2 id='pet_h2'>Mascota</h2>
-            <input placeholder='Nombre de la mascota' type="text" name="pet_name" id="pet_name"   {...register('pet_name', {
-              required: {
+            <input placeholder='Nombre de la mascota' type="text" name="nombre_mascota" id="nombre_mascota"   {...register('nombre_mascota', {
+              required: selectedCheckbox!=='Urgencia' ? {
                 value: true,
                 message: 'El nombre de la mascota es un campo requerido'
-              }
+              } : false
             })} />
-            {errors.pet_name && <span>{errors.pet_name.message}</span>}
+            {errors.nombre_mascota && <span>{errors.nombre_mascota.message}</span>}
 
-            <input placeholder='Edad' type="text" name="age" id="age"   {...register('age', {
+            <input placeholder='Edad' type="text" name="edad" id="edad"   {...register('edad', {
               autoComplete: {
                 value: 'off'
               },
-              required: {
+              required:selectedCheckbox!=='Urgencia' ?  {
                 value: true,
                 message: 'La edad es un campo requerido'
-              }
+              } : false
             })} />
 
-            {errors.age && <span>{errors.age.message}</span>}
+            {errors.edad && <span>{errors.edad.message}</span>}
 
             <input placeholder='Color' type="text" name="color" id="color"   {...register('color', {
               autoComplete: {
                 value: 'off'
               },
-              required: {
+              required:selectedCheckbox!=='Urgencia' ?  {
                 value: true,
                 message: 'El color es un campo requerido'
-              }
+              } : false
             })} />
 
             {errors.color && <span>{errors.color.message}</span>}
 
-
-            <input placeholder='Peso' type="number" name="weight" id="weight"  {...register('weight', {
-              required: {
-                value: true,
-                message: "El peso es un campo requerido"
-              }
-            })} />
-
-            {errors.weight && <span>{errors.weight.message}</span>}
-
-            <input placeholder='Sexo' type="text" name="sex" id="sex"   {...register('sex', {
+            <input placeholder='Sexo' type="text" name="sexo" id="sexo"   {...register('sexo', {
               autoComplete: {
                 value: 'off'
               },
-              required: {
+              required:selectedCheckbox!=='Urgencia' ?  {
                 value: true,
                 message: 'EL sexo es un campo requerido'
-              }
+              } : false
             })} />
 
-            {errors.sex && <span>{errors.sex.message}</span>}
+            {errors.sexo && <span>{errors.sexo.message}</span>}
 
-            <input placeholder='Raza' type="text" name="race" id="race"   {...register('race', {
+            <input placeholder='Raza' type="text" name="raza" id="raza"   {...register('raza', {
               autoComplete: {
                 value: 'off'
               },
-              required: {
+              required:selectedCheckbox!=='Urgencia' ?  {
                 value: true,
                 message: 'La raza es un campo requerido'
-              }
+              } : false
             })} />
 
-            {errors.race && <span>{errors.race.message}</span>}
+            {errors.raza && <span>{errors.raza.message}</span>}
 
-            <input placeholder='Especie' type="text" name="species" id="species"   {...register('species', {
+            <input placeholder='Especie' type="text" name="especie" id="especie"   {...register('especie', {
               autoComplete: {
                 value: 'off'
               },
-              required: {
+              required:selectedCheckbox!=='Urgencia' ?  {
                 value: true,
                 message: 'La especie es un campo requerido'
-              }
+              } : false
             })} />
 
-            {errors.species && <span>{errors.species.message}</span>}
+            {errors.especie && <span>{errors.especie.message}</span>}
           </div>
           <div className=' flex flex-row my-4'>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -283,7 +340,7 @@ const ReceptionComponent = () => {
                 control={control}
                 render={({ field }) => (
                   <DatePicker
-                    label="Controlled picker"
+                    label="Fecha"
                     value={field.value}
                     onChange={(date) => field.onChange(date)}
                   />
@@ -294,7 +351,7 @@ const ReceptionComponent = () => {
                 control={control}
                 render={({ field }) => (
                   <TimePicker
-                    label="With Time Clock"
+                    label="Hora"
                     viewRenderers={{
                       hours: renderTimeViewClock,
                       minutes: renderTimeViewClock,
@@ -321,7 +378,6 @@ const ReceptionComponent = () => {
             <h2>Datos de  {data.pet_name}</h2>
             <p>Nombre de la mascota: {data.pet_name} </p>
             <p>Raza: {data.race}</p>
-            <p>Peso: {data.weight} Kg</p>
           </div>
         ))}
 
