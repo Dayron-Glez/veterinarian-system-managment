@@ -57,7 +57,7 @@ const data = [
 const TreatmentPage = () => {
     const CharStyle = {margin: 'auto'}
     const date = dayjs();
-   
+    
     
     return (
     <>  
