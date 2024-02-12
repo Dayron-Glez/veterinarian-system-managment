@@ -3,6 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -11,7 +12,8 @@ import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import Select from 'react-select'
 
-const ReceptionComponent = () => {
+const ReceptionPage = () => {
+  const date = dayjs()
   const [formData, setFormData] = useState([]);
   const [selectedCheckbox, setSelectedCheckbox] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -88,25 +90,26 @@ const ReceptionComponent = () => {
   // };
 
   async function onSubmit(formData) {
-    // try {
-    //   const response = await axios.post('/user?ID=12345', {
-    //     formData
-    //   });
-    //   console.log(response);
-    // } catch (error) {
-    //   console.error(error);
-    // }
-    // Crea un nuevo objeto para enviar, que incluye todos los datos del formulario excepto los checkboxes
+    
     const dataToSend = Object.keys(formData).reduce((obj, key) => {
       if (!['Consulta', 'Continuación', 'Planificada', 'Emergencia', 'Urgencia'].includes(key)) {
         obj[key] = formData[key];
       }
       return obj;
     }, {});
-
-
+    
+    
     dataToSend.consulta = selectedCheckbox;
     console.log(dataToSend);
+    try {
+      const response = await axios.post('https://g8k31qc7-8000.use.devtunnels.ms/recepcion/registrar/', {
+        dataToSend
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+    reset()
   }
 
   useEffect(() => {
@@ -251,6 +254,7 @@ const ReceptionComponent = () => {
                       }),
 
                     }}
+                    isMulti
                     className=' w-[200px]'
                     id='specialized'
                   />
@@ -341,7 +345,7 @@ const ReceptionComponent = () => {
                 render={({ field }) => (
                   <DatePicker
                     label="Fecha"
-                    value={field.value}
+                    value={date}
                     onChange={(date) => field.onChange(date)}
                   />
                 )}
@@ -357,7 +361,7 @@ const ReceptionComponent = () => {
                       minutes: renderTimeViewClock,
                       seconds: renderTimeViewClock,
                     }}
-                    value={field.value}
+                    value={date}
                     onChange={(time) => field.onChange(time)}
                   />
                 )}
@@ -387,4 +391,4 @@ const ReceptionComponent = () => {
   )
 }
 
-export default ReceptionComponent
+export default ReceptionPage

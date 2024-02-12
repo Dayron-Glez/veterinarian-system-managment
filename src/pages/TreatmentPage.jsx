@@ -8,7 +8,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import SystemDeseaseComponent from './SystemDeseaseComponent';
+import SystemDeseaseComponent from '../components/SystemDeseaseComponent';
 
 const data = [
   {
@@ -54,14 +54,15 @@ const data = [
     amt: 2100,
   },
 ];
-const TreatmentComponent = () => {
+const TreatmentPage = () => {
     const CharStyle = {margin: 'auto'}
-    const defaultValue = dayjs('2022-04-17T15:30');
+    const date = dayjs();
+   
     
     return (
     <>  
     <LocalizationProvider dateAdapter={AdapterDayjs} style={CharStyle}>
-      <DatePicker />
+      <DatePicker  value={date} className=' hover:border-red-500'/>
     
       
       <TimePicker
@@ -72,6 +73,7 @@ const TreatmentComponent = () => {
             minutes: renderTimeViewClock,
             seconds: renderTimeViewClock,
           }}
+          value={date}
         />
     
      
@@ -107,4 +109,4 @@ const TreatmentComponent = () => {
     )
 }
 
-export default TreatmentComponent
+export default TreatmentPage

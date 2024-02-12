@@ -6,14 +6,14 @@ import HideIcon from '../assets/hide.png';
 
 
 
-const LoginComponent = () => {
+const LoginPage = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm()
   const onSubmit = handleSubmit((data) => {
     console.log(data);
     if (data.password === 'Dayronglez01*') {
 
-      navigate("/ReceptionComponent")
+      navigate("/ReceptionPage")
     }
     else {
       alert('no puedes acceder')
@@ -70,4 +70,4 @@ const LoginComponent = () => {
   )
 }
 
-export default LoginComponent
+export default LoginPage

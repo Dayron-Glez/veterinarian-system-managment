@@ -1,20 +1,20 @@
 
 import './App.css'
 import { Routes, Route } from "react-router-dom";
-import ReceptionComponent from './components/ReceptionComponent';
-import LoginComponent from './components/LoginComponent';
-import DoctorComponent from './components/DoctorComponent';
-import TreatmentComponent from './components/TreatmentComponent';
+import ReceptionPage from './pages/ReceptionPage';
+import LoginPage from './pages/LoginPage';
+import DoctorPage from './pages/DoctorPage';
+import TreatmentPage from './pages/TreatmentPage';
 function App() {
 
 
   return (
     <>
       <Routes>
-        <Route path="/" element={<LoginComponent />} />
-        <Route path="/ReceptionComponent" element={<ReceptionComponent />} />
-        <Route path="/DoctorComponent" element={<DoctorComponent />} />
-        <Route path="/TreatmentComponent" element={<TreatmentComponent />} />
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/ReceptionPage" element={<ReceptionPage />} />
+        <Route path='/DoctorPage' element={<DoctorPage />} />
+        <Route path="/TreatmentPage" element={<TreatmentPage />} />
       </Routes>
     </>
   )
