@@ -1,2 +1,36 @@
 @tailwind components;
 @tailwind utilities;
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.shadow {
+    -webkit-box-shadow: 0 13px 7.5px -5.5px #dddddd;
+-moz-box-shadow: 0 13px 7.5px -5.5px #dddddd;
+box-shadow: 0 13px 7.5px -5.5px #dddddd;
+}
+/* Estilo para la barra de desplazamiento */
+main::-webkit-scrollbar {
+    width: 7px; /* Ancho de la barra de desplazamiento */
+  }
+  
+  /* Ocultar las flechas de desplazamiento */
+  main::-webkit-scrollbar-button {
+    display: none;
+  }
+  
+  /* Estilo para el fondo de la barra de desplazamiento */
+  main::-webkit-scrollbar-track {
+    background: transparent; /* Hacer el fondo transparente */
+  }
+  
+  /* Estilo para la barra de desplazamiento en sí */
+  main::-webkit-scrollbar-thumb {
+    background: #7a808a; /* Color de la barra de desplazamiento */
+    border-radius: 5px; /* Bordes redondeados */
+  }
+  
+  
