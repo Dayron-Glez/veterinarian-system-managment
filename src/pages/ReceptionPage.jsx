@@ -99,7 +99,6 @@ const ReceptionPage = () => {
 
   const agregarMascota = (data) => {
     console.log("agregarMascota iniciado", data);
-  
     const newMascota = {
       nombre_mascota: data.nombre_mascota,
       especie: data.especie,
