@@ -110,7 +110,10 @@
         ]
     },
     {
-        name: 'Parálisis faríngea'
+        name: 'Parálisis faríngea', 
+        enfermedades: [
+            { name: "Parálisis faríngea"}
+        ]
 
     },
     {

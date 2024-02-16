@@ -4,10 +4,25 @@ import { useForm } from 'react-hook-form';
 
 import LogoComponent from '../components/LogoComponent'
 import notificationIcon from '../assets/notificationIcon.svg'
+import SystemDeseaseComponent from '../components/SystemDeseaseComponent'
 const DoctorPage = () => {
   const [mascotas, setMascotas] = useState([]);
+  const [mascota, setMascota] = useState(null);
   const [mascotaSeleccionada, setMascotaSeleccionada] = useState(null);
-  const { register, handleSubmit, reset } = useForm()
+  const { register, handleSubmit, reset, watch } = useForm()
+  const [sistema, setSistema] = useState(null);
+  const [enfermedad, setEnfermedad] = useState(null);
+
+
+  const handleSystemChange = (sistemaSeleccionado) => {
+    setSistema(sistemaSeleccionado);
+  };
+
+  const handleEnfermedadChange = (enfermedadSeleccionada) => {
+    setEnfermedad(enfermedadSeleccionada);
+  };
+  const watchAlimentacion = watch('Alimentación', '');
+  const watchHabitat = watch('Hábitat', '');
   let fecha = new Date()
   let horas = fecha.getHours()
   let minutos = fecha.getMinutes();
@@ -28,10 +43,11 @@ const DoctorPage = () => {
 
   useEffect(() => {
     const obtenerDatos = () => {
-      const fechaActual = new Date().toISOString().split('T')[0];
+      const fechaActual = new Date().toLocaleDateString('en-CA');
       axios.get(`https://g8k31qc7-8000.use.devtunnels.ms/doctor/citas/${fechaActual}/`)
         .then(res => {
           setMascotas(res.data);
+          setMascota(res.data[0]); // Guarda la primera mascota en el estado
         })
         .catch(err => console.error(err));
     };
@@ -47,28 +63,108 @@ const DoctorPage = () => {
   const handleClick = mascota => {
     setMascotaSeleccionada(mascota);
   };
-  async function getPets() {
 
-
-    try {
-      const response = await axios.get('https://g8k31qc7-8000.use.devtunnels.ms/api/historia')
-      console.log(response);
-    } catch (error) {
-      console.error(error);
+  function onSubmit(data) {
+    if (watchAlimentacion !== 'Otro1') {
+      delete data.otro1;
+    } else {
+      data.Alimentación = data.otro1
     }
 
-  }
-  function onSubmit(data) {
+    if (watchHabitat !== 'Otro2') {
+      delete data.otro2;
+    } else {
+      data.Hábitat = data.otro2
+    }
+
+    const mascotaData = {
+      mascota: mascota.id,
+      historia: {
+        motivo: data.motivo,
+        anamnesis: data.anamnesis,
+        estado_reproductivo: data.estado_reproductivo,
+        alimentacion: data.Alimentación,
+        habitad: data.Hábitat,
+        alergia: data.alergias,
+        tllc: data.TLLC,
+        pulso: data.Pulso,
+        fc: data.FC,
+        fr: data.FR,
+        temperatura: data.Temperatura,
+        peso: data.Peso
+      },
+
+      cirugia: [
+        {
+          tipo: "Cirugia",
+          organo: "dfsf"
+        },
+        {
+          tipo: "Cirugia2",
+          organo: "aasda"
+        }
+      ],
+      vacuna: [
+        {
+          tipo: "Vacuna",
+          producto: "aassd"
+        }
+      ],
+      desparacitacion: [
+        {
+          producto: "Desparacitacio",
+          fecha: "2024-02-16"
+        }
+      ],
+      examen_clinico: [
+        {
+          hidratacion: "Exame",
+          actitud: "sads",
+          sistema:
+          {
+            nombre: sistema,
+            enfermedad: enfermedad
+          },
+          evolucion:
+          {
+            peso: 2.52,
+            fecha: "2024-02-21"
+          },
+          mucosa: {
+            "tipo": "dsd"
+          }
+        }
+      ],
+      terapia: [
+        {
+          tratamiento: "Terapi",
+          via: "asdh",
+          examen: {
+            "fecha": "2024-02-21"
+          }
+        }
+      ]
+    }
+
+    axios.post('https://g8k31qc7-8000.use.devtunnels.ms/doctor/actualizarHistoria/', mascotaData)
+      .then(response => {
+        console.log("Respuesta de axios.post", response);
+
+      })
+      .catch(error => {
+        console.error("Error en axios.post", error);
+      });
+
     console.log(data);
-    reset()
+    // reset();
   }
+
   return (
     <>
       <div className='flex flex-col'>
         <nav className=' flex flex-col h-[14vh] w-full'>
           <section className='flex flex-col h-[7vh] bg-white justify-center'>
             <div className='flex flex-row justify-between'>
-              {/* <img height={40} width={40} src={Logo} alt="Logo icon" className='mx-4 md:mx-8' /> */}
               <LogoComponent height={48} className=' mx-4 md:mx-8' />
               <div className='flex flex-col justify-center place-items-center'>
                 <p className='flex text-lg font-semibold'>{strTiempo}</p>
@@ -127,21 +223,21 @@ const DoctorPage = () => {
                   <label className='flex flex-row mb-2'>Estado reproductivo <p className='text-red-500'>*</p> </label>
                   <div className='flex flex-row'>
                     <label className=' mx-8'>
-                      <input type="radio" value="Castrado" name="Estado-reproductivo" {...register('Estado-reproductivo')} />
+                      <input type="radio" value="Castrado" name="estado_reproductivo" {...register('estado_reproductivo')} />
                       Castrado
                     </label>
                     <label>
-                      <input type="radio" value="Gestación" name="Estado-reproductivo" {...register('Estado-reproductivo')} />
+                      <input type="radio" value="Gestación" name="estado_reproductivo" {...register('estado_reproductivo')} />
                       Gestación
                     </label>
                   </div>
                   <div className='flex flex-row'>
                     <label className=' mx-8'>
-                      <input type="radio" value="Entero" name="Estado-reproductivo" {...register('Estado-reproductivo')} />
+                      <input type="radio" value="Entero" name="estado_reproductivo" {...register('estado_reproductivo')} />
                       Entero
                     </label>
                     <label>
-                      <input type="radio" value="Lactancia" name="Estado-reproductivo" {...register('Estado-reproductivo')} />
+                      <input type="radio" value="Lactancia" name="estado_reproductivo" {...register('estado_reproductivo')} />
                       Lactancia
                     </label>
                   </div>
@@ -165,7 +261,7 @@ const DoctorPage = () => {
                     </label>
                     <div className='flex flex-row'>
                       <label>
-                        <input type="radio" value="Otro" name="Alimentación" {...register('Alimentación')} />
+                        <input type="radio" value="Otro1" name="Alimentación" {...register('Alimentación')} />
                         Otro
                       </label>
                       <textarea name="otro1" id="otro1" cols="15" rows="1" className='shadow ml-4 rounded-sm resize-none' placeholder='Ej. texto' {...register('otro1')} />
@@ -197,7 +293,7 @@ const DoctorPage = () => {
                     </div>
                     <div className='flex flex-row'>
                       <label>
-                        <input type="radio" value="Otro" name="Hábitat" {...register('Hábitat')} />
+                        <input type="radio" value="Otro2" name="Hábitat" {...register('Hábitat')} />
                         Otro
                       </label>
                       <textarea name="otro2" id="otro2" cols="15" rows="1" className='shadow ml-4 rounded-sm resize-none' placeholder='Ej. texto'{...register('otro2')} />
@@ -214,11 +310,11 @@ const DoctorPage = () => {
                 <div className='flex flex-row justify-start  mt-8'>
                   <div className='flex flex-col ml-8'>
                     <label className='flex flex-row mb-2'>TLLC <p className='text-red-500'>*</p> </label>
-                    <input type="text" name="TLLC" id="TLLC" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('TLLC')} />
+                    <input type="number" name="TLLC" id="TLLC" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('TLLC')} />
                   </div>
                   <div className='flex flex-col ml-8'>
                     <label className='flex flex-row mb-2'>Pulso <p className='text-red-500'>*</p> </label>
-                    <input type="text" name="Pulso" id="Pulso" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('Pulso')} />
+                    <input type="number" name="Pulso" id="Pulso" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('Pulso')} />
                   </div>
                   <div className='flex flex-col ml-8'>
                     <label className='flex flex-row mb-2'>FC <p className='text-red-500'>*</p> </label>
@@ -230,13 +326,17 @@ const DoctorPage = () => {
                   </div>
                   <div className='flex flex-col ml-8'>
                     <label className='flex flex-row mb-2'>Temperatura <p className='text-red-500'>*</p> </label>
-                    <input type="text" name="Temperatura" id="Temperatura" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('Temperatura')} />
+                    <input type="number" name="Temperatura" id="Temperatura" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('Temperatura')} />
                   </div>
                   <div className='flex flex-col ml-8'>
                     <label className='flex flex-row mb-2'>Peso <p className='text-red-500'>*</p> </label>
-                    <input type="text" name="Peso" id="Peso" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('Peso')} />
+                    <input type="number" name="Peso" id="Peso" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('Peso')} />
                   </div>
                 </div>
+                <SystemDeseaseComponent
+                  onSubmit={handleSystemChange} 
+                  onEnfermedadChange={handleEnfermedadChange} 
+                />
               </section>
               <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[90%]'></div>
               <div className='flex flex-row justify-around mt-8'>
@@ -252,11 +352,13 @@ const DoctorPage = () => {
               <div className=' mt-1 border-[1px] border-solid border-[#a4a4a4] h-0 w-[90%]'></div>
               {mascotaSeleccionada ? (
                 <div>
-                  <h2>Detalles de la mascota</h2>
-                  <p>Nombre: {mascotaSeleccionada.nombre_mascota}</p>
-                  <p>Especie: {mascotaSeleccionada.especie}</p>
-                  <p>Edad: {mascotaSeleccionada.edad}</p>
-                  <p>Sexo: {mascotaSeleccionada.sexo}</p>
+                  <h3 className=' my-4 text-[#eb5b27]'>Nombre de la mascota : {mascotaSeleccionada.nombre_mascota}</h3>
+                  <div className='flex flex-row'>
+                    <p className='text-[#344054]'>Especie : {mascotaSeleccionada.especie}</p>
+                    <span className=' mx-4 text-[#344054]'>/</span>
+                    <p className='text-[#344054]'> Raza : {mascotaSeleccionada.raza}</p>
+                  </div>
+                  <span className=' mt-4 font-extralight'>Edad : {mascotaSeleccionada.edad}</span>
                 </div>
               ) : (
                 <div>
@@ -294,6 +396,10 @@ const DoctorPage = () => {
 
                       {mascota.edad + ' años'}
                     </p>
+                    <p>
+
+                      {mascota.id + ' id'}
+                    </p>
                   </div>
                 </button>
               ))}
@@ -301,7 +407,6 @@ const DoctorPage = () => {
           </aside>
         </div>
       </div>
-      {/* <button type="button" onClick={getPets}> get pet</button> */}
     </>
   )
 }
