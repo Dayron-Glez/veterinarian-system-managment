@@ -15,10 +15,13 @@ import Select from 'react-select'
 const ReceptionPage = () => {
   // eslint-disable-next-line no-unused-vars
   const [formData, setFormData] = useState([]);
+  const [data, setData] = useState([]);
   const [selectedCheckbox, setSelectedCheckbox] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [clienteData, setClienteData] = useState(null);
   const [mascotasData, setMascotasData] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+
   // const [mascotaActual, setMascotaActual] = useState(null);
   // const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
@@ -27,6 +30,7 @@ const ReceptionPage = () => {
   // eslint-disable-next-line no-unused-vars
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, reset, getValues, control } = useForm()
+
   useEffect(() => {
     if (isSubmitting && selectedCheckbox !== null) {
       const formData = getValues();
@@ -36,6 +40,12 @@ const ReceptionPage = () => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCheckbox, isSubmitting, getValues]);
+
+  useEffect(() =>{
+    axios.get(`https://g8k31qc7-8000.use.devtunnels.ms/recepcion/filtrarTutores/${inputValue}/`)
+    .then(res => setData(res.data))
+    .catch(err => {console.log(err);})
+  },[inputValue])
 
   const handleCheckboxChange = (e) => {
     if (e.target.checked) {
@@ -208,254 +218,282 @@ const ReceptionPage = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className='client-pet-form flex '>
-        <div className=' flex flex-col' id='client_form'>
-          <h2>Cliente</h2>
-          <input placeholder='Nombre del cliente' type="text" name="nombre_tutor" id="nombre_tutor"  {...register('nombre_tutor', {
-            required: {
-              value: true,
-              message: 'Nombre del cliente es un campo requerido'
-            },
-            minLength: {
-              value: 3,
-              message: 'Mínimo de 3 caracteres'
-            },
-            maxLength: {
-              value: 30,
-              message: 'Máximo de 20 caracteres'
-            },
-            autoComplete: {
-              value: 'off'
-            }
-          })} />
+      <div className=' flex flex-col place-items-center '>
 
-          {errors.nombre_tutor && <span>{errors.nombre_tutor.message}</span>}
+          <div className=' flex flex-col justify-center place-items-center  w-[50%]'>
 
-          <input placeholder='CI del cliente' type="text" name="dni" id="dni"  {...register('dni', {
-            required: {
-              value: true,
-              message: 'CI es un campo requerido'
-            },
-            autoComplete: 'off'
-          })} />
+          <input type="text" onChange={e => setInputValue(e.target.value)} className=' w-full mt-10'/>
 
-          {errors.dni && <span>{errors.dni.message}</span>}
+            <table className="table-auto w-full">
+              {inputValue && (
 
-          <input placeholder='Número de teléfono' type="tel" name="telefono" id="telefono"  {...register('telefono', {
-            required: {
-              value: true,
-              message: 'EL número de teléfono es un campo requerido'
-            }
-          })} />
-
-          {errors.telefono && <span>{errors.telefono.message}</span>}
-
-          <div className=' flex flex-row w-full justify-center gap-2'>
-            <button  type='button' id='btn-open-modal'>Añadir Mascota</button>
-            <button onClick={() => { console.log("Botón Enviar clickeado"); enviarDatos(); }} type='submit'>Enviar</button>
+        <thead className="bg-gray-200">
+            <tr className=' text-center'>
+                <th className=" place-self-center h-10">Nombre del tutor</th>
+                <th className=" place-self-center h-10">CI</th>
+                <th className=" place-self-center h-10">Telefono</th>
+            </tr>
+           
+        </thead>
+              )}
+        <tbody>
+            {data.map((d,i) => {
+              return (
+                <tr key={i} className=' bg-slate-300 text-center h-8'>
+                  <td><a href="http://" target="_blank" rel="noopener noreferrer" className=' no-underline text-[#eb5b27]'>{d.nombre_tutor}</a></td>
+                  <td>{d.dni}</td>
+                  <td>{d.telefono}</td>
+                </tr>
+              )
+            })}
+        </tbody>
+    </table>
           </div>
-        </div>
-        <div id='modal' className=' border-none w-[800px] rounded-md flex-col hidden z-20'>
-          <div>
-            <h2>Motivo de llegada</h2>
-            <ul className=' flex flex-row list-none gap-2 pl-0'>
+      
+        <form onSubmit={handleSubmit(onSubmit)} className='client-pet-form '>
+          <div className=' flex flex-col' id='client_form'>
+            <h2>Cliente</h2>
+            <input placeholder='Nombre del cliente' type="text" name="nombre_tutor" id="nombre_tutor"  {...register('nombre_tutor', {
+              required: {
+                value: true,
+                message: 'Nombre del cliente es un campo requerido'
+              },
+              minLength: {
+                value: 3,
+                message: 'Mínimo de 3 caracteres'
+              },
+              maxLength: {
+                value: 30,
+                message: 'Máximo de 20 caracteres'
+              },
+              autoComplete: {
+                value: 'off'
+              }
+            })} />
 
-              <li>
-                <label>
-                  <input type="checkbox" name='Consulta' {...register('Consulta')} onChange={handleCheckboxChange} />Consulta
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="checkbox" name='Continuación' {...register('Continuación')} onChange={handleCheckboxChange} />Continuación
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="checkbox" name='Planificada' {...register('Planificada')} onChange={handleCheckboxChange} />Planificada
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="checkbox" name='Emergencia' {...register('Emergencia')} onChange={handleCheckboxChange} />Emergencia
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="checkbox" name="Urgencia" id="Urgencia"{...register('Urgencia')} onChange={handleUrgencyChange} />Urgencia
-                </label>
-              </li>
+            {errors.nombre_tutor && <span>{errors.nombre_tutor.message}</span>}
+
+            <input placeholder='CI del cliente' type="text" name="dni" id="dni"  {...register('dni', {
+              required: {
+                value: true,
+                message: 'CI es un campo requerido'
+              },
+              autoComplete: 'off'
+            })} />
+
+            {errors.dni && <span>{errors.dni.message}</span>}
+
+            <input placeholder='Número de teléfono' type="tel" name="telefono" id="telefono"  {...register('telefono', {
+              required: {
+                value: true,
+                message: 'EL número de teléfono es un campo requerido'
+              }
+            })} />
+
+            {errors.telefono && <span>{errors.telefono.message}</span>}
+
+            <div className=' flex flex-row w-full justify-center gap-2'>
+              <button  type='button' id='btn-open-modal'>Añadir Mascota</button>
+              <button onClick={() => { console.log("Botón Enviar clickeado"); enviarDatos(); }} type='submit'>Enviar</button>
+            </div>
+          </div>
+          <div id='modal' className=' border-none w-[800px] rounded-md flex-col hidden z-20'>
+            <div>
+              <h2>Motivo de llegada</h2>
+              <ul className=' flex flex-row list-none gap-2 pl-0'>
+
+                <li>
+                  <label>
+                    <input type="checkbox" name='Consulta' {...register('Consulta')} onChange={handleCheckboxChange} />Consulta
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="checkbox" name='Continuación' {...register('Continuación')} onChange={handleCheckboxChange} />Continuación
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="checkbox" name='Planificada' {...register('Planificada')} onChange={handleCheckboxChange} />Planificada
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="checkbox" name='Emergencia' {...register('Emergencia')} onChange={handleCheckboxChange} />Emergencia
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="checkbox" name="Urgencia" id="Urgencia"{...register('Urgencia')} onChange={handleUrgencyChange} />Urgencia
+                  </label>
+                </li>
+                <Controller
+                  name="specialized"
+                  control={control}
+
+                  defaultValue=""
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      options={[
+                        { value: 'cardiología', label: 'Cardiología' },
+                        { value: 'cirugía', label: 'Cirugía' },
+                        { value: 'oftalmología', label: 'Oftalmología' },
+                        { value: 'dermatología', label: 'Dermatología' },
+                        { value: 'nutrición', label: 'Nutrición' },
+                        { value: 'ortopedia', label: 'Ortopedia' },
+                        { value: 'neurología', label: 'Neurología' },
+                        { value: 'neonatología', label: 'Neonatología' },
+                        { value: 'reproducción', label: 'Reproducción' },
+                        { value: 'exóticos', label: 'Exóticos' },
+                        { value: 'gerontología', label: 'Gerontología' },
+                        { value: 'odontología', label: 'Odontología' },
+                      ]}
+                      onChange={option => field.onChange(option)}
+                      placeholder='Especializadas'
+                      isSearchable
+                      isClearable
+                      noOptionsMessage={() => 'No existe esa opción'}
+                      styles={{
+                        clearIndicator: (baseStyles) => ({
+                          ...baseStyles,
+                          color: 'red',
+
+                        }),
+
+                      }}
+                      isMulti
+                      className=' w-[200px]'
+                      id='specialized'
+                    />
+                  )}
+                />
+              </ul>
+            </div>
+            <div className='  flex-col hidden ' id='observation_container'>
+              <h2>Observación</h2>
+              <textarea name="observation_text" id="observation_text" cols="106" rows="6" {...register('observation_text')}></textarea>
+            </div>
+            <div className=' flex flex-col'>
+
+              <h2 id='pet_h2'>Mascota</h2>
+              <input placeholder='Nombre de la mascota' type="text" name="nombre_mascota" id="nombre_mascota"   {...register('nombre_mascota', {
+                required: selectedCheckbox!=='Urgencia' ? {
+                  value: true,
+                  message: 'El nombre de la mascota es un campo requerido'
+                } : false
+              })} />
+              {errors.nombre_mascota && <span>{errors.nombre_mascota.message}</span>}
+
+              <input placeholder='Edad' type='number' name="edad" id="edad"   {...register('edad', {
+                autoComplete: {
+                  value: 'off'
+                },
+                required:selectedCheckbox!=='Urgencia' ?  {
+                  value: true,
+                  message: 'La edad es un campo requerido'
+                } : false
+              })} />
+
+              {errors.edad && <span>{errors.edad.message}</span>}
+
+              <input placeholder='Color' type="text" name="color" id="color"   {...register('color', {
+                autoComplete: {
+                  value: 'off'
+                },
+                required:selectedCheckbox!=='Urgencia' ?  {
+                  value: true,
+                  message: 'El color es un campo requerido'
+                } : false
+              })} />
+
+              {errors.color && <span>{errors.color.message}</span>}
+
+              <input placeholder='Sexo' type="text" name="sexo" id="sexo"   {...register('sexo', {
+                autoComplete: {
+                  value: 'off'
+                },
+                required:selectedCheckbox!=='Urgencia' ?  {
+                  value: true,
+                  message: 'EL sexo es un campo requerido'
+                } : false
+              })} />
+
+              {errors.sexo && <span>{errors.sexo.message}</span>}
+
+              <input placeholder='Raza' type="text" name="raza" id="raza"   {...register('raza', {
+                autoComplete: {
+                  value: 'off'
+                },
+                required:selectedCheckbox!=='Urgencia' ?  {
+                  value: true,
+                  message: 'La raza es un campo requerido'
+                } : false
+              })} />
+
+              {errors.raza && <span>{errors.raza.message}</span>}
+
+              <input placeholder='Especie' type="text" name="especie" id="especie"   {...register('especie', {
+                autoComplete: {
+                  value: 'off'
+                },
+                required:selectedCheckbox!=='Urgencia' ?  {
+                  value: true,
+                  message: 'La especie es un campo requerido'
+                } : false
+              })} />
+
+              {errors.especie && <span>{errors.especie.message}</span>}
+            </div>
+            <div className=' flex flex-row my-4'>
+              <input type="datetime-local" name="datetime-local" id="datetime-local" {...register('dateForm')} />
+              {/* <LocalizationProvider >
               <Controller
-                name="specialized"
-                control={control}
+              name="dateForm"
+              control={control}
+              defaultValue={fecha} // Aquí establecemos el valor por defecto
+              render={({ field }) => (
+                <DatePicker
+                  label="Fecha"
+                  value={field.value} // Aquí utilizamos el valor del formulario
+                  onChange={(date) => field.onChange(date)}
+                />
+              )}
+            />
+  <Controller
+    name="HourForm"
+    control={control}
+    defaultValue={hora} // Aquí establecemos el valor por defecto
+    render={({ field }) => (
+      <TimePicker
+        label="Hora"
+        viewRenderers={{
+          hours: renderTimeViewClock,
+          minutes: renderTimeViewClock,
+          seconds: renderTimeViewClock,
+        }}
+        value={field.value} // Aquí utilizamos el valor del formulario
+        onChange={(time) => field.onChange(time)}
+      />
+    )}
+  />
+              </LocalizationProvider> */}
+            </div>
 
-                defaultValue=""
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    options={[
-                      { value: 'cardiología', label: 'Cardiología' },
-                      { value: 'cirugía', label: 'Cirugía' },
-                      { value: 'oftalmología', label: 'Oftalmología' },
-                      { value: 'dermatología', label: 'Dermatología' },
-                      { value: 'nutrición', label: 'Nutrición' },
-                      { value: 'ortopedia', label: 'Ortopedia' },
-                      { value: 'neurología', label: 'Neurología' },
-                      { value: 'neonatología', label: 'Neonatología' },
-                      { value: 'reproducción', label: 'Reproducción' },
-                      { value: 'exóticos', label: 'Exóticos' },
-                      { value: 'gerontología', label: 'Gerontología' },
-                      { value: 'odontología', label: 'Odontología' },
-                    ]}
-                    onChange={option => field.onChange(option)}
-                    placeholder='Especializadas'
-                    isSearchable
-                    isClearable
-                    noOptionsMessage={() => 'No existe esa opción'}
-                    styles={{
-                      clearIndicator: (baseStyles) => ({
-                        ...baseStyles,
-                        color: 'red',
 
-                      }),
 
-                    }}
-                    isMulti
-                    className=' w-[200px]'
-                    id='specialized'
-                  />
-                )}
-              />
-            </ul>
+            <div className=' flex flex-row justify-between py-4'>
+              <button type='button' className='ml-10' onClick={() => {agregarMascota(getValues())}}>Aceptar</button>
+              <button type='button' className='mr-10' id='btn-close-modal'>Cerrar</button>
+            </div>
+
           </div>
-          <div className='  flex-col hidden ' id='observation_container'>
-            <h2>Observación</h2>
-            <textarea name="observation_text" id="observation_text" cols="106" rows="6" {...register('observation_text')}></textarea>
-          </div>
-          <div className=' flex flex-col'>
+          
 
-            <h2 id='pet_h2'>Mascota</h2>
-            <input placeholder='Nombre de la mascota' type="text" name="nombre_mascota" id="nombre_mascota"   {...register('nombre_mascota', {
-              required: selectedCheckbox!=='Urgencia' ? {
-                value: true,
-                message: 'El nombre de la mascota es un campo requerido'
-              } : false
-            })} />
-            {errors.nombre_mascota && <span>{errors.nombre_mascota.message}</span>}
-
-            <input placeholder='Edad' type='number' name="edad" id="edad"   {...register('edad', {
-              autoComplete: {
-                value: 'off'
-              },
-              required:selectedCheckbox!=='Urgencia' ?  {
-                value: true,
-                message: 'La edad es un campo requerido'
-              } : false
-            })} />
-
-            {errors.edad && <span>{errors.edad.message}</span>}
-
-            <input placeholder='Color' type="text" name="color" id="color"   {...register('color', {
-              autoComplete: {
-                value: 'off'
-              },
-              required:selectedCheckbox!=='Urgencia' ?  {
-                value: true,
-                message: 'El color es un campo requerido'
-              } : false
-            })} />
-
-            {errors.color && <span>{errors.color.message}</span>}
-
-            <input placeholder='Sexo' type="text" name="sexo" id="sexo"   {...register('sexo', {
-              autoComplete: {
-                value: 'off'
-              },
-              required:selectedCheckbox!=='Urgencia' ?  {
-                value: true,
-                message: 'EL sexo es un campo requerido'
-              } : false
-            })} />
-
-            {errors.sexo && <span>{errors.sexo.message}</span>}
-
-            <input placeholder='Raza' type="text" name="raza" id="raza"   {...register('raza', {
-              autoComplete: {
-                value: 'off'
-              },
-              required:selectedCheckbox!=='Urgencia' ?  {
-                value: true,
-                message: 'La raza es un campo requerido'
-              } : false
-            })} />
-
-            {errors.raza && <span>{errors.raza.message}</span>}
-
-            <input placeholder='Especie' type="text" name="especie" id="especie"   {...register('especie', {
-              autoComplete: {
-                value: 'off'
-              },
-              required:selectedCheckbox!=='Urgencia' ?  {
-                value: true,
-                message: 'La especie es un campo requerido'
-              } : false
-            })} />
-
-            {errors.especie && <span>{errors.especie.message}</span>}
-          </div>
-          <div className=' flex flex-row my-4'>
-            <input type="datetime-local" name="datetime-local" id="datetime-local" {...register('dateForm')} />
-            {/* <LocalizationProvider >
-            <Controller
-            name="dateForm"
-            control={control}
-            defaultValue={fecha} // Aquí establecemos el valor por defecto
-            render={({ field }) => (
-              <DatePicker
-                label="Fecha"
-                value={field.value} // Aquí utilizamos el valor del formulario
-                onChange={(date) => field.onChange(date)}
-              />
-            )}
-          />
-<Controller
-  name="HourForm"
-  control={control}
-  defaultValue={hora} // Aquí establecemos el valor por defecto
-  render={({ field }) => (
-    <TimePicker
-      label="Hora"
-      viewRenderers={{
-        hours: renderTimeViewClock,
-        minutes: renderTimeViewClock,
-        seconds: renderTimeViewClock,
-      }}
-      value={field.value} // Aquí utilizamos el valor del formulario
-      onChange={(time) => field.onChange(time)}
-    />
-  )}
-/>
-            </LocalizationProvider> */}
-          </div>
-
-
-
-          <div className=' flex flex-row justify-between py-4'>
-            <button type='button' className='ml-10' onClick={() => {agregarMascota(getValues())}}>Aceptar</button>
-            <button type='button' className='mr-10' id='btn-close-modal'>Cerrar</button>
-          </div>
-
-        </div>
-        {formData.map((data, index) => (
-          <div key={index}>
-            <h2>Datos de  {data.pet_name}</h2>
-            <p>Nombre de la mascota: {data.pet_name} </p>
-            <p>Raza: {data.race}</p>
-          </div>
-        ))}
-
-      </form>
-      <DevTool control={control} />
+        </form>
+        <DevTool control={control} />
+      </div>
+     
     </>
   )
 }
