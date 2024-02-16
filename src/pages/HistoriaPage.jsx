@@ -34,11 +34,34 @@ function HistoriaPage() {
     // Añade texto al documento
     doc.text("Historia de la Mascota", 10, 10);
     doc.text(`Nombre de la Mascota: ${historia[1].nombre_mascota}`, 10, 20);
-    // ...añade más detalles...
+    doc.text(`Motivo: ${historia[0].motivo}`, 10, 30);
+    doc.text(`Consulta: ${historia[0].consulta}`, 10, 40);
+    doc.text(`Anamnesis: ${historia[0].anamnesis}`, 10, 50);
+    doc.text(`Estado Reproductivo: ${historia[0].estado_reproductivo}`, 10, 60);
+    doc.text(`Habitat: ${historia[0].habitad}`, 10, 70);
+    doc.text(`Alimentación: ${historia[0].alimentacion}`, 10, 80);
+    doc.text(`Alergia: ${historia[0].alergia}`, 10, 90);
+    doc.text(`TLLC: ${historia[0].tllc}`, 10, 100);
+    doc.text(`Pulso: ${historia[0].pulso}`, 10, 110);
+    doc.text(`FC: ${historia[0].fc}`, 10, 120);
+    doc.text(`FR: ${historia[0].fr}`, 10, 130);
+    doc.text(`Temperatura: ${historia[0].temperatura}`, 10, 140);
+    doc.text(`Peso: ${historia[0].peso}`, 10, 150);
+    doc.text(`Fecha: ${new Date(historia[0].fecha).toLocaleDateString()}`, 10, 160);
+    doc.text(`ID de la Mascota: ${historia[0].mascota}`, 10, 170);
+    doc.text(`Especie: ${historia[1].especie}`, 10, 180);
+    doc.text(`Raza: ${historia[1].raza}`, 10, 190);
+    doc.text(`Edad: ${historia[1].edad}`, 10, 200);
+    doc.text(`Color: ${historia[1].color}`, 10, 210);
+    doc.text(`Sexo: ${historia[1].sexo}`, 10, 220);
+    doc.text(`Nombre del Tutor: ${historia[2].nombre_tutor}`, 10, 230);
+    doc.text(`DNI del Tutor: ${historia[2].dni}`, 10, 240);
+    doc.text(`Teléfono del Tutor: ${historia[2].telefono}`, 10, 250);
   
     // Guarda el PDF con el nombre "historia.pdf"
     doc.save(`historia de ${historia[1].nombre_mascota}.pdf`);
-  }
+}
+
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -49,7 +72,7 @@ function HistoriaPage() {
         <p><strong>Consulta:</strong> {historia[0].consulta}</p>
         <p><strong>Anamnesis:</strong> {historia[0].anamnesis}</p>
         <p><strong>Estado Reproductivo:</strong> {historia[0].estado_reproductivo}</p>
-        <p><strong>Habitad:</strong> {historia[0].habitad}</p>
+        <p><strong>Habitat:</strong> {historia[0].habitad}</p>
         <p><strong>Alimentación:</strong> {historia[0].alimentacion}</p>
         <p><strong>Alergia:</strong> {historia[0].alergia}</p>
         <p><strong>TLLC:</strong> {historia[0].tllc}</p>
