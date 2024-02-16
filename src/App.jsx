@@ -5,6 +5,7 @@ import ReceptionPage from './pages/ReceptionPage';
 import LoginPage from './pages/LoginPage';
 import DoctorPage from './pages/DoctorPage';
 import TreatmentPage from './pages/TreatmentPage';
+import HistoriaPage from './pages/HistoriaPage';
 function App() {
 
 
@@ -15,6 +16,7 @@ function App() {
         <Route path="/ReceptionPage" element={<ReceptionPage />} />
         <Route path='/DoctorPage' element={<DoctorPage />} />
         <Route path="/TreatmentPage" element={<TreatmentPage />} />
+        <Route path="/detalleHistoria" element={<HistoriaPage />} /> 
       </Routes>
     </>
   )

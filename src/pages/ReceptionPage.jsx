@@ -2,14 +2,9 @@ import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { useNavigate } from "react-router-dom";
+import {   Link, useLocation  } from 'react-router-dom';
 import axios from 'axios';
-// import dayjs from 'dayjs';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-// import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
-// import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import Select from 'react-select'
 
 const ReceptionPage = () => {
@@ -21,16 +16,20 @@ const ReceptionPage = () => {
   const [clienteData, setClienteData] = useState(null);
   const [mascotasData, setMascotasData] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [clicked, setIsClicked] = useState(false);
+  const [mascotaFiltrada, setMascotaFiltrada] = useState([])
+  const [tutorId, setTutorId] = useState(null)
+  const location = useLocation();
 
-  // const [mascotaActual, setMascotaActual] = useState(null);
-  // const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-
-  
-  
   // eslint-disable-next-line no-unused-vars
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, reset, getValues, control } = useForm()
 
+  useEffect(() => {
+    if (location.pathname === '/ReceptionPage') {
+      localStorage.removeItem('historia');
+    }
+  }, [location]);
   useEffect(() => {
     if (isSubmitting && selectedCheckbox !== null) {
       const formData = getValues();
@@ -38,14 +37,21 @@ const ReceptionPage = () => {
       onSubmit(formData);
       setIsSubmitting(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCheckbox, isSubmitting, getValues]);
 
-  useEffect(() =>{
+  useEffect(() => {
     axios.get(`https://g8k31qc7-8000.use.devtunnels.ms/recepcion/filtrarTutores/${inputValue}/`)
-    .then(res => setData(res.data))
-    .catch(err => {console.log(err);})
-  },[inputValue])
+    .then(res => {
+      setData(res.data);
+      console.log(data);
+      // Asume que res.data es un array y accede al primer elemento
+      if (res.data[0]) {
+        setTutorId(res.data[0].id);
+      }
+    })
+    .catch(err => { console.log(err); })
+  }, [inputValue])
 
   const handleCheckboxChange = (e) => {
     if (e.target.checked) {
@@ -54,7 +60,7 @@ const ReceptionPage = () => {
       setSelectedCheckbox(null);
     }
   };
-  
+
 
   const handleUrgencyChange = (e) => {
     // Selecciona todos los inputs que no sean de tipo checkbox
@@ -62,19 +68,19 @@ const ReceptionPage = () => {
     const pet_h2 = document.querySelector('#pet_h2')
     const observation_container = document.querySelector('#observation_container')
     const specializedSelect = document.querySelector('#specialized')
-  
+
     if (e.target.checked) {
       setSelectedCheckbox(e.target.name);
-  
+
       pet_h2.classList.add('hidden')
       observation_container.classList.remove('hidden')
       specializedSelect.classList.add('hidden')
-  
+
       // Agrega la clase 'hidden' a todos los inputs seleccionados
       inputs.forEach(input => {
         input.classList.add('hidden');
       });
-  
+
       // Resetea los campos del formulario de la mascota
       reset({
         nombre_mascota: '',
@@ -86,18 +92,27 @@ const ReceptionPage = () => {
       });
     } else {
       setSelectedCheckbox(null); // Si "Urgencia" se deselecciona, borra el valor de selectedCheckbox
-  
+
       pet_h2.classList.remove('hidden')
       observation_container.classList.add('hidden')
       specializedSelect.classList.remove('hidden')
-  
+
       // Remueve la clase 'hidden' de todos los inputs seleccionados
       inputs.forEach(input => {
         input.classList.remove('hidden');
       });
     }
   };
-  
+
+  function obtenerHistoria(mascotaId) {
+    axios.get(`https://g8k31qc7-8000.use.devtunnels.ms/doctor/historias/${mascotaId}/`)
+      .then(response => {
+        // Guarda los datos en el local storage en lugar de en el estado
+        localStorage.setItem('historia', JSON.stringify(response.data));
+        console.log(response.data);
+      })
+      .catch(err => console.log(err));
+  }
 
   // eslint-disable-next-line no-unused-vars
   // const onSubmit = (formData) => {
@@ -119,15 +134,15 @@ const ReceptionPage = () => {
       historia: {
         consulta: selectedCheckbox, // Aquí se agrega el tipo de consulta seleccionado
         fecha: data.dateForm,
-       
+
         observation_text: data.observation_text,
       },
     };
     setMascotasData(prevMascotasData => [...prevMascotasData, newMascota]);
-  
+
     console.log("agregarMascota terminado");
   };
-  
+
   const onSubmit = (data) => {
     const dataToSend = Object.keys(formData).reduce((obj, key) => {
       if (!['Consulta', 'Continuación', 'Planificada', 'Emergencia', 'Urgencia'].includes(key)) {
@@ -136,23 +151,23 @@ const ReceptionPage = () => {
       return obj;
     }, {});
     console.log("Fecha enviada: ", data.dateForm);
-  console.log("Hora enviada: ", data.HourForm);
+    console.log("Hora enviada: ", data.HourForm);
 
     dataToSend.consulta = selectedCheckbox;
     console.log(dataToSend);
     console.log("onSubmit iniciado", data);
-  
+
     if (!clienteData) {
       console.log("setClienteData iniciado");
       setClienteData(data);
       console.log("setClienteData terminado");
     }
-  
+
     // reset();
-  
+
     console.log("onSubmit terminado");
   };
-  
+
   const enviarDatos = () => {
     if (clienteData && mascotasData.length > 0) {
       const dataToSend = {
@@ -161,9 +176,9 @@ const ReceptionPage = () => {
         telefono: clienteData.telefono,
         mascotas: mascotasData,
       };
-  
+
       console.log("axios.post iniciado", dataToSend);
-  
+
       axios.post('https://g8k31qc7-8000.use.devtunnels.ms/recepcion/registrar/', dataToSend)
         .then(response => {
           console.log("Respuesta de axios.post", response);
@@ -173,21 +188,21 @@ const ReceptionPage = () => {
         .catch(error => {
           console.error("Error en axios.post", error);
         });
-  
+
       console.log("axios.post terminado");
     }
   };
-  
+
   useEffect(() => {
     if (clienteData && mascotasData.length > 0) {
       enviarDatos();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clienteData, mascotasData]);
-  
-  
-  
-  
+
+
+
+
   useEffect(() => {
     const modal = document.querySelector('#modal');
     const btnOpenModal = document.querySelector("#btn-open-modal");
@@ -202,54 +217,97 @@ const ReceptionPage = () => {
     });
   }, []);
 
-  // const handleAccept = () => {
-  //   const data = getValues(); // Obtiene los valores actuales del formulario
-  //   setFormData(prevData => [...prevData, data]);
-  //   // eslint-disable-next-line no-undef
-  //   modal.classList.add('hidden')
-
-
-  // };
+  
   useEffect(() => {
     console.log(formData);
   }, [formData]);
 
+  function filtrarMascotas() {
+    setIsClicked(true);
+    axios.get(`https://g8k31qc7-8000.use.devtunnels.ms/recepcion/filtrarMascota/${tutorId}/`)
+    .then( res2 => {
+      setMascotaFiltrada(res2.data);
+      console.log(res2.data);
+    })
+    .catch(err2 => {console.log(err2);})
+  }
 
 
   return (
     <>
       <div className=' flex flex-col place-items-center '>
 
-          <div className=' flex flex-col justify-center place-items-center  w-[50%]'>
+        <div className=' flex flex-col justify-center place-items-center  w-[50%]'>
 
-          <input type="text" onChange={e => setInputValue(e.target.value)} className=' w-full mt-10'/>
+          <input type="text" onChange={e => setInputValue(e.target.value)} className=' w-full mt-10 h-10 rounded-md' placeholder='Buscar por usuario'/>
 
+          {inputValue && (
             <table className="table-auto w-full">
-              {inputValue && (
-
-        <thead className="bg-gray-200">
-            <tr className=' text-center'>
-                <th className=" place-self-center h-10">Nombre del tutor</th>
-                <th className=" place-self-center h-10">CI</th>
-                <th className=" place-self-center h-10">Telefono</th>
-            </tr>
-           
-        </thead>
-              )}
-        <tbody>
-            {data.map((d,i) => {
-              return (
-                <tr key={i} className=' bg-slate-300 text-center h-8'>
-                  <td><a href="http://" target="_blank" rel="noopener noreferrer" className=' no-underline text-[#eb5b27]'>{d.nombre_tutor}</a></td>
-                  <td>{d.dni}</td>
-                  <td>{d.telefono}</td>
+              <thead className="bg-gray-200">
+                <tr className=' text-center'>
+                  <th className=" place-self-center h-10">Nombre del tutor</th>
+                  <th className=" place-self-center h-10">CI</th>
+                  <th className=" place-self-center h-10">Telefono</th>
                 </tr>
-              )
-            })}
-        </tbody>
-    </table>
+              </thead>
+              <tbody>
+                {data.map((d, i) => {
+                  return (
+                    <tr key={i} className=' bg-slate-300 text-center h-8'>
+                      <td>
+                        <button className=' w-32 h-6 rounded-md border-none bg-[#eb5b27] hover:bg-[#f6622d] text-white text-md' onClick={ () => {filtrarMascotas()}} disabled={!data}>
+                          {d.nombre_tutor}  
+                        </button>
+                      </td>
+                      <td>{d.dni}</td>
+                      <td>{d.telefono}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          )}
+
+        </div>
+        
+        {clicked && (
+        <div className="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                  Listado de mascotas
+                </h3>
+                <div>
+      {mascotaFiltrada.map((d,i) => {
+        return (
+          <Link key={i} to="/detalleHistoria" target='_blank' className=' flex flex-col' onClick={() => obtenerHistoria(d.id)}>
+            <div className=' flex flex-row'>
+              <p className=' text-lg mx-4'>{d.nombre_mascota}</p>
+            </div>
+          </Link>
+        )
+      })}
+    </div>
+              </div>
+              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button 
+                  type="button" 
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setIsClicked(false);
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
-      
+        </div>
+      )}
+
         <form onSubmit={handleSubmit(onSubmit)} className='client-pet-form '>
           <div className=' flex flex-col' id='client_form'>
             <h2>Cliente</h2>
@@ -293,7 +351,7 @@ const ReceptionPage = () => {
             {errors.telefono && <span>{errors.telefono.message}</span>}
 
             <div className=' flex flex-row w-full justify-center gap-2'>
-              <button  type='button' id='btn-open-modal'>Añadir Mascota</button>
+              <button type='button' id='btn-open-modal'>Añadir Mascota</button>
               <button onClick={() => { console.log("Botón Enviar clickeado"); enviarDatos(); }} type='submit'>Enviar</button>
             </div>
           </div>
@@ -378,7 +436,7 @@ const ReceptionPage = () => {
 
               <h2 id='pet_h2'>Mascota</h2>
               <input placeholder='Nombre de la mascota' type="text" name="nombre_mascota" id="nombre_mascota"   {...register('nombre_mascota', {
-                required: selectedCheckbox!=='Urgencia' ? {
+                required: selectedCheckbox !== 'Urgencia' ? {
                   value: true,
                   message: 'El nombre de la mascota es un campo requerido'
                 } : false
@@ -389,7 +447,7 @@ const ReceptionPage = () => {
                 autoComplete: {
                   value: 'off'
                 },
-                required:selectedCheckbox!=='Urgencia' ?  {
+                required: selectedCheckbox !== 'Urgencia' ? {
                   value: true,
                   message: 'La edad es un campo requerido'
                 } : false
@@ -401,7 +459,7 @@ const ReceptionPage = () => {
                 autoComplete: {
                   value: 'off'
                 },
-                required:selectedCheckbox!=='Urgencia' ?  {
+                required: selectedCheckbox !== 'Urgencia' ? {
                   value: true,
                   message: 'El color es un campo requerido'
                 } : false
@@ -413,7 +471,7 @@ const ReceptionPage = () => {
                 autoComplete: {
                   value: 'off'
                 },
-                required:selectedCheckbox!=='Urgencia' ?  {
+                required: selectedCheckbox !== 'Urgencia' ? {
                   value: true,
                   message: 'EL sexo es un campo requerido'
                 } : false
@@ -425,7 +483,7 @@ const ReceptionPage = () => {
                 autoComplete: {
                   value: 'off'
                 },
-                required:selectedCheckbox!=='Urgencia' ?  {
+                required: selectedCheckbox !== 'Urgencia' ? {
                   value: true,
                   message: 'La raza es un campo requerido'
                 } : false
@@ -437,7 +495,7 @@ const ReceptionPage = () => {
                 autoComplete: {
                   value: 'off'
                 },
-                required:selectedCheckbox!=='Urgencia' ?  {
+                required: selectedCheckbox !== 'Urgencia' ? {
                   value: true,
                   message: 'La especie es un campo requerido'
                 } : false
@@ -483,17 +541,17 @@ const ReceptionPage = () => {
 
 
             <div className=' flex flex-row justify-between py-4'>
-              <button type='button' className='ml-10' onClick={() => {agregarMascota(getValues())}}>Aceptar</button>
+              <button type='button' className='ml-10' onClick={() => { agregarMascota(getValues()) }}>Aceptar</button>
               <button type='button' className='mr-10' id='btn-close-modal'>Cerrar</button>
             </div>
 
           </div>
-          
+
 
         </form>
         <DevTool control={control} />
       </div>
-     
+
     </>
   )
 }
