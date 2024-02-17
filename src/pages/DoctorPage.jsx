@@ -334,8 +334,8 @@ const DoctorPage = () => {
                   </div>
                 </div>
                 <SystemDeseaseComponent
-                  onSubmit={handleSystemChange} 
-                  onEnfermedadChange={handleEnfermedadChange} 
+                  onSubmit={handleSystemChange}
+                  onEnfermedadChange={handleEnfermedadChange}
                 />
               </section>
               <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[90%]'></div>

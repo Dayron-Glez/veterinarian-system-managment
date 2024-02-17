@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { useNavigate } from "react-router-dom";
-import {   Link, useLocation  } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import LogoComponent from '../components/LogoComponent'
+import notificationIcon from '../assets/notificationIcon.svg'
 
 import Select from 'react-select'
 
@@ -42,15 +44,15 @@ const ReceptionPage = () => {
 
   useEffect(() => {
     axios.get(`https://g8k31qc7-8000.use.devtunnels.ms/recepcion/filtrarTutores/${inputValue}/`)
-    .then(res => {
-      setData(res.data);
-      console.log(data);
-      // Asume que res.data es un array y accede al primer elemento
-      if (res.data[0]) {
-        setTutorId(res.data[0].id);
-      }
-    })
-    .catch(err => { console.log(err); })
+      .then(res => {
+        setData(res.data);
+        console.log(data);
+        // Asume que res.data es un array y accede al primer elemento
+        if (res.data[0]) {
+          setTutorId(res.data[0].id);
+        }
+      })
+      .catch(err => { console.log(err); })
   }, [inputValue])
 
   const handleCheckboxChange = (e) => {
@@ -217,7 +219,7 @@ const ReceptionPage = () => {
     });
   }, []);
 
-  
+
   useEffect(() => {
     console.log(formData);
   }, [formData]);
@@ -225,38 +227,64 @@ const ReceptionPage = () => {
   function filtrarMascotas() {
     setIsClicked(true);
     axios.get(`https://g8k31qc7-8000.use.devtunnels.ms/recepcion/filtrarMascota/${tutorId}/`)
-    .then( res2 => {
-      setMascotaFiltrada(res2.data);
-      console.log(res2.data);
-    })
-    .catch(err2 => {console.log(err2);})
+      .then(res2 => {
+        setMascotaFiltrada(res2.data);
+        console.log(res2.data);
+      })
+      .catch(err2 => { console.log(err2); })
   }
 
 
   return (
     <>
-      <div className=' flex flex-col place-items-center '>
+
+
+      <div className='flex flex-col place-items-center h-[100vh]'>
+        <nav className=' flex flex-col h-[14vh] w-full'>
+          <section className='flex flex-col h-[7vh] bg-white justify-center'>
+            <div className='flex flex-row justify-between'>
+              <LogoComponent height={48} className=' mx-4 md:mx-8' />
+              <img height={32} width={32} src={notificationIcon} alt="notification Icon" className='mx-4 md:mx-8' />
+            </div>
+          </section>
+          <div className=' flex flex-row h-[7vh] place-items-center bg-[#eb5b27]'>
+            <ul className=' list-none mx-8'>
+              <button className=' border-none bg-transparent mx-4'>
+                <li className='text-white font-semibold'>INICIO</li>
+              </button>
+              <button className=' border-none bg-transparent mx-4'>
+                <li className='text-white font-semibold'>CLIENTES</li>
+              </button>
+              <button className=' border-none bg-transparent mx-4'>
+                <li className='text-white font-semibold'>MASCOTAS</li>
+              </button>
+              <button className=' border-none bg-transparent mx-4'>
+                <li className='text-white font-semibold'>HISTORIAS</li>
+              </button>
+            </ul>
+          </div>
+        </nav>
 
         <div className=' flex flex-col justify-center place-items-center  w-[50%]'>
 
-          <input type="text" onChange={e => setInputValue(e.target.value)} className=' w-full mt-10 h-10 rounded-md' placeholder='Buscar por usuario'/>
+          <input type="text" onChange={e => setInputValue(e.target.value)} className=' w-full mt-10 h-10 rounded-md' placeholder='Buscar por usuario' />
 
           {inputValue && (
-            <table className="table-auto w-full">
-              <thead className="bg-gray-200">
+            <table className="table-auto w-full ">
+              <thead className="bg-orange-600">
                 <tr className=' text-center'>
-                  <th className=" place-self-center h-10">Nombre del tutor</th>
-                  <th className=" place-self-center h-10">CI</th>
-                  <th className=" place-self-center h-10">Telefono</th>
+                  <th className="  place-self-center h-10 text-white">Nombre del tutor</th>
+                  <th className=" place-self-center h-10 text-white">CI</th>
+                  <th className="  place-self-center h-10 text-white">Telefono</th>
                 </tr>
               </thead>
               <tbody>
                 {data.map((d, i) => {
                   return (
-                    <tr key={i} className=' bg-slate-300 text-center h-8'>
+                    <tr key={i} className=' bg-white text-center text-black h-8'>
                       <td>
-                        <button className=' w-32 h-6 rounded-md border-none bg-[#eb5b27] hover:bg-[#f6622d] text-white text-md' onClick={ () => {filtrarMascotas()}} disabled={!data}>
-                          {d.nombre_tutor}  
+                        <button className=' w-32 h-6 rounded-md border-none bg-[#eb5b27] hover:bg-[#f6622d] text-white text-md' onClick={() => { filtrarMascotas() }} disabled={!data}>
+                          {d.nombre_tutor}
                         </button>
                       </td>
                       <td>{d.dni}</td>
@@ -269,49 +297,50 @@ const ReceptionPage = () => {
           )}
 
         </div>
-        
+
         {clicked && (
-        <div className="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                  Listado de mascotas
-                </h3>
-                <div>
-      {mascotaFiltrada.map((d,i) => {
-        return (
-          <Link key={i} to="/detalleHistoria" target='_blank' className=' flex flex-col' onClick={() => obtenerHistoria(d.id)}>
-            <div className=' flex flex-row'>
-              <p className=' text-lg mx-4'>{d.nombre_mascota}</p>
-            </div>
-          </Link>
-        )
-      })}
-    </div>
-              </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button 
-                  type="button" 
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setIsClicked(false);
-                  }}
-                >
-                  Close
-                </button>
+          <div className="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+              <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+              <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                    Listado de mascotas
+                  </h3>
+                  <div>
+                    {mascotaFiltrada.map((d, i) => {
+                      return (
+                        <Link key={i} to="/detalleHistoria" target='_blank' className=' flex flex-col' onClick={() => obtenerHistoria(d.id)}>
+                          <div className=' flex flex-row'>
+                            <p className=' text-lg mx-4'>{d.nombre_mascota}</p>
+                          </div>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                  <button
+                    type="button"
+                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setIsClicked(false);
+                    }}
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
         <form onSubmit={handleSubmit(onSubmit)} className='client-pet-form '>
-          <div className=' flex flex-col' id='client_form'>
-            <h2>Cliente</h2>
-            <input placeholder='Nombre del cliente' type="text" name="nombre_tutor" id="nombre_tutor"  {...register('nombre_tutor', {
+          <div className=' justify-center items-center absolute' id='client_form'>
+            <h2 className='text-[#344054]'>Cliente</h2>
+            <label className='flex flex-row mb-2'>Nombre del cliente<p className='text-red-500'>*</p> </label>
+            <input className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="nombre_tutor" id="nombre_tutor"  {...register('nombre_tutor', {
               required: {
                 value: true,
                 message: 'Nombre del cliente es un campo requerido'
@@ -331,7 +360,8 @@ const ReceptionPage = () => {
 
             {errors.nombre_tutor && <span>{errors.nombre_tutor.message}</span>}
 
-            <input placeholder='CI del cliente' type="text" name="dni" id="dni"  {...register('dni', {
+            <label className='flex flex-row mb-2'>Carnet de identidad<p className='text-red-500'>*</p> </label>
+            <input className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="dni" id="dni"  {...register('dni', {
               required: {
                 value: true,
                 message: 'CI es un campo requerido'
@@ -341,7 +371,9 @@ const ReceptionPage = () => {
 
             {errors.dni && <span>{errors.dni.message}</span>}
 
-            <input placeholder='Número de teléfono' type="tel" name="telefono" id="telefono"  {...register('telefono', {
+
+            <label className='flex flex-row mb-2'>Número de teléfono<p className='text-red-500'>*</p> </label>
+            <input className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="tel" name="telefono" id="telefono"  {...register('telefono', {
               required: {
                 value: true,
                 message: 'EL número de teléfono es un campo requerido'
@@ -350,39 +382,39 @@ const ReceptionPage = () => {
 
             {errors.telefono && <span>{errors.telefono.message}</span>}
 
-            <div className=' flex flex-row w-full justify-center gap-2'>
-              <button type='button' id='btn-open-modal'>Añadir Mascota</button>
-              <button onClick={() => { console.log("Botón Enviar clickeado"); enviarDatos(); }} type='submit'>Enviar</button>
+            <div className='flex flex-row w-full justify-center gap-10'>
+              <button className="bg-orange-600 my-10 text-white h-8 w-40 rounded-md border-none shadow-md focus:ring " type='button' id='btn-open-modal'>Añadir Mascota</button>
+              <button className="bg-orange-600 my-10 text-white h-8 w-40 rounded-md border-none shadow-md focus:ring " onClick={() => { console.log("Botón Enviar clickeado"); enviarDatos(); }} type='submit'>Enviar</button>
             </div>
           </div>
-          <div id='modal' className=' border-none w-[800px] rounded-md flex-col hidden z-20'>
+          <div id='modal' className='bg-white border-none w-[800px] rounded-md flex-col hidden z-20 px-10'>
             <div>
-              <h2>Motivo de llegada</h2>
-              <ul className=' flex flex-row list-none gap-2 pl-0'>
+              <h2 className='text-[#344054] py-10'>Motivo de llegada</h2>
+              <ul className=' flex flex-row  gap-2 pl-0 list-none  text-[#344054] border-2 space-x-4'>
 
                 <li>
                   <label>
-                    <input type="checkbox" name='Consulta' {...register('Consulta')} onChange={handleCheckboxChange} />Consulta
+                    <input type="checkbox" class=" accent-orange-600 focus:accent-orange-600" name='Consulta' {...register('Consulta')} onChange={handleCheckboxChange} />Consulta
                   </label>
                 </li>
                 <li>
                   <label>
-                    <input type="checkbox" name='Continuación' {...register('Continuación')} onChange={handleCheckboxChange} />Continuación
+                    <input type="checkbox" class=" accent-orange-600 focus:accent-orange-600" name='Continuación' {...register('Continuación')} onChange={handleCheckboxChange} />Continuación
                   </label>
                 </li>
                 <li>
                   <label>
-                    <input type="checkbox" name='Planificada' {...register('Planificada')} onChange={handleCheckboxChange} />Planificada
+                    <input type="checkbox" class=" accent-orange-600 focus:accent-orange-600" name='Planificada' {...register('Planificada')} onChange={handleCheckboxChange} />Planificada
                   </label>
                 </li>
                 <li>
                   <label>
-                    <input type="checkbox" name='Emergencia' {...register('Emergencia')} onChange={handleCheckboxChange} />Emergencia
+                    <input type="checkbox" class=" accent-orange-600 focus:accent-orange-600" name='Emergencia' {...register('Emergencia')} onChange={handleCheckboxChange} />Emergencia
                   </label>
                 </li>
                 <li>
                   <label>
-                    <input type="checkbox" name="Urgencia" id="Urgencia"{...register('Urgencia')} onChange={handleUrgencyChange} />Urgencia
+                    <input type="checkbox" class=" accent-orange-600 focus:accent-orange-600" name="Urgencia" id="Urgencia"{...register('Urgencia')} onChange={handleUrgencyChange} />Urgencia
                   </label>
                 </li>
                 <Controller
@@ -421,7 +453,7 @@ const ReceptionPage = () => {
 
                       }}
                       isMulti
-                      className=' w-[200px]'
+                      className=' w-[200px] text-orange-600 border-none'
                       id='specialized'
                     />
                   )}
@@ -434,74 +466,95 @@ const ReceptionPage = () => {
             </div>
             <div className=' flex flex-col'>
 
-              <h2 id='pet_h2'>Mascota</h2>
-              <input placeholder='Nombre de la mascota' type="text" name="nombre_mascota" id="nombre_mascota"   {...register('nombre_mascota', {
-                required: selectedCheckbox !== 'Urgencia' ? {
-                  value: true,
-                  message: 'El nombre de la mascota es un campo requerido'
-                } : false
-              })} />
-              {errors.nombre_mascota && <span>{errors.nombre_mascota.message}</span>}
+              <h2 className='text-[#344054] py-10' id='pet_h2'>Mascota</h2>
+              <div className=' grid-cols-3 flex space-x-40 p-0'>
+                <div>
+                  <label className='flex flex-row mb-2'>Nombre de la mascota<p className='text-red-500'>*</p> </label>
+                  <input className='shadow rounded-md resize-none h-6 w-50' placeholder='Nombre de la mascota' type="text" name="nombre_mascota" id="nombre_mascota"   {...register('nombre_mascota', {
+                    required: selectedCheckbox !== 'Urgencia' ? {
+                      value: true,
+                      message: 'El nombre de la mascota es un campo requerido'
+                    } : false
+                  })} />
+                  {errors.nombre_mascota && <span>{errors.nombre_mascota.message}</span>}
+                </div>
 
-              <input placeholder='Edad' type='number' name="edad" id="edad"   {...register('edad', {
-                autoComplete: {
-                  value: 'off'
-                },
-                required: selectedCheckbox !== 'Urgencia' ? {
-                  value: true,
-                  message: 'La edad es un campo requerido'
-                } : false
-              })} />
+                <div className='grid-cols-3 flex space-x-3'>
+                  <div>
+                    <label className='flex flex-row mb-2'>Edad<p className='text-red-500'>*</p> </label>
+                    <input className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type='number' name="edad" id="edad"   {...register('edad', {
+                      autoComplete: {
+                        value: 'off'
+                      },
+                      required: selectedCheckbox !== 'Urgencia' ? {
+                        value: true,
+                        message: 'La edad es un campo requerido'
+                      } : false
+                    })} />
 
-              {errors.edad && <span>{errors.edad.message}</span>}
+                    {errors.edad && <span>{errors.edad.message}</span>}
+                  </div>
 
-              <input placeholder='Color' type="text" name="color" id="color"   {...register('color', {
-                autoComplete: {
-                  value: 'off'
-                },
-                required: selectedCheckbox !== 'Urgencia' ? {
-                  value: true,
-                  message: 'El color es un campo requerido'
-                } : false
-              })} />
+                  <div><label className='flex flex-row mb-2'>Color<p className='text-red-500'>*</p> </label>
+                    <input className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type="text" name="color" id="color"   {...register('color', {
+                      autoComplete: {
+                        value: 'off'
+                      },
+                      required: selectedCheckbox !== 'Urgencia' ? {
+                        value: true,
+                        message: 'El color es un campo requerido'
+                      } : false
+                    })} />
 
-              {errors.color && <span>{errors.color.message}</span>}
+                    {errors.color && <span>{errors.color.message}</span>}
+                  </div>
 
-              <input placeholder='Sexo' type="text" name="sexo" id="sexo"   {...register('sexo', {
-                autoComplete: {
-                  value: 'off'
-                },
-                required: selectedCheckbox !== 'Urgencia' ? {
-                  value: true,
-                  message: 'EL sexo es un campo requerido'
-                } : false
-              })} />
+                  <div><label className='flex flex-row mb-2'>Sexo<p className='text-red-500'>*</p> </label>
+                    <input className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type="text" name="sexo" id="sexo"   {...register('sexo', {
+                      autoComplete: {
+                        value: 'off'
+                      },
+                      required: selectedCheckbox !== 'Urgencia' ? {
+                        value: true,
+                        message: 'EL sexo es un campo requerido'
+                      } : false
+                    })} />
 
-              {errors.sexo && <span>{errors.sexo.message}</span>}
+                    {errors.sexo && <span>{errors.sexo.message}</span>}
+                  </div>
+                </div>
+              </div>
 
-              <input placeholder='Raza' type="text" name="raza" id="raza"   {...register('raza', {
-                autoComplete: {
-                  value: 'off'
-                },
-                required: selectedCheckbox !== 'Urgencia' ? {
-                  value: true,
-                  message: 'La raza es un campo requerido'
-                } : false
-              })} />
 
-              {errors.raza && <span>{errors.raza.message}</span>}
+              <div className='flex grid-cols-2 space-x-40'><div>
+                <label className='flex flex-row mb-2'>Raza<p className='text-red-500'>*</p> </label>
+                <input className='shadow rounded-md resize-none h-6 w-50' placeholder='Ej.texto' type="text" name="raza" id="raza"   {...register('raza', {
+                  autoComplete: {
+                    value: 'off'
+                  },
+                  required: selectedCheckbox !== 'Urgencia' ? {
+                    value: true,
+                    message: 'La raza es un campo requerido'
+                  } : false
+                })} />
 
-              <input placeholder='Especie' type="text" name="especie" id="especie"   {...register('especie', {
-                autoComplete: {
-                  value: 'off'
-                },
-                required: selectedCheckbox !== 'Urgencia' ? {
-                  value: true,
-                  message: 'La especie es un campo requerido'
-                } : false
-              })} />
+                {errors.raza && <span>{errors.raza.message}</span>}
+              </div>
 
-              {errors.especie && <span>{errors.especie.message}</span>}
+                <div><label className='flex flex-row mb-2'>Especie<p className='text-red-500'>*</p> </label>
+                  <input className='shadow rounded-md resize-none h-6 w-50' placeholder='Ej.texto' type="text" name="especie" id="especie"   {...register('especie', {
+                    autoComplete: {
+                      value: 'off'
+                    },
+                    required: selectedCheckbox !== 'Urgencia' ? {
+                      value: true,
+                      message: 'La especie es un campo requerido'
+                    } : false
+                  })} />
+
+                  {errors.especie && <span>{errors.especie.message}</span>}
+                </div>
+              </div>
             </div>
             <div className=' flex flex-row my-4'>
               <input type="datetime-local" name="datetime-local" id="datetime-local" {...register('dateForm')} />
@@ -540,9 +593,9 @@ const ReceptionPage = () => {
 
 
 
-            <div className=' flex flex-row justify-between py-4'>
-              <button type='button' className='ml-10' onClick={() => { agregarMascota(getValues()) }}>Aceptar</button>
-              <button type='button' className='mr-10' id='btn-close-modal'>Cerrar</button>
+            <div className='flex space-x-80'>
+              <button type='button' className=' bg-[#eb5b27] text-white border-none rounded-3xl h-10 w-36 mb-8' onClick={() => { agregarMascota(getValues()) }}>Aceptar</button>
+              <button type='button' className=' bg-[#eb5b27] text-white border-none rounded-3xl h-10 w-36 mb-8' id='btn-close-modal'>Cerrar</button>
             </div>
 
           </div>
