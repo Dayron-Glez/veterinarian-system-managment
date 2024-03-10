@@ -223,7 +223,7 @@ const DoctorPage = () => {
                   </div>
 
 
-                  <div className=' flex flex-col mt-4 ml-4'>
+                  <div className=' flex flex-col mt-4 ml-10'>
 
                     <div>
                       <h3 className=' ml-[15px] mt-16 mb-8'>&Uacute;LTIMA DESPARACITACIÓN</h3>
@@ -328,7 +328,7 @@ const DoctorPage = () => {
                   </div>
                 </section>
               </div>
-              <div className=' flex flex-row ml-12'>
+              <div className=' flex flex-row flex-wrap ml-12 mt-16'>
                 <section className=' flex flex-col ml-5 mt-8'>
                   <label className='flex flex-row mb-2'>Alergias <p className='text-red-500'>*</p> </label>
                   <textarea name="alergias" id="alergias" cols="" rows="5" className='shadow resize-none rounded-sm w-80'{...register('alergias')} />
@@ -343,33 +343,39 @@ const DoctorPage = () => {
                   <label className='flex flex-row mb-2'>Antecedentes familiares <p className='text-red-500'>*</p> </label>
                   <textarea name="antecedentes" id="antecedentes" cols="" rows="5" className='shadow resize-none rounded-sm w-80'{...register('antecedentes')} />
                 </section>
+
+                <section className=' flex flex-col ml-5 mt-8'>
+                  <label className='flex flex-row mb-2'>Cirugías <p className='text-red-500'>*</p> </label>
+                  <textarea name="cirugías" id="cirugías" cols="" rows="5" className='shadow resize-none rounded-sm w-80'{...register('cirugías')} />
+                </section>
               </div>
+              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]'/>
               <section className='flex flex-col ml-8 mt-8'>
                 <h4 className='text-[#344054] ml-8'>CONSTANTES FISIOLÓGICAS</h4>
                 <div className='flex flex-row justify-start  mt-8'>
-                  <div className='flex flex-col ml-8'>
+                  <div className='flex flex-col ml-6'>
                     <label className='flex flex-row mb-2'>TLLC <p className='text-red-500'>*</p> </label>
-                    <input type="number" name="TLLC" id="TLLC" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('TLLC')} />
+                    <input type="number" name="TLLC" id="TLLC" className=' w-[153px] shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('TLLC')} />
                   </div>
-                  <div className='flex flex-col ml-8'>
+                  <div className='flex flex-col ml-6'>
                     <label className='flex flex-row mb-2'>Pulso <p className='text-red-500'>*</p> </label>
-                    <input type="number" name="Pulso" id="Pulso" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('Pulso')} />
+                    <input type="number" name="Pulso" id="Pulso" className=' w-[153px] shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('Pulso')} />
                   </div>
-                  <div className='flex flex-col ml-8'>
+                  <div className='flex flex-col ml-6'>
                     <label className='flex flex-row mb-2'>FC <p className='text-red-500'>*</p> </label>
-                    <input type="number" name="FC" id="FC" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('FC')} />
+                    <input type="number" name="FC" id="FC" className=' w-[153px] shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('FC')} />
                   </div>
-                  <div className='flex flex-col ml-8'>
+                  <div className='flex flex-col ml-6'>
                     <label className='flex flex-row mb-2'>FR <p className='text-red-500'>*</p> </label>
-                    <input type="number" name="FR" id="FR" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('FR')} />
+                    <input type="number" name="FR" id="FR" className=' w-[153px] shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('FR')} />
                   </div>
-                  <div className='flex flex-col ml-8'>
-                    <label className='flex flex-row mb-2'>Temperatura <p className='text-red-500'>*</p> </label>
-                    <input type="number" name="Temperatura" id="Temperatura" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('Temperatura')} />
+                  <div className='flex flex-col ml-6'>
+                    <label className='flex flex-row mb-2'>{`Temperatura [C`}&deg;{`]`} <p className='text-red-500'>*</p> </label>
+                    <input type="number" name="Temperatura" id="Temperatura" className=' w-[153px] shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('Temperatura')} />
                   </div>
-                  <div className='flex flex-col ml-8'>
-                    <label className='flex flex-row mb-2'>Peso <p className='text-red-500'>*</p> </label>
-                    <input type="number" name="Peso" id="Peso" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('Peso')} />
+                  <div className='flex flex-col ml-6'>
+                    <label className='flex flex-row mb-2'>{`Peso [kg/lbs]`} <p className='text-red-500'>*</p> </label>
+                    <input type="number" name="Peso" id="Peso" className=' w-[153px] shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('Peso')} />
                   </div>
                 </div>
                 {/* <SystemDeseaseComponent
@@ -377,7 +383,179 @@ const DoctorPage = () => {
                   onEnfermedadChange={handleEnfermedadChange}
                 /> */}
               </section>
-              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]'></div>
+              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]'/>
+              <div className=' flex flex-col ml-16 mt-16'>
+                <h3>EXAMEN CLÍNICO</h3>
+                <div className=' flex flex-row '>
+                  <section className=' flex flex-col  mt-8'>
+                      <label className='flex flex-row mb-2'>Actitud <p className='text-red-500'>*</p> </label>
+                      <div className='flex flex-row'>
+                        <label className='flex items-center mr-11'>
+                          <input type="radio" value="Alerta" name="Actitud" {...register('Actitud')} className='custom-radio' />
+                          <span className="ml-2">Alerta</span>
+                        </label>
+                        <label className='flex items-center'>
+                          <input type="radio" value="Agresivo" name="Actitud" {...register('Actitud')} className='custom-radio' />
+                          <span className="ml-2">Agresivo</span>
+                        </label>
+                      </div>
+                      <div className='flex flex-row'>
+                        <label className='flex items-center mr-5'>
+                          <input type="radio" value="Depresivo" name="Actitud" {...register('Actitud')} className='custom-radio' />
+                          <span className="ml-2">Depresivo</span>
+                        </label>
+                        <label className='flex items-center'>
+                          <input type="radio" value="Comatoso" name="Actitud" {...register('Actitud')} className='custom-radio' />
+                          <span className="ml-2">Comatoso</span>
+                        </label>
+                      </div>
+                    </section>
+
+                    <section className=' flex flex-col  mt-8 ml-36'>
+                      <label className='flex flex-row mb-2'>Condición corporal <p className='text-red-500'>*</p> </label>
+                      <div className=' flex flex-col'>
+
+                        <div className='flex flex-row'>
+                          <label className='flex items-center mr-11'>
+                            <input type="radio" value="Caquético" name="condicion_corporal" {...register('condicion_corporal')} className='custom-radio' />
+                            <span className="ml-2">Caquético</span>
+                          </label>
+                          <label className='flex items-center'>
+                            <input type="radio" value="Delgado" name="condicion_corporal" {...register('condicion_corporal')} className='custom-radio' />
+                            <span className="ml-2">Delgado</span>
+                          </label>
+                      </div>
+                          <div>
+                          <label className='flex items-center'>
+                            <input type="radio" value="Normal" name="condicion_corporal" {...register('condicion_corporal')} className='custom-radio' />
+                            <span className="ml-2">Normal</span>
+                          </label>
+                          </div>
+                      </div>
+                      <div className='flex flex-row'>
+                        <label className='flex items-center mr-5'>
+                          <input type="radio" value="Sobrepeso" name="condicion_corporal" {...register('condicion_corporal')} className='custom-radio' />
+                          <span className="ml-2">Sobrepeso</span>
+                        </label>
+                        <label className='flex items-center ml-[22px]'>
+                          <input type="radio" value="Obeso" name="condicion_corporal" {...register('condicion_corporal')} className='custom-radio' />
+                          <span className="ml-2">Obeso</span>
+                        </label>
+                      </div>
+                    </section>
+
+                    <section className=' flex flex-col  mt-8 ml-40'>
+                      <label className='flex flex-row mb-2'>Hidratación <p className='text-red-500'>*</p> </label>
+                      <div className=' flex flex-col'>
+
+                        <div className='flex flex-row'>
+                          <label className='flex items-center mr-11'>
+                            <input type="radio" value="Normal" name="hidratacion" {...register('hidratacion')} className='custom-radio' />
+                            <span className="ml-2">Normal</span>
+                          </label>
+                          <label className='flex items-center ml-[46px]'>
+                            <input type="radio" value="d_0_5" name="hidratacion" {...register('hidratacion')} className='custom-radio' />
+                            <span className="ml-2">{`Deshidratación 0-5%`}</span>
+                          </label>
+                      </div>
+                          <div className=' flex flex-row'>
+                            <label className='flex items-center'>
+                              <input type="radio" value="d_6_7" name="hidratacion" {...register('hidratacion')} className='custom-radio' />
+                              <span className="ml-2">{`Deshidratación 6-7%`}</span>
+                            </label>
+                            <label className='flex items-center ml-1 '>
+                              <input type="radio" value="d_8_9" name="hidratacion" {...register('hidratacion')} className='custom-radio' />
+                              <span className="ml-2">{`Deshidratación 8-9%`}</span>
+                            </label>
+                          </div>
+                      </div>
+                      <div className='flex flex-row'>
+                        <label className='flex items-center mr-5'>
+                          <input type="radio" value="d_+10" name="hidratacion" {...register('hidratacion')} className='custom-radio' />
+                          <span className="ml-2">{`Deshidratación +10%`}</span>
+                        </label>
+                      </div>
+                    </section>
+                </div>
+              </div>
+              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]'/>
+              <div className=' flex flex-row ml-16 mt-16'>
+                <section className=' flex flex-col'>
+                  <label className='flex flex-row mb-6'>Mucosa Conjuntival <p className='text-red-500'>*</p> </label>
+                  <div className='flex flex-row'>
+                        <label className='flex items-center mr-5'>
+                          <input type="radio" value="Normal" name="mucosa_conjuntival" {...register('mucosa_conjuntival')} className='custom-radio' />
+                          <span className="ml-2">Normal</span>
+                        </label>
+
+                        <label className='flex items-center mr-5'>
+                          <input type="radio" value="Alterada" name="mucosa_conjuntival" {...register('mucosa_conjuntival')} className='custom-radio' />
+                          <span className="ml-2">Alterada</span>
+                        </label>
+                  </div>
+                  <div className=' mt-8'>
+                    <label className='flex flex-row mb-2'>Observación <p className='text-red-500'>*</p> </label>
+                    <textarea name="observation_mucosa_conjuntival" id="observation_mucosa_conjuntival" cols="" rows="5" className='shadow resize-none rounded-sm w-80'{...register('observation_mucosa_conjuntival')} />
+                  </div>
+                </section>
+                <section className=' ml-6'>
+                <label className='flex flex-row mb-6'>Mucosa Vulvar/Prepucial <p className='text-red-500'>*</p> </label>
+                  <div className='flex flex-row'>
+                        <label className='flex items-center mr-5'>
+                          <input type="radio" value="Normal" name="mucosa_vulvar_prepucial" {...register('mucosa_vulvar_prepucial')} className='custom-radio' />
+                          <span className="ml-2">Normal</span>
+                        </label>
+
+                        <label className='flex items-center mr-5'>
+                          <input type="radio" value="Alterada" name="mucosa_vulvar_prepucial" {...register('mucosa_vulvar_prepucial')} className='custom-radio' />
+                          <span className="ml-2">Alterada</span>
+                        </label>
+                  </div>
+                  <div className=' mt-8'>
+                    <label className='flex flex-row mb-2'>Observación <p className='text-red-500'>*</p> </label>
+                    <textarea name="observation_mucosa_vulvar_prepucial" id="observation_mucosa_vulvar_prepucial" cols="" rows="5" className='shadow resize-none rounded-sm w-80'{...register('observation_mucosa_vulvar_prepucial')} />
+                  </div>
+                </section>
+                <section className=' ml-12'>
+                <label className='flex flex-row mb-6'>Mucosa Rectal <p className='text-red-500'>*</p> </label>
+                  <div className='flex flex-row'>
+                        <label className='flex items-center mr-5'>
+                          <input type="radio" value="Normal" name="mucosa_rectal" {...register('mucosa_rectal')} className='custom-radio' />
+                          <span className="ml-2">Normal</span>
+                        </label>
+
+                        <label className='flex items-center mr-5'>
+                          <input type="radio" value="Alterada" name="mucosa_rectal" {...register('mucosa_rectal')} className='custom-radio' />
+                          <span className="ml-2">Alterada</span>
+                        </label>
+                  </div>
+                  <div className=' mt-8'>
+                    <label className='flex flex-row mb-2'>Observación <p className='text-red-500'>*</p> </label>
+                    <textarea name="observation_mucosa_rectal" id="observation_mucosa_rectal" cols="" rows="5" className='shadow resize-none rounded-sm w-80'{...register('observation_mucosa_rectal')} />
+                  </div>
+                </section>
+              </div>
+              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]'/>
+              <div className=' flex flex-row ml-16 mt-16'>
+              <section className=' flex flex-col'>
+                  <label className='flex flex-row mb-6'>Nódulos linfáticos <p className='text-red-500'>*</p> </label>
+                  <div className='flex flex-row'>
+                        <label className='flex items-center mr-5'>
+                          <input type="radio" value="Normal" name="nodulos_linfaticos" {...register('nodulos_linfaticos')} className='custom-radio' />
+                          <span className="ml-2">Normal</span>
+                        </label>
+
+                        <label className='flex items-center mr-5'>
+                          <input type="radio" value="Alterada" name="nodulos_linfaticos" {...register('nodulos_linfaticos')} className='custom-radio' />
+                          <span className="ml-2">Alterada</span>
+                        </label>
+                  </div>
+                </section>
+                  <div className=' ml-[150px]'>
+                    <label className='flex flex-row mb-2'>Observación <p className='text-red-500'>*</p> </label>
+                    <textarea name="observation_nodulos_linfaticos" id="observation_nodulos_linfaticos" cols="" rows="5" className='shadow resize-none rounded-sm w-80'{...register('observation_nodulos_linfaticos')} />
+                  </div>
+              </div>
               <div className='flex flex-row justify-around mt-8'>
                 <button onClick={() => { reset() }} className=' rounded-3xl h-10 w-36 mb-8'>Cancelar</button>
                 <button type='submit' className=' bg-[#eb5b27] text-white border-none rounded-3xl h-10 w-36 mb-8'>Guardar</button>
