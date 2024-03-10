@@ -394,27 +394,27 @@ const ReceptionPage = () => {
 
                 <li>
                   <label>
-                    <input type="checkbox" class=" accent-orange-600 focus:accent-orange-600" name='Consulta' {...register('Consulta')} onChange={handleCheckboxChange} />Consulta
+                    <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Consulta' {...register('Consulta')} onChange={handleCheckboxChange} />Consulta
                   </label>
                 </li>
                 <li>
                   <label>
-                    <input type="checkbox" class=" accent-orange-600 focus:accent-orange-600" name='Continuación' {...register('Continuación')} onChange={handleCheckboxChange} />Continuación
+                    <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Continuación' {...register('Continuación')} onChange={handleCheckboxChange} />Continuación
                   </label>
                 </li>
                 <li>
                   <label>
-                    <input type="checkbox" class=" accent-orange-600 focus:accent-orange-600" name='Planificada' {...register('Planificada')} onChange={handleCheckboxChange} />Planificada
+                    <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Planificada' {...register('Planificada')} onChange={handleCheckboxChange} />Planificada
                   </label>
                 </li>
                 <li>
                   <label>
-                    <input type="checkbox" class=" accent-orange-600 focus:accent-orange-600" name='Emergencia' {...register('Emergencia')} onChange={handleCheckboxChange} />Emergencia
+                    <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Emergencia' {...register('Emergencia')} onChange={handleCheckboxChange} />Emergencia
                   </label>
                 </li>
                 <li>
                   <label>
-                    <input type="checkbox" class=" accent-orange-600 focus:accent-orange-600" name="Urgencia" id="Urgencia"{...register('Urgencia')} onChange={handleUrgencyChange} />Urgencia
+                    <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name="Urgencia" id="Urgencia"{...register('Urgencia')} onChange={handleUrgencyChange} />Urgencia
                   </label>
                 </li>
                 <Controller

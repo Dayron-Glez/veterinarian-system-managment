@@ -33,4 +33,19 @@ main::-webkit-scrollbar {
     border-radius: 5px; /* Bordes redondeados */
   }
   
+  .custom-radio {
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border: 1px solid #d2d6dc;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border-radius: 5px; /* Esto hace que el botón de radio sea cuadrado */
+  }
+  
+  .custom-radio:checked {
+    background-color: #eb5b27;
+  }
+  
   

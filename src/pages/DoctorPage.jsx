@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios'
 import { useForm } from 'react-hook-form';
-
+import ECOP_IMG from '../assets/ecop_image.png'
+import ECOP_IMG2 from '../assets/eccop_image_2.png'
 import LogoComponent from '../components/LogoComponent'
 import notificationIcon from '../assets/notificationIcon.svg'
 import SystemDeseaseComponent from '../components/SystemDeseaseComponent'
@@ -156,7 +157,7 @@ const DoctorPage = () => {
       });
 
     console.log(data);
-    // reset();
+    reset();
   }
 
   return (
@@ -173,139 +174,177 @@ const DoctorPage = () => {
               <img height={32} width={32} src={notificationIcon} alt="notification Icon" className='mx-4 md:mx-8' />
             </div>
           </section>
-          <div className=' flex flex-row h-[7vh] place-items-center bg-[#eb5b27]'>
-            <ul className=' list-none mx-8'>
-              <button className=' border-none bg-transparent mx-4'>
-                <li className='text-white font-semibold'>INICIO</li>
-              </button>
-              <button className=' border-none bg-transparent mx-4'>
-                <li className='text-white font-semibold'>CLIENTES</li>
-              </button>
-              <button className=' border-none bg-transparent mx-4'>
-                <li className='text-white font-semibold'>MASCOTAS</li>
-              </button>
-              <button className=' border-none bg-transparent mx-4'>
-                <li className='text-white font-semibold'>HISTORIAS</li>
-              </button>
-            </ul>
-          </div>
+          <div className='h-[4vh] bg-[#eb5b27]' />
         </nav>
         <div className='flex flex-row h-full w-full '>
           <main className='flex flex-col h-[100vh] w-[75vw] overflow-auto scrollbar scrollbar-thumb-gray-500 scrollbar-thin scrollbar-thumb-rounded'>
             <section className='flex flex-col mt-8 ml-8'>
-              <h3 className='text-[#344054]'>HISTORIA CLÍNICA</h3>
-              <div className=' mt-4 '>
-                <button className=' bg-transparent border-[#344054] border-[1px] rounded-md w-32 h-8 mx-2'>Principal</button>
-                <button className=' bg-transparent border-[#344054] border-[1px] rounded-md w-32 h-8 mx-2'>Examen Clínico</button>
-                <button className=' bg-transparent border-[#344054] border-[1px] rounded-md w-32 h-8 mx-2'>Plan Terapéutico</button>
-                <button className=' bg-transparent border-[#344054] border-[1px] rounded-md w-32 h-8 mx-2'>Mucosas</button>
-                <button className=' bg-transparent border-[#344054] border-[1px] rounded-md w-32 h-8 mx-2'>Exámenes</button>
-                <button className=' bg-transparent border-[#344054] border-[1px] rounded-md w-32 h-8 mx-2'>Vacunas</button>
-                <button className=' bg-transparent border-[#344054] border-[1px] rounded-md w-32 h-8 mx-2'>Desparacitación</button>
-                <button className=' bg-transparent border-[#344054] border-[1px] rounded-md w-32 h-8 mx-2'>Cirugía</button>
-                <button className=' bg-transparent border-[#344054] border-[1px] rounded-md w-32 h-8 mx-2'>Evolución</button>
+              <div className=' flex flex-row place-items-center'>
+                <img src={ECOP_IMG} alt="ECOP Image" className=' size-8' />
+                <h2 className='text-[#344054] font-bold ml-1'>ECOP</h2>
               </div>
+              <div className=' mt-4 border-[1px] border-solid border-[#344054] h-0 w-[98%]'></div>
             </section>
             <form onSubmit={handleSubmit(onSubmit)}>
+              <section className=' flex flex-col'>
+                <h3 className=' pt-10 ml-16'>GENERAL</h3>
+                <div className='flex flex-row ml-16 mt-4'>
+                  <div className='flex flex-col'>
+                    <label className='flex flex-row mb-2'>Motivo de consulta <p className='text-red-500'>*</p> </label>
+                    <textarea name="motivo" id="motivo" cols="64" rows="5" className='shadow rounded-sm resize-none' {...register('motivo')} />
+                  </div>
+                  <div className='flex flex-col ml-6'>
+                    <label className='flex flex-row mb-2'>Anamnesis <p className='text-red-500'>*</p> </label>
+                    <textarea name="anamnesis" id="anamnesis" cols="64" rows="5" className='shadow rounded-sm resize-none' {...register('anamnesis')} />
+                  </div>
+                </div>
+                <section className=' flex flex-row ml-16'>
 
-              <section className='flex flex-row justify-around mt-8'>
-                <div className='flex flex-col'>
-                  <label className='flex flex-row mb-2'>Motivo de consulta <p className='text-red-500'>*</p> </label>
-                  <textarea name="motivo" id="motivo" cols="70" rows="4" className='shadow rounded-md resize-none' {...register('motivo')} />
-                </div>
-                <div className='flex flex-col'>
-                  <label className='flex flex-row mb-2'>Anamnesis <p className='text-red-500'>*</p> </label>
-                  <textarea name="anamnesis" id="anamnesis" cols="70" rows="4" className='shadow rounded-md resize-none' {...register('anamnesis')} />
-                </div>
+                  <div className='flex flex-col mt-4'>
+                    <div>
+                      <h3 className=' mt-16 mb-8'>&Uacute;LTIMA VACUNACIÓN</h3>
+                    </div>
+                    <div className=' flex flex-row ml-[-14px]'>
+                      <div className='flex flex-col  items-baseline'>
+                        <label className='flex flex-row mb-2'>Tipo de vacuna</label>
+                        <textarea name="tipo_vacuna" id="tipo_vacuna" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' />
+                      </div>
+
+                      <div className=' flex flex-col  items-baseline'>
+                        <label className='flex flex-row mb-2'>Producto</label>
+                        <textarea name="producto" id="producto" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' />
+                      </div>
+
+                      <div className=' flex flex-col  items-baseline'>
+                        <label className='flex flex-row mb-2'>Fecha</label>
+                        <textarea name="fecha" id="fecha" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' />
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div className=' flex flex-col mt-4 ml-4'>
+
+                    <div>
+                      <h3 className=' ml-[15px] mt-16 mb-8'>&Uacute;LTIMA DESPARACITACIÓN</h3>
+                    </div>
+                    <div className=' flex flex-row'>
+
+                      <div className=' flex flex-col items-baseline'>
+                        <label className='flex flex-row mb-2'>Producto</label>
+                        <textarea name="producto" id="producto" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' />
+                      </div>
+
+                      <div className=' flex flex-col  items-baseline'>
+                        <label className='flex flex-row mb-2'>Fecha</label>
+                        <textarea name="fecha" id="fecha" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' />
+                      </div>
+                    </div>
+                  </div>
+
+                </section>
               </section>
-              <div className='flex flex-row'>
-                <section className=' flex flex-col ml-8 mt-8'>
+              <div className='flex flex-row ml-16 mt-16'>
+                <section className=' flex flex-col  mt-8'>
                   <label className='flex flex-row mb-2'>Estado reproductivo <p className='text-red-500'>*</p> </label>
                   <div className='flex flex-row'>
-                    <label className=' mx-8'>
-                      <input type="radio" value="Castrado" name="estado_reproductivo" {...register('estado_reproductivo')} />
-                      Castrado
+                    <label className='flex items-center mr-8'>
+                      <input type="radio" value="Castrado" name="estado_reproductivo" {...register('estado_reproductivo')} className='custom-radio' />
+                      <span className="ml-2">Castrado</span>
                     </label>
-                    <label>
-                      <input type="radio" value="Gestación" name="estado_reproductivo" {...register('estado_reproductivo')} />
-                      Gestación
+                    <label className='flex items-center'>
+                      <input type="radio" value="Gestación" name="estado_reproductivo" {...register('estado_reproductivo')} className='custom-radio' />
+                      <span className="ml-2">Gestación</span>
                     </label>
                   </div>
                   <div className='flex flex-row'>
-                    <label className=' mx-8'>
-                      <input type="radio" value="Entero" name="estado_reproductivo" {...register('estado_reproductivo')} />
-                      Entero
+                    <label className='flex items-center mr-12'>
+                      <input type="radio" value="Entero" name="estado_reproductivo" {...register('estado_reproductivo')} className='custom-radio' />
+                      <span className="ml-2">Entero</span>
                     </label>
-                    <label>
-                      <input type="radio" value="Lactancia" name="estado_reproductivo" {...register('estado_reproductivo')} />
-                      Lactancia
+                    <label className='flex items-center'>
+                      <input type="radio" value="Lactancia" name="estado_reproductivo" {...register('estado_reproductivo')} className='custom-radio' />
+                      <span className="ml-2">Lactancia</span>
                     </label>
                   </div>
+
                 </section>
-                <section className=' flex flex-col ml-8 mt-8'>
+                <section className=' flex flex-col ml-[136px] mt-8'>
                   <label className='flex flex-row mb-2'>Alimentación <p className='text-red-500'>*</p> </label>
                   <div className='flex flex-row'>
-                    <label className=''>
-                      <input type="radio" value="Balanceada" name="Alimentación" {...register('Alimentación')} />
-                      Balanceada
+                    <label className='flex items-center'>
+                      <input type="radio" value="Balanceada" name="Alimentación" {...register('Alimentación')} className='custom-radio' />
+                      <span className=' ml-2'>Balanceada</span>
                     </label>
-                    <label>
-                      <input type="radio" value="Mixta" name="Alimentación" className='ml-4' {...register('Alimentación')} />
-                      Mixta
+                    <label className=' flex items-center'>
+                      <input type="radio" value="Mixta" name="Alimentación" className='ml-8 custom-radio' {...register('Alimentación')} />
+                      <span className=' ml-2'>Mixta</span>
                     </label>
                   </div>
                   <div className='flex flex-col'>
-                    <label className='flex'>
-                      <input type="radio" value="Casera" name="Alimentación" {...register('Alimentación')} />
-                      Casera
+                    <label className='flex items-center'>
+                      <input type="radio" value="Casera" name="Alimentación" {...register('Alimentación')} className='custom-radio' />
+                      <span className=' ml-2'>Casera</span>
                     </label>
-                    <div className='flex flex-row'>
-                      <label>
-                        <input type="radio" value="Otro1" name="Alimentación" {...register('Alimentación')} />
-                        Otro
+                    <div className='flex flex-row mt-4'>
+                      <label className=' flex items-center'>
+                        <input type="radio" value="Otro1" name="Alimentación" {...register('Alimentación')} className=' custom-radio' />
+                        <span>Otro</span>
                       </label>
                       <textarea name="otro1" id="otro1" cols="15" rows="1" className='shadow ml-4 rounded-sm resize-none' placeholder='Ej. texto' {...register('otro1')} />
                     </div>
                   </div>
                 </section>
-                <section className=' flex flex-col ml-8 mt-8'>
+                <section className=' flex flex-col ml-[165px] mt-8'>
                   <label className='flex flex-row mb-2'>Hábitat <p className='text-red-500'>*</p> </label>
                   <div className='flex flex-row'>
-                    <label className=''>
-                      <input type="radio" value="Casa" name="Hábitat" {...register('Hábitat')} />
-                      Casa
+                    <label className=' flex items-center'>
+                      <input type="radio" value="Casa" name="Hábitat" {...register('Hábitat')} className='custom-radio' />
+                      <span className=' ml-2'>Casa</span>
                     </label>
-                    <label>
-                      <input type="radio" value="Lote" name="Hábitat" className='ml-4' {...register('Hábitat')} />
-                      Lote
+                    <label className=' flex items-center'>
+                      <input type="radio" value="Lote" name="Hábitat" className='ml-8 custom-radio' {...register('Hábitat')} />
+                      <span className=' ml-2'>Lote</span>
                     </label>
                   </div>
                   <div className='flex flex-col'>
                     <div className='flex flex-row'>
-                      <label className='flex'>
-                        <input type="radio" value="Finca" name="Hábitat" {...register('Hábitat')} />
-                        Finca
+                      <label className='flex items-center'>
+                        <input type="radio" value="Finca" name="Hábitat" {...register('Hábitat')} className='custom-radio' />
+                        <span className=' ml-2'>Finca</span>
                       </label>
-                      <label className='flex'>
-                        <input type="radio" value="Tráiler" name="Hábitat" className='ml-3' {...register('Hábitat')} />
-                        Tráiler
+                      <label className='flex items-center'>
+                        <input type="radio" value="Tráiler" name="Hábitat" className='ml-7 custom-radio' {...register('Hábitat')} />
+                        <span className=' ml-2'>Tráiler</span>
                       </label>
                     </div>
-                    <div className='flex flex-row'>
-                      <label>
-                        <input type="radio" value="Otro2" name="Hábitat" {...register('Hábitat')} />
-                        Otro
+                    <div className='flex flex-row mt-4'>
+                      <label className=' flex items-center'>
+                        <input type="radio" value="Otro2" name="Hábitat" {...register('Hábitat')} className='custom-radio' />
+                        <span className=' ml-2'>Otro</span>
                       </label>
                       <textarea name="otro2" id="otro2" cols="15" rows="1" className='shadow ml-4 rounded-sm resize-none' placeholder='Ej. texto'{...register('otro2')} />
                     </div>
                   </div>
                 </section>
               </div>
-              <section className=' flex flex-col ml-5 mt-8'>
-                <label className='flex flex-row mb-2'>Alergias <p className='text-red-500'>*</p> </label>
-                <textarea name="alergias" id="alergias" cols="" rows="4" className='shadow resize-none rounded-md w-80'{...register('alergias')} />
-              </section>
-              <section className='flex flex-col ml-5 mt-8'>
+              <div className=' flex flex-row ml-12'>
+                <section className=' flex flex-col ml-5 mt-8'>
+                  <label className='flex flex-row mb-2'>Alergias <p className='text-red-500'>*</p> </label>
+                  <textarea name="alergias" id="alergias" cols="" rows="5" className='shadow resize-none rounded-sm w-80'{...register('alergias')} />
+                </section>
+
+                <section className=' flex flex-col ml-5 mt-8'>
+                  <label className='flex flex-row mb-2'>Enfermedades anteriores <p className='text-red-500'>*</p> </label>
+                  <textarea name="enfermedades" id="enfermedades" cols="" rows="5" className='shadow resize-none rounded-sm w-80'{...register('enfermedades')} />
+                </section>
+
+                <section className=' flex flex-col ml-5 mt-8'>
+                  <label className='flex flex-row mb-2'>Antecedentes familiares <p className='text-red-500'>*</p> </label>
+                  <textarea name="antecedentes" id="antecedentes" cols="" rows="5" className='shadow resize-none rounded-sm w-80'{...register('antecedentes')} />
+                </section>
+              </div>
+              <section className='flex flex-col ml-8 mt-8'>
                 <h4 className='text-[#344054] ml-8'>CONSTANTES FISIOLÓGICAS</h4>
                 <div className='flex flex-row justify-start  mt-8'>
                   <div className='flex flex-col ml-8'>
@@ -318,11 +357,11 @@ const DoctorPage = () => {
                   </div>
                   <div className='flex flex-col ml-8'>
                     <label className='flex flex-row mb-2'>FC <p className='text-red-500'>*</p> </label>
-                    <input type="text" name="FC" id="FC" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('FC')} />
+                    <input type="number" name="FC" id="FC" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('FC')} />
                   </div>
                   <div className='flex flex-col ml-8'>
                     <label className='flex flex-row mb-2'>FR <p className='text-red-500'>*</p> </label>
-                    <input type="text" name="FR" id="FR" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('FR')} />
+                    <input type="number" name="FR" id="FR" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('FR')} />
                   </div>
                   <div className='flex flex-col ml-8'>
                     <label className='flex flex-row mb-2'>Temperatura <p className='text-red-500'>*</p> </label>
@@ -333,12 +372,12 @@ const DoctorPage = () => {
                     <input type="number" name="Peso" id="Peso" className=' w-32 shadow h-8 rounded-md border-[1px]' placeholder='Ej. text' {...register('Peso')} />
                   </div>
                 </div>
-                <SystemDeseaseComponent
+                {/* <SystemDeseaseComponent
                   onSubmit={handleSystemChange}
                   onEnfermedadChange={handleEnfermedadChange}
-                />
+                /> */}
               </section>
-              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[90%]'></div>
+              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]'></div>
               <div className='flex flex-row justify-around mt-8'>
                 <button onClick={() => { reset() }} className=' rounded-3xl h-10 w-36 mb-8'>Cancelar</button>
                 <button type='submit' className=' bg-[#eb5b27] text-white border-none rounded-3xl h-10 w-36 mb-8'>Guardar</button>
@@ -361,14 +400,19 @@ const DoctorPage = () => {
                   <span className=' mt-4 font-extralight'>Edad : {mascotaSeleccionada.edad}</span>
                 </div>
               ) : (
-                <div>
-                  <h3 className=' my-4 text-[#eb5b27]'>Nombre de la mascota</h3>
-                  <div className='flex flex-row'>
-                    <p className='text-[#344054]'>Especie</p>
-                    <span className=' mx-4 text-[#344054]'>/</span>
-                    <p className='text-[#344054]'> Raza</p>
+                <div className=' flex flex-row my-4'>
+                  <div className=' grid rounded-full size-28'>
+                    <img src={ECOP_IMG2} alt="ECOP_IMG2" className='flex size-24 justify-self-end place-self-center ' />
                   </div>
-                  <span className=' mt-4 font-extralight'>Edad</span>
+                  <div>
+                    <h3 className=' my-4 text-[#eb5b27]'>Nombre de la mascota</h3>
+                    <div className='flex flex-row'>
+                      <p className='text-[#344054]'>Especie</p>
+                      <span className=' mx-4 text-[#344054]'>/</span>
+                      <p className='text-[#344054]'> Raza</p>
+                    </div>
+                    <span className=' mt-4 font-extralight'>Edad</span>
+                  </div>
                 </div>
               )}
 
