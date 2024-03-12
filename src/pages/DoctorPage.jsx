@@ -12,6 +12,8 @@ import { ConstantesFComponent } from '../components/ECOP/ConstantesFComponent';
 import { ExamenCComponent } from '../components/ECOP/ExamenCComponent';
 import { MucosasComponent } from '../components/ECOP/MucosasComponent';
 import { ProblemComponent } from '../components/ECOP/ProblemComponent';
+import { handleButtonClickDesease, handleButtonClickProblem } from '../components/utils/buttonHandlers';
+import { onSubmit } from '../components/utils/formHandler';
 const DoctorPage = () => {
   const [mascotas, setMascotas] = useState([]);
   const [mascota, setMascota] = useState(null);
@@ -74,121 +76,10 @@ const DoctorPage = () => {
     setMascotaSeleccionada(mascota);
   };
 
-  function onSubmit(data) {
-    if (watchAlimentacion !== 'Otro1') {
-      delete data.otro1;
-    } else {
-      data.Alimentación = data.otro1
-    }
-
-    if (watchHabitat !== 'Otro2') {
-      delete data.otro2;
-    } else {
-      data.Hábitat = data.otro2
-    }
-
-    const mascotaData = {
-      mascota: mascota.id,
-      historia: {
-        motivo: data.motivo,
-        anamnesis: data.anamnesis,
-        estado_reproductivo: data.estado_reproductivo,
-        alimentacion: data.Alimentación,
-        habitad: data.Hábitat,
-        alergia: data.alergias,
-        tllc: data.TLLC,
-        pulso: data.Pulso,
-        fc: data.FC,
-        fr: data.FR,
-        temperatura: data.Temperatura,
-        peso: data.Peso
-      },
-
-      cirugia: [
-        {
-          tipo: "Cirugia",
-          organo: "dfsf"
-        },
-        {
-          tipo: "Cirugia2",
-          organo: "aasda"
-        }
-      ],
-      vacuna: [
-        {
-          tipo: "Vacuna",
-          producto: "aassd"
-        }
-      ],
-      desparacitacion: [
-        {
-          producto: "Desparacitacio",
-          fecha: "2024-02-16"
-        }
-      ],
-      examen_clinico: [
-        {
-          hidratacion: "Exame",
-          actitud: "sads",
-          sistema:
-          {
-            nombre: sistema,
-            enfermedad: enfermedad
-          },
-          evolucion:
-          {
-            peso: 2.52,
-            fecha: "2024-02-21"
-          },
-          mucosa: {
-            "tipo": "dsd"
-          }
-        }
-      ],
-      terapia: [
-        {
-          tratamiento: "Terapi",
-          via: "asdh",
-          examen: {
-            "fecha": "2024-02-21"
-          }
-        }
-      ]
-    }
-
-    axios.post('https://g8k31qc7-8000.use.devtunnels.ms/doctor/actualizarHistoria/', mascotaData)
-      .then(response => {
-        console.log("Respuesta de axios.post", response);
-
-      })
-      .catch(error => {
-        console.error("Error en axios.post", error);
-      });
-
-    console.log(data);
-    reset();
-  }
-  const handleButtonClickDesease = () => {
-    const newComponent = (
-      <SystemDeseaseComponent
-        key={deseaseComponents.length}
-        onSubmit={handleSystemChange}
-        onEnfermedadChange={handleEnfermedadChange}
-      />
-    );
-
-    setDeseaseComponents(prevComponents => [...prevComponents, newComponent]);
-  };
-
-  const handleButtonClickProblem = () => {
-    const newComponentProblem = (
-      <ProblemComponent
-        key={problemsComponents.length}
-      />
-    );
-
-    setProblemsComponents(prevComponents => [...prevComponents, newComponentProblem]);
-  };
+  const onSubmitHandler = (data) => onSubmit(data, watchAlimentacion, watchHabitat, mascota, sistema, enfermedad, reset);
+  const onButtonClickDesease = () => handleButtonClickDesease(deseaseComponents, setDeseaseComponents, handleSystemChange, handleEnfermedadChange);
+  const onButtonClickProblem = () => handleButtonClickProblem(problemsComponents, setProblemsComponents);
+  
   return (
     <>
       <div className='flex flex-col'>
@@ -214,7 +105,7 @@ const DoctorPage = () => {
               </div>
               <div className=' mt-4 border-[1px] border-solid border-[#344054] h-0 w-[98%]'></div>
             </section>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmitHandler)}>
               <GeneralComponent register={register} />
               <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
               <ConstantesFComponent register={register}/>
@@ -234,7 +125,7 @@ const DoctorPage = () => {
                     onEnfermedadChange={handleEnfermedadChange}
                   />
                 ))}
-                <button onClick={handleButtonClickDesease} className=' bg-transparent border-none '>
+                <button onClick={onButtonClickDesease} className=' bg-transparent border-none '>
                   <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
                 </button>
               </div>
@@ -246,19 +137,13 @@ const DoctorPage = () => {
                     <p className=' font-semibold text-[#eb5b27] border-solid border-y-0 border-r-0 pl-2 ml-2 w-80'>Lista Maestra</p>
                     <p className=' font-semibold text-[#eb5b27] border-solid border-y-0 border-r-0 pl-2 ml-14'>{`Diagnóstico Diferencial (DAMNVVIT)`}</p>
                   </div>
-                  {/* <div className=' mt-4 border-[1px] border-solid border-[#b5b7ba] h-0 ml-8 w-[95%]' /> */}
-
-                  {/* <div className='flex flex-row mt-4'>
-                    <input  type="text" className=' placeholder:font-bold placeholder:pl-4 resize-none ml-6 w-72 h-8 border-none  outline-1 focus:outline-[#eb5b27] focus:rounded-sm'placeholder='Ej. Text'/>
-                    <input  type="text" className=' placeholder:font-bold placeholder:pl-4 resize-none w-80 ml-8 h-8 border-none  outline-1 focus:outline-[#eb5b27] focus:rounded-sm'placeholder='Ej. Text'/>
-                    <input  type="text" className=' placeholder:font-bold placeholder:pl-4 resize-none ml-14 w-72 h-8 border-none outline-1  focus:outline-[#eb5b27] focus:rounded-sm'placeholder='Ej. Text'/>
-                  </div> */}
+                 
                   {problemsComponents.map((_, index) => (
                       <ProblemComponent
                         key={index}
                       />
                     ))}
-                  <button onClick={handleButtonClickProblem} className=' bg-transparent border-none place-self-start mt-8  '>
+                  <button onClick={onButtonClickProblem} className=' bg-transparent border-none place-self-start mt-8  '>
                   <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
                 </button>
               </section>
