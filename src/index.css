@@ -47,5 +47,9 @@ main::-webkit-scrollbar {
   .custom-radio:checked {
     background-color: #eb5b27;
   }
+
+  textarea:focus, input:focus {
+    outline-color: #eb5b27;
+  }
   
   
