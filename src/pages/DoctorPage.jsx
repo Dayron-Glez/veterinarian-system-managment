@@ -18,7 +18,7 @@ const DoctorPage = () => {
   const [mascotas, setMascotas] = useState([]);
   const [mascota, setMascota] = useState(null);
   const [mascotaSeleccionada, setMascotaSeleccionada] = useState(null);
-  const { register, handleSubmit, reset, watch } = useForm()
+  const { register, handleSubmit, reset, watch, control } = useForm()
   const [sistema, setSistema] = useState(null);
   const [enfermedad, setEnfermedad] = useState(null);
   const [deseaseComponents, setDeseaseComponents] = useState([{}]);
@@ -123,9 +123,11 @@ const DoctorPage = () => {
                     key={index}
                     onSubmit={handleSystemChange}
                     onEnfermedadChange={handleEnfermedadChange}
+                    register={register}
+                    control= {control}
                   />
                 ))}
-                <button onClick={onButtonClickDesease} className=' bg-transparent border-none '>
+                <button type='button' onClick={onButtonClickDesease} className=' bg-transparent border-none '>
                   <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
                 </button>
               </div>

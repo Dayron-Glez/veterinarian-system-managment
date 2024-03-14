@@ -14,7 +14,7 @@ export const onSubmit = (data, watchAlimentacion, watchHabitat, mascota, sistema
   }
 
   const mascotaData = {
-    mascota: mascota.id,
+    // mascota: mascota.id,
     historia: {
       motivo: data.motivo,
       anamnesis: data.anamnesis,

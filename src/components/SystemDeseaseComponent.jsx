@@ -1,13 +1,12 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import {  Controller } from 'react-hook-form';
 import Select from 'react-select';
 import { systems } from './SystemDesease';
 
-const SystemDeseaseComponent = (props) => {
-  const { control } = useForm();
+const SystemDeseaseComponent = ({control, register, ...props}) => {
   const [enfermedades, setEnfermedades] = useState([]);
   const [enfermedadSeleccionada, setEnfermedadSeleccionada] = useState(null);
-  const { register } = useForm()
 
   const handleSystemChange = (selectedOption) => {
     if (selectedOption) {
