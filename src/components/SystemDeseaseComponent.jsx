@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
 import {  Controller } from 'react-hook-form';
 import Select from 'react-select';
 import { systems } from './SystemDesease';
 
-const SystemDeseaseComponent = ({control, register, ...props}) => {
+const SystemDeseaseComponent = ({control, register,index, ...props}) => {
   const [enfermedades, setEnfermedades] = useState([]);
   const [enfermedadSeleccionada, setEnfermedadSeleccionada] = useState(null);
 
@@ -46,7 +47,7 @@ const SystemDeseaseComponent = ({control, register, ...props}) => {
         <div className=' flex-col'>
           <label className='flex flex-row mb-2'>Sistema de órgano <p className='text-red-500'>*</p> </label>
           <Controller
-            name="sistema"
+            name={`sistema${index}`}
             control={control}
             defaultValue=""
             render={({ field }) => (
@@ -76,12 +77,12 @@ const SystemDeseaseComponent = ({control, register, ...props}) => {
         <div className=' flex flex-col'>
           <div className=' flex-col ml-6 '>
             <label className='flex flex-row mb-2'>&Oacute;rgano afectado <p className='text-red-500'>*</p> </label>
-            <input type="text" className=' w-80 h-9 ' />
+            <input type="text" className=' w-80 h-9 ' {...register(`organoAfectado${index}`)}/>
           </div>
           <div className=' flex-col ml-6 my-4'>
             <label className='flex flex-row mb-2'>Enfermedad del órgano <p className='text-red-500'>*</p> </label>
             <Controller
-              name="enfermedad"
+              name={`enfermedad${index}`}
               control={control}
               defaultValue=""
               render={({ field }) => (
@@ -113,7 +114,7 @@ const SystemDeseaseComponent = ({control, register, ...props}) => {
         </div>
         <div className=' ml-12'>
           <label className='flex flex-row mb-2'>Observación <p className='text-red-500'>*</p> </label>
-          <textarea name="observation_mucosa_rectal" id="observation_mucosa_rectal" className='shadow resize-none rounded-sm w-80 h-32'{...register('observation_mucosa_rectal')} />
+          <textarea name="observation_enfermedad_organo" id="observation_enfermedad_organo" className='shadow resize-none rounded-sm w-80 h-32'{...register(`observation_enfermedad_organo${index}`)} />
         </div>
       </section>
     </>

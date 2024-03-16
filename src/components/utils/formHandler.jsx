@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-export const onSubmit = (data, watchAlimentacion, watchHabitat, mascota, sistema, enfermedad, reset) => {
+
+export const onSubmit = (data, watchAlimentacion, watchHabitat, mascota,sistemas,problemas, reset,) => {
   if (watchAlimentacion !== 'Otro1') {
     delete data.otro1;
   } else {
@@ -27,8 +28,12 @@ export const onSubmit = (data, watchAlimentacion, watchHabitat, mascota, sistema
       fc: data.FC,
       fr: data.FR,
       temperatura: data.Temperatura,
-      peso: data.Peso
+      peso: data.Peso,
+      
+
     },
+    sistemas:sistemas,
+    problemas: problemas,
 
     cirugia: [
       {
@@ -56,11 +61,7 @@ export const onSubmit = (data, watchAlimentacion, watchHabitat, mascota, sistema
       {
         hidratacion: "Exame",
         actitud: "sads",
-        sistema:
-        {
-          nombre: sistema,
-          enfermedad: enfermedad
-        },
+       
         evolucion:
         {
           peso: 2.52,
@@ -90,6 +91,6 @@ export const onSubmit = (data, watchAlimentacion, watchHabitat, mascota, sistema
       console.error("Error en axios.post", error);
     });
 
-  console.log(data);
+  console.log(mascotaData);
   reset();
 };

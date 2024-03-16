@@ -20,6 +20,7 @@ const DoctorPage = () => {
   const [mascotaSeleccionada, setMascotaSeleccionada] = useState(null);
   const { register, handleSubmit, reset, watch, control } = useForm()
   const [sistema, setSistema] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [enfermedad, setEnfermedad] = useState(null);
   const [deseaseComponents, setDeseaseComponents] = useState([{}]);
   const [problemsComponents, setProblemsComponents] = useState([{}]);
@@ -75,8 +76,31 @@ const DoctorPage = () => {
   const handleClick = mascota => {
     setMascotaSeleccionada(mascota);
   };
+ 
 
-  const onSubmitHandler = (data) => onSubmit(data, watchAlimentacion, watchHabitat, mascota, sistema, enfermedad, reset);
+  const onSubmitHandler = (data) => {
+    const sistemas = deseaseComponents.map((_, index) => {
+      return {
+        sistema: data[`sistema${index}`].value,
+        enfermedad: data[`enfermedad${index}`].value,
+        organoAfectado: data[`organoAfectado${index}`],
+        observacion_sistema: data[`observation_enfermedad_organo${index}`],
+      };
+    });
+
+    const problemas = problemsComponents.map((_, index) => {
+      return {
+        problema: data[`problema${index}`],
+        problema_maestra: data[`problema_maestra${index}`],
+        diagnostico_diferencial: data[`diagnostico_diferencial${index}`],
+      };
+    });
+    console.log(sistema);
+
+    onSubmit(data, watchAlimentacion, watchHabitat, mascota,sistemas,problemas, reset);
+    setDeseaseComponents([{}]);
+    setProblemsComponents([{}]);
+  }
   const onButtonClickDesease = () => handleButtonClickDesease(deseaseComponents, setDeseaseComponents, handleSystemChange, handleEnfermedadChange);
   const onButtonClickProblem = () => handleButtonClickProblem(problemsComponents, setProblemsComponents);
   
@@ -121,6 +145,7 @@ const DoctorPage = () => {
                 {deseaseComponents.map((_, index) => (
                   <SystemDeseaseComponent
                     key={index}
+                    index={index}
                     onSubmit={handleSystemChange}
                     onEnfermedadChange={handleEnfermedadChange}
                     register={register}
@@ -143,9 +168,11 @@ const DoctorPage = () => {
                   {problemsComponents.map((_, index) => (
                       <ProblemComponent
                         key={index}
+                        index={index}
+                        register={register}
                       />
                     ))}
-                  <button onClick={onButtonClickProblem} className=' bg-transparent border-none place-self-start mt-8  '>
+                  <button type='button' onClick={onButtonClickProblem} className=' bg-transparent border-none place-self-start mt-8  '>
                   <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
                 </button>
               </section>
