@@ -12,18 +12,26 @@ import { ConstantesFComponent } from '../components/ECOP/ConstantesFComponent';
 import { ExamenCComponent } from '../components/ECOP/ExamenCComponent';
 import { MucosasComponent } from '../components/ECOP/MucosasComponent';
 import { ProblemComponent } from '../components/ECOP/ProblemComponent';
-import { handleButtonClickDesease, handleButtonClickProblem } from '../components/utils/buttonHandlers';
+import { DiagnosticComponent } from '../components/ECOP/DiagnosticComponent';
+import 
+   { 
+    handleButtonClickDesease,
+    handleButtonClickProblem,
+    handleButtonClickDiagnostic
+   } from '../components/utils/buttonHandlers';
 import { onSubmit } from '../components/utils/formHandler';
 const DoctorPage = () => {
   const [mascotas, setMascotas] = useState([]);
   const [mascota, setMascota] = useState(null);
   const [mascotaSeleccionada, setMascotaSeleccionada] = useState(null);
   const { register, handleSubmit, reset, watch, control } = useForm()
+  // eslint-disable-next-line no-unused-vars
   const [sistema, setSistema] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [enfermedad, setEnfermedad] = useState(null);
   const [deseaseComponents, setDeseaseComponents] = useState([{}]);
   const [problemsComponents, setProblemsComponents] = useState([{}]);
+  const [diagnosticComponents, setDiagnosticComponents] = useState([{}]);
 
   const handleSystemChange = (sistemaSeleccionado) => {
     setSistema(sistemaSeleccionado);
@@ -95,14 +103,25 @@ const DoctorPage = () => {
         diagnostico_diferencial: data[`diagnostico_diferencial${index}`],
       };
     });
-    console.log(sistema);
 
-    onSubmit(data, watchAlimentacion, watchHabitat, mascota,sistemas,problemas, reset);
+    const diagnosticos = diagnosticComponents.map((_, index) => {
+      return {
+        tipo_examen: data[`tipo_examen${index}`],
+        autorizacion_examen: data[`autorizacion_examen${index}`],
+        fecha_plan_diagnostico: data[`fecha_pland${index}`],
+        laboratorio: data[`laboratorio${index}`],
+        resultados_lab: data[`resultados_lab${index}`],
+      };
+    });
+
+    onSubmit(data, watchAlimentacion, watchHabitat, mascota,sistemas,problemas,diagnosticos, reset);
     setDeseaseComponents([{}]);
     setProblemsComponents([{}]);
+    setDiagnosticComponents([{}]);
   }
   const onButtonClickDesease = () => handleButtonClickDesease(deseaseComponents, setDeseaseComponents, handleSystemChange, handleEnfermedadChange);
   const onButtonClickProblem = () => handleButtonClickProblem(problemsComponents, setProblemsComponents);
+  const onButtonClickDiagnostic = () => handleButtonClickDiagnostic(diagnosticComponents, setDiagnosticComponents);
   
   return (
     <>
@@ -176,6 +195,20 @@ const DoctorPage = () => {
                   <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
                 </button>
               </section>
+              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
+                <section className='flex flex-col ml-16 mt-8'>
+                    <h3 className=' mb-8'>PLAN DIAGN&Oacute;STICO</h3>
+                    {diagnosticComponents.map((_, index) => (
+                      <DiagnosticComponent
+                        key={index}
+                        index={index}
+                        register={register}
+                      />
+                    ))}
+                    <button type='button' onClick={onButtonClickDiagnostic} className=' bg-transparent border-none place-self-start mt-8  '>
+                    <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
+                  </button>
+                </section>
               <div className='flex flex-row justify-around mt-8'>
                 <button onClick={() => { reset() }} className=' rounded-3xl h-10 w-36 mb-8'>Cancelar</button>
                 <button type='submit' className=' bg-[#eb5b27] text-white border-none rounded-3xl h-10 w-36 mb-8'>Guardar</button>

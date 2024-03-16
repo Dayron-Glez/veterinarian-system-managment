@@ -117,6 +117,9 @@ const SystemDeseaseComponent = ({control, register,index, ...props}) => {
           <textarea name="observation_enfermedad_organo" id="observation_enfermedad_organo" className='shadow resize-none rounded-sm w-80 h-32'{...register(`observation_enfermedad_organo${index}`)} />
         </div>
       </section>
+        <div className=" flex w-full justify-center">
+                        <div className=' flex  border-[1px] border-solid border-[#b5b7ba] h-0  w-[800px] my-8' />
+                    </div>
     </>
   )
 }

@@ -1,3 +1,4 @@
+import { DiagnosticComponent } from "../ECOP/DiagnosticComponent";
 import { ProblemComponent } from "../ECOP/ProblemComponent";
 import SystemDeseaseComponent from "../SystemDeseaseComponent";
 
@@ -21,5 +22,15 @@ export const handleButtonClickDesease = (deseaseComponents, setDeseaseComponents
     );
   
     setProblemsComponents(prevComponents => [...prevComponents, newComponentProblem]);
+  };
+
+  export const handleButtonClickDiagnostic = (diagnosticComponents, setDiagnosticComponents) => {
+    const newComponentDiagnostic = (
+      <DiagnosticComponent
+        key={diagnosticComponents.length}
+      />
+    );
+  
+    setDiagnosticComponents(prevComponents => [...prevComponents, newComponentDiagnostic]);
   };
   
