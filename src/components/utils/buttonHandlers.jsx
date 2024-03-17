@@ -43,4 +43,14 @@ export const handleButtonClickDesease = (deseaseComponents, setDeseaseComponents
   
     setTerapeuticComponents(prevComponents => [...prevComponents, newComponentTerapeutic]);
   };
+
+  export const handleButtonClickPasantes = (terapeuticComponents, setTerapeuticComponents) => {
+    const newComponentTerapeutic = (
+      <DiagnosticComponent
+        key={terapeuticComponents.length}
+      />
+    );
+  
+    setTerapeuticComponents(prevComponents => [...prevComponents, newComponentTerapeutic]);
+  };
   

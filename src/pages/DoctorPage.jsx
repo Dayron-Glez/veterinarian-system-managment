@@ -18,11 +18,13 @@ import {
 handleButtonClickDesease,
 handleButtonClickProblem,
 handleButtonClickDiagnostic,
-handleButtonClickTerapeutic
+handleButtonClickTerapeutic,
+handleButtonClickPasantes
 } from '../components/utils/buttonHandlers';
 import { onSubmit } from '../components/utils/formHandler';
 import { NódulosComponent } from '../components/ECOP/NódulosComponent';
 import { EstadoPComponent } from '../components/ECOP/EstadoPComponent';
+import { PasantesComponent } from '../components/ECOP/PasantesComponent';
 const DoctorPage = () => {
   const [mascotas, setMascotas] = useState([]);
   const [mascota, setMascota] = useState(null);
@@ -38,6 +40,7 @@ const DoctorPage = () => {
   const [problemsComponents, setProblemsComponents] = useState([{}]);
   const [diagnosticComponents, setDiagnosticComponents] = useState([{}]);
   const [terapeuticComponents, setTerapeuticComponents] = useState([{}]);
+  const [pasantesComponents, setPasantesComponents] = useState([{}]);
 
   const handleSystemChange = (sistemaSeleccionado) => {
     setSistema(sistemaSeleccionado);
@@ -137,16 +140,31 @@ const DoctorPage = () => {
       };
     });
 
-    onSubmit(data, watchAlimentacion, watchHabitat, mascota, sistemas, problemas, diagnosticos, planes_terapeuticos, reset);
+    const pasantes = pasantesComponents.map((_, index) => {
+      return {
+        nombre_y_apellidos: data[`nombre_y_apellidos${index}`],
+        documento: data[`documento${index}`],
+        semestre: data[`semestre${index}`],
+        // posologia: data[`posologia${index}`],
+        // dosis_total: data[`dosis_total${index}`],
+        // via: data[`via${index}`],
+        // frecuencia: data[`frecuencia${index}`],
+        // duracion: data[`duracion${index}`],
+      };
+    });
+
+    onSubmit(data, watchAlimentacion, watchHabitat, mascota, sistemas, problemas, diagnosticos, planes_terapeuticos,pasantes, reset);
     setDeseaseComponents([{}]);
     setProblemsComponents([{}]);
     setDiagnosticComponents([{}]);
     setTerapeuticComponents([{}]);
+    setPasantesComponents([{}]);
   }
   const onButtonClickDesease = () => handleButtonClickDesease(deseaseComponents, setDeseaseComponents, handleSystemChange, handleEnfermedadChange);
   const onButtonClickProblem = () => handleButtonClickProblem(problemsComponents, setProblemsComponents);
   const onButtonClickDiagnostic = () => handleButtonClickDiagnostic(diagnosticComponents, setDiagnosticComponents);
   const onButtonClickTerapeutic = () => handleButtonClickTerapeutic(terapeuticComponents, setTerapeuticComponents);
+  const onButtonClickPasantes = () => handleButtonClickPasantes(pasantesComponents, setPasantesComponents);
 
   return (
     <>
@@ -288,13 +306,40 @@ const DoctorPage = () => {
                 <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
 
               </section>
+              <section className=' fondo'>
+                <section className=' flex flex-col ml-16 m-16 fondo'>
+                  <h3>{`Pasantes / Auxiliares / Rotantes`}</h3>
+
+                  <div className=' flex flex-row mt-4'>
+                    <p className=' font-semibold text-[#eb5b27]  pl-2 ml-4'>Nombre y apellidos</p>
+                    <p className=' font-semibold text-[#eb5b27] border-solid border-y-0 border-r-0 pl-2 ml-28'>Documento</p>
+                    <p className=' font-semibold text-[#eb5b27] border-solid border-y-0 border-r-0 pl-2 ml-28'>Semestre</p>
+                    <p className=' font-semibold text-[#eb5b27] border-solid border-y-0 border-r-0 pl-2 ml-28'>Firma del autorizado</p>
+                    <p className=' font-semibold text-[#eb5b27] border-solid border-y-0 border-r-0 pl-2 ml-28'>Firma del MVZ</p>
+                  </div>
+        <div className=' border-[1px] border-solid border-[#b5b7ba] h-0  w-[100%] my-4' />
+
+                  {pasantesComponents.map((_, index) => (
+                    <PasantesComponent
+                      key={index}
+                      index={index}
+                      register={register}
+                    />
+                  ))}
+                  <button type='button' onClick={onButtonClickPasantes} className=' bg-transparent border-none place-self-start mt-8  '>
+                    <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none' />
+                  </button>
+                </section>
+                <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
+              </section>
               <div className='flex flex-row justify-around mt-8'>
                 <button onClick={() => { reset() }} className=' rounded-3xl h-10 w-36 mb-8'>Cancelar</button>
                 <button type='submit' className=' bg-[#eb5b27] text-white border-none rounded-3xl h-10 w-36 mb-8'>Guardar</button>
               </div>
             </form>
           </main>
-          <aside className='flex flex-col justify-start w-[23vw]  sticky top-0 h-screen '>
+          <aside className='flex flex-col justify-start w-[23zvw]  sticky top-0 h-screen '>
+          <div className="absolute w-[2px] ml-4 border-[1px] inset-0 bg-[#a4a4a4]"></div>
             <div className='ml-12'>
 
               <h1 className=' mt-8 font-light'>MASCOTA</h1>
@@ -327,9 +372,9 @@ const DoctorPage = () => {
               )}
 
             </div>
-            <div className=' mt-1 border-[1px] border-solid border-[#a4a4a4] h-0 w-[100%]'></div>
+            <div className=' mt-1 border-[1px] border-solid border-[#a4a4a4] h-0 w-[95%] ml-4'></div>
             <h3 className=' mt-8 ml-12 text-[#344054]'>Citas programadas</h3>
-            <div className=' ml-12 mt-1 border-[1px] border-solid border-[#a4a4a4] h-0 w-[87%]'></div>
+            <div className=' ml-11 mt-1 border-[1px] border-solid border-[#a4a4a4] h-0 w-[87%]'></div>
             <div className='flex flex-col place-items-centers'>
               {mascotas.map(mascota => (
                 <button key={mascota.id} onClick={() => handleClick(mascota)} className=' my-2 w-[85%] mx-auto h-14 rounded-md border-[1px] border-solid border-[#eb5b27] bg-transparent hover:bg-[#eb5b27] hover:text-white outline-none'>
