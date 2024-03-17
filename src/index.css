@@ -62,3 +62,25 @@ main::-webkit-scrollbar {
   .fondo:nth-child(even) {
     background-color: rgb(255, 255, 255)
   }
+
+  .radio-button input[type="radio"] {
+    display: none;
+  }
+  
+  /* Creamos el estilo del botón */
+  .radio-button label {
+    padding: 5px 20px;
+    background-color: #fff;
+    color: #eb5b27;
+    cursor: pointer;
+    border-radius: 5px;
+    border: solid 1px;
+    border-color: #eb5b27;
+  }
+  
+  /* Cambiamos el color cuando el checkbox está seleccionado */
+  .radio-button input[type="radio"]:checked + label {
+    background-color: #eb5b27;
+    color: white;
+
+  }

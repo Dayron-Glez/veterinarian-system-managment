@@ -35,9 +35,10 @@ export const TerapeuticComponent = ({ register, control, index, ...props }) => {
             props.onSubmit(selectedOption.name);
         }
         else {
-            setTipoTratamiento('');
-            props.onSubmit('');
-        }
+            setTipoTratamiento([]);
+            // eslint-disable-next-line react/prop-types
+            props.onSubmit(null, []);
+          }
     };
 
 

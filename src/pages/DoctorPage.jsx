@@ -7,22 +7,22 @@ import ADD_IMG from '../assets/añadir.png'
 import LogoComponent from '../components/LogoComponent'
 import notificationIcon from '../assets/notificationIcon.svg'
 import SystemDeseaseComponent from '../components/SystemDeseaseComponent'
-import {GeneralComponent} from '../components/ECOP/GeneralComponent'
+import { GeneralComponent } from '../components/ECOP/GeneralComponent'
 import { ConstantesFComponent } from '../components/ECOP/ConstantesFComponent';
 import { ExamenCComponent } from '../components/ECOP/ExamenCComponent';
 import { MucosasComponent } from '../components/ECOP/MucosasComponent';
 import { ProblemComponent } from '../components/ECOP/ProblemComponent';
 import { DiagnosticComponent } from '../components/ECOP/DiagnosticComponent';
 import { TerapeuticComponent } from '../components/ECOP/TerapeuticComponent';
-import 
-   { 
-    handleButtonClickDesease,
-    handleButtonClickProblem,
-    handleButtonClickDiagnostic,
-    handleButtonClickTerapeutic
-   } from '../components/utils/buttonHandlers';
+import {
+handleButtonClickDesease,
+handleButtonClickProblem,
+handleButtonClickDiagnostic,
+handleButtonClickTerapeutic
+} from '../components/utils/buttonHandlers';
 import { onSubmit } from '../components/utils/formHandler';
 import { NódulosComponent } from '../components/ECOP/NódulosComponent';
+import { EstadoPComponent } from '../components/ECOP/EstadoPComponent';
 const DoctorPage = () => {
   const [mascotas, setMascotas] = useState([]);
   const [mascota, setMascota] = useState(null);
@@ -45,7 +45,7 @@ const DoctorPage = () => {
   const handleTreatmentChange = (sistemaSeleccionado) => {
     setTreatment(sistemaSeleccionado);
   };
-  
+
 
   const handleEnfermedadChange = (enfermedadSeleccionada) => {
     setEnfermedad(enfermedadSeleccionada);
@@ -94,7 +94,7 @@ const DoctorPage = () => {
   const handleClick = mascota => {
     setMascotaSeleccionada(mascota);
   };
- 
+
 
   const onSubmitHandler = (data) => {
     const sistemas = deseaseComponents.map((_, index) => {
@@ -126,7 +126,7 @@ const DoctorPage = () => {
 
     const planes_terapeuticos = terapeuticComponents.map((_, index) => {
       return {
-        tipo_tratamiento: data[`tipo_tratamiento${index}`].name,
+        tipo_tratamiento: data[`tipo_tratamiento${index}`] ? data[`tipo_tratamiento${index}`].name : null,
         principio_activo: data[`principio_activo${index}`],
         presentacion: data[`presentacion${index}`],
         posologia: data[`posologia${index}`],
@@ -137,7 +137,7 @@ const DoctorPage = () => {
       };
     });
 
-    onSubmit(data, watchAlimentacion, watchHabitat, mascota,sistemas,problemas,diagnosticos,planes_terapeuticos, reset);
+    onSubmit(data, watchAlimentacion, watchHabitat, mascota, sistemas, problemas, diagnosticos, planes_terapeuticos, reset);
     setDeseaseComponents([{}]);
     setProblemsComponents([{}]);
     setDiagnosticComponents([{}]);
@@ -147,13 +147,13 @@ const DoctorPage = () => {
   const onButtonClickProblem = () => handleButtonClickProblem(problemsComponents, setProblemsComponents);
   const onButtonClickDiagnostic = () => handleButtonClickDiagnostic(diagnosticComponents, setDiagnosticComponents);
   const onButtonClickTerapeutic = () => handleButtonClickTerapeutic(terapeuticComponents, setTerapeuticComponents);
-  
+
   return (
     <>
       <div className='flex flex-col'>
         <nav className=' flex flex-col h-[14vh] w-full'>
           <div>
-            
+
           </div>
           <section className='flex flex-col h-[7vh] bg-white justify-center'>
             <div className='flex flex-row justify-between'>
@@ -182,107 +182,112 @@ const DoctorPage = () => {
               </section>
               <section className=' fondo'>
                 <div className=' border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
-                <ConstantesFComponent register={register}/>
+                <ConstantesFComponent register={register} />
               </section>
-             <section className='fondo'>
+              <section className='fondo'>
                 <div className=' border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
                 <ExamenCComponent register={register} />
                 <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
-             </section>
-             <section className='fondo'>
-                <MucosasComponent register={register}/> 
-             </section>
-             <section className='fondo'>
-                <NódulosComponent register={register}/> 
+              </section>
+              <section className='fondo'>
+                <MucosasComponent register={register} />
+              </section>
+              <section className='fondo'>
+                <NódulosComponent register={register} />
                 <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
-             </section>
-             <section className=' fondo py-8'>
-              <div className=' ml-16'>
-                {deseaseComponents.map((_, index) => (
-                  <SystemDeseaseComponent
-                    key={index}
-                    index={index}
-                    onSubmit={handleSystemChange}
-                    onEnfermedadChange={handleEnfermedadChange}
-                    register={register}
-                    control= {control}
-                  />
-                ))}
-                <button type='button' onClick={onButtonClickDesease} className=' mt-4 bg-transparent border-none '>
-                  <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
-                </button>
-              </div>
-             </section>
-             <section className=' fondo'>
+              </section>
+              <section className=' fondo py-8'>
+                <div className=' ml-16'>
+                  {deseaseComponents.map((_, index) => (
+                    <SystemDeseaseComponent
+                      key={index}
+                      index={index}
+                      onSubmit={handleSystemChange}
+                      onEnfermedadChange={handleEnfermedadChange}
+                      register={register}
+                      control={control}
+                    />
+                  ))}
+                  <button type='button' onClick={onButtonClickDesease} className=' mt-4 bg-transparent border-none '>
+                    <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none' />
+                  </button>
+                </div>
+              </section>
+              <section className=' fondo'>
                 <div className=' border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
                 <section className=' flex flex-col ml-16 mt-16'>
-                    <h3>LISTA DE PROBLEMAS</h3>
-                    <div className=' flex flex-row mt-4'>
-                      <p className=' font-semibold text-[#eb5b27]  pl-2 ml-4 w-80'>Lista de problemas</p>
-                      <p className=' font-semibold text-[#eb5b27] border-solid border-y-0 border-r-0 pl-2 ml-2 w-80'>Lista Maestra</p>
-                      <p className=' font-semibold text-[#eb5b27] border-solid border-y-0 border-r-0 pl-2 ml-14'>{`Diagnóstico Diferencial (DAMNVVIT)`}</p>
-                    </div>
-                  
-                    {problemsComponents.map((_, index) => (
-                        <ProblemComponent
-                          key={index}
-                          index={index}
-                          register={register}
-                        />
-                      ))}
-                    <button type='button' onClick={onButtonClickProblem} className=' bg-transparent border-none place-self-start mt-8  '>
-                    <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
+                  <h3>LISTA DE PROBLEMAS</h3>
+                  <div className=' flex flex-row mt-4'>
+                    <p className=' font-semibold text-[#eb5b27]  pl-2 ml-4 w-80'>Lista de problemas</p>
+                    <p className=' font-semibold text-[#eb5b27] border-solid border-y-0 border-r-0 pl-2 ml-2 w-80'>Lista Maestra</p>
+                    <p className=' font-semibold text-[#eb5b27] border-solid border-y-0 border-r-0 pl-2 ml-14'>{`Diagnóstico Diferencial (DAMNVVIT)`}</p>
+                  </div>
+
+                  {problemsComponents.map((_, index) => (
+                    <ProblemComponent
+                      key={index}
+                      index={index}
+                      register={register}
+                    />
+                  ))}
+                  <button type='button' onClick={onButtonClickProblem} className=' bg-transparent border-none place-self-start mt-8  '>
+                    <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none' />
                   </button>
                 </section>
-              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
-             </section>
-             <section className=' fondo'>
+                <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
+              </section>
+              <section className=' fondo'>
                 <section className='flex flex-col ml-16 py-8'>
-                    <h3 className=' mb-8'>PLAN DIAGN&Oacute;STICO</h3>
-                    {diagnosticComponents.map((_, index) => (
-                      <DiagnosticComponent
-                        key={index}
-                        index={index}
-                        register={register}
-                      />
-                    ))}
-                    <button type='button' onClick={onButtonClickDiagnostic} className=' bg-transparent border-none place-self-start mt-8  '>
-                    <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
+                  <h3 className=' mb-8'>PLAN DIAGN&Oacute;STICO</h3>
+                  {diagnosticComponents.map((_, index) => (
+                    <DiagnosticComponent
+                      key={index}
+                      index={index}
+                      register={register}
+                    />
+                  ))}
+                  <button type='button' onClick={onButtonClickDiagnostic} className=' bg-transparent border-none place-self-start mt-8  '>
+                    <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none' />
                   </button>
                 </section>
-             </section>
-             <section className=' fondo'>
+              </section>
+              <section className=' fondo'>
                 <div className=' border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
                 <section className=' flex flex-col ml-16 mt-8'>
-                    <h3 className=' mb-8'>PLAN TERAP&Eacute;UTICO</h3>
-                    <div className=' flex flex-row mt-4'>
-                      <p className=' '>Tipo de tratamiento</p>
-                      <p className=' ml-6'>PRINCIPIO ACTIVO</p>
-                      <p className=' ml-6'>PRESENTACI&Oacute;N</p>
-                      <p className=' ml-6'>POSOLOG&Iacute;A</p>
-                      <p className=' ml-6'>DOSIS TOTAL</p>
-                      <p className=' ml-4'>V&Iacute;A</p>
-                      <p className=' ml-24'>FRECUENCIA</p>
-                      <p className=' ml-10'>DURACI&Oacute;N</p>
-                    </div>
-            <div className=' border-[1px] border-solid border-[#b5b7ba] h-0 my-2 w-[100%]' />
+                  <h3 className=' mb-8'>PLAN TERAP&Eacute;UTICO</h3>
+                  <div className=' flex flex-row mt-4'>
+                    <p className=' '>Tipo de tratamiento</p>
+                    <p className=' ml-6'>PRINCIPIO ACTIVO</p>
+                    <p className=' ml-6'>PRESENTACI&Oacute;N</p>
+                    <p className=' ml-6'>POSOLOG&Iacute;A</p>
+                    <p className=' ml-6'>DOSIS TOTAL</p>
+                    <p className=' ml-4'>V&Iacute;A</p>
+                    <p className=' ml-24'>FRECUENCIA</p>
+                    <p className=' ml-10'>DURACI&Oacute;N</p>
+                  </div>
+                  <div className=' border-[1px] border-solid border-[#b5b7ba] h-0 my-2 w-[100%]' />
 
-                  
-                    {terapeuticComponents.map((_, index) => (
-                        <TerapeuticComponent
-                          key={index}
-                          index={index}
-                          register={register}
-                          control ={control}
-                          onSubmit={handleTreatmentChange}
-                        />
-                      ))}
-                    <button type='button' onClick={onButtonClickTerapeutic} className=' bg-transparent border-none place-self-start mt-8  '>
-                    <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
+
+                  {terapeuticComponents.map((_, index) => (
+                    <TerapeuticComponent
+                      key={index}
+                      index={index}
+                      register={register}
+                      control={control}
+                      onSubmit={handleTreatmentChange}
+                    />
+                  ))}
+                  <button type='button' onClick={onButtonClickTerapeutic} className=' bg-transparent border-none place-self-start mt-8  '>
+                    <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none' />
                   </button>
                 </section>
-              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
-             </section>
+                <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
+              </section>
+              <section className=' fondo'>
+                <EstadoPComponent register={register} />
+                <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
+
+              </section>
               <div className='flex flex-row justify-around mt-8'>
                 <button onClick={() => { reset() }} className=' rounded-3xl h-10 w-36 mb-8'>Cancelar</button>
                 <button type='submit' className=' bg-[#eb5b27] text-white border-none rounded-3xl h-10 w-36 mb-8'>Guardar</button>

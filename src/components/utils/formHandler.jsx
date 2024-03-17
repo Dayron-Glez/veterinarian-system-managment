@@ -36,6 +36,9 @@ export const onSubmit = (data, watchAlimentacion, watchHabitat, mascota,sistemas
     problemas: problemas,
     diagnosticos:diagnosticos,
     planes_terapeuticos: planes_terapeuticos,
+    estado_paciente: data.estado_paciente,
+    interpretacion_resultados: data.interpretacion_resultados,
+    impresion_diagnostica: data.impresion_diagnostica,
 
     cirugia: [
       {
