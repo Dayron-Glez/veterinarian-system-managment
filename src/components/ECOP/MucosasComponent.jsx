@@ -3,7 +3,7 @@
 export const MucosasComponent = ({register}) => {
   return (
     <>
-        <div className=' flex flex-row ml-16 mt-16'>
+        <div className=' flex flex-row ml-16 py-16'>
                 <section className=' flex flex-col'>
                   <label className='flex flex-row mb-6'>Mucosa Conjuntival <p className='text-red-500'>*</p> </label>
                   <div className='flex flex-row'>
@@ -59,8 +59,8 @@ export const MucosasComponent = ({register}) => {
                   </div>
                 </section>
               </div>
-              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
-              <div className=' flex flex-row ml-16 mt-16'>
+              {/* <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' /> */}
+              {/* <div className=' flex flex-row ml-16 mt-16'>
                 <section className=' flex flex-col'>
                   <label className='flex flex-row mb-6'>Nódulos linfáticos <p className='text-red-500'>*</p> </label>
                   <div className='flex flex-row'>
@@ -79,7 +79,7 @@ export const MucosasComponent = ({register}) => {
                   <label className='flex flex-row mb-2'>Observación <p className='text-red-500'>*</p> </label>
                   <textarea name="observation_nodulos_linfaticos" id="observation_nodulos_linfaticos" cols="" rows="5" className='shadow resize-none rounded-sm w-80'{...register('observation_nodulos_linfaticos')} />
                 </div>
-              </div>
+              </div> */}
     </>
   )
 }

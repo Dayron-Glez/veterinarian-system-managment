@@ -34,9 +34,9 @@ export const DiagnosticComponent = ({ register, index }) => {
                 </div>
 
             </div>
-            <div className=" flex w-full justify-center">
-                <div className=' flex  border-[1px] border-solid border-[#b5b7ba] h-0 mr-24 w-[700px] mt-4' />
-            </div>
+            
+                <div className=' flex  border-[1px]  border-[#d6d7d8] h-0 w-[98%] border-dashed mt-4' />
+            
 
         </>
     )

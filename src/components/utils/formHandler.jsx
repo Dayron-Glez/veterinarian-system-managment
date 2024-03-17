@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-export const onSubmit = (data, watchAlimentacion, watchHabitat, mascota,sistemas,problemas,diagnosticos, reset,) => {
+export const onSubmit = (data, watchAlimentacion, watchHabitat, mascota,sistemas,problemas,diagnosticos,planes_terapeuticos, reset,) => {
   if (watchAlimentacion !== 'Otro1') {
     delete data.otro1;
   } else {
@@ -35,6 +35,7 @@ export const onSubmit = (data, watchAlimentacion, watchHabitat, mascota,sistemas
     sistemas:sistemas,
     problemas: problemas,
     diagnosticos:diagnosticos,
+    planes_terapeuticos: planes_terapeuticos,
 
     cirugia: [
       {

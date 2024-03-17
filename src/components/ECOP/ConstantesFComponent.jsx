@@ -3,7 +3,7 @@
 export const ConstantesFComponent = ({register}) => {
   return (
     <>
-        <section className='flex flex-col ml-8 mt-8'>
+        <section className='flex flex-col ml-8 py-8'>
                 <h4 className='text-[#344054] ml-8'>CONSTANTES FISIOLÓGICAS</h4>
                 <div className='flex flex-row justify-start  mt-8'>
                   <div className='flex flex-col ml-6'>

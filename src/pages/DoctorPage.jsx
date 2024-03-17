@@ -13,13 +13,16 @@ import { ExamenCComponent } from '../components/ECOP/ExamenCComponent';
 import { MucosasComponent } from '../components/ECOP/MucosasComponent';
 import { ProblemComponent } from '../components/ECOP/ProblemComponent';
 import { DiagnosticComponent } from '../components/ECOP/DiagnosticComponent';
+import { TerapeuticComponent } from '../components/ECOP/TerapeuticComponent';
 import 
    { 
     handleButtonClickDesease,
     handleButtonClickProblem,
-    handleButtonClickDiagnostic
+    handleButtonClickDiagnostic,
+    handleButtonClickTerapeutic
    } from '../components/utils/buttonHandlers';
 import { onSubmit } from '../components/utils/formHandler';
+import { NódulosComponent } from '../components/ECOP/NódulosComponent';
 const DoctorPage = () => {
   const [mascotas, setMascotas] = useState([]);
   const [mascota, setMascota] = useState(null);
@@ -28,14 +31,21 @@ const DoctorPage = () => {
   // eslint-disable-next-line no-unused-vars
   const [sistema, setSistema] = useState(null);
   // eslint-disable-next-line no-unused-vars
+  const [treatment, setTreatment] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [enfermedad, setEnfermedad] = useState(null);
   const [deseaseComponents, setDeseaseComponents] = useState([{}]);
   const [problemsComponents, setProblemsComponents] = useState([{}]);
   const [diagnosticComponents, setDiagnosticComponents] = useState([{}]);
+  const [terapeuticComponents, setTerapeuticComponents] = useState([{}]);
 
   const handleSystemChange = (sistemaSeleccionado) => {
     setSistema(sistemaSeleccionado);
   };
+  const handleTreatmentChange = (sistemaSeleccionado) => {
+    setTreatment(sistemaSeleccionado);
+  };
+  
 
   const handleEnfermedadChange = (enfermedadSeleccionada) => {
     setEnfermedad(enfermedadSeleccionada);
@@ -114,19 +124,37 @@ const DoctorPage = () => {
       };
     });
 
-    onSubmit(data, watchAlimentacion, watchHabitat, mascota,sistemas,problemas,diagnosticos, reset);
+    const planes_terapeuticos = terapeuticComponents.map((_, index) => {
+      return {
+        tipo_tratamiento: data[`tipo_tratamiento${index}`].name,
+        principio_activo: data[`principio_activo${index}`],
+        presentacion: data[`presentacion${index}`],
+        posologia: data[`posologia${index}`],
+        dosis_total: data[`dosis_total${index}`],
+        via: data[`via${index}`],
+        frecuencia: data[`frecuencia${index}`],
+        duracion: data[`duracion${index}`],
+      };
+    });
+
+    onSubmit(data, watchAlimentacion, watchHabitat, mascota,sistemas,problemas,diagnosticos,planes_terapeuticos, reset);
     setDeseaseComponents([{}]);
     setProblemsComponents([{}]);
     setDiagnosticComponents([{}]);
+    setTerapeuticComponents([{}]);
   }
   const onButtonClickDesease = () => handleButtonClickDesease(deseaseComponents, setDeseaseComponents, handleSystemChange, handleEnfermedadChange);
   const onButtonClickProblem = () => handleButtonClickProblem(problemsComponents, setProblemsComponents);
   const onButtonClickDiagnostic = () => handleButtonClickDiagnostic(diagnosticComponents, setDiagnosticComponents);
+  const onButtonClickTerapeutic = () => handleButtonClickTerapeutic(terapeuticComponents, setTerapeuticComponents);
   
   return (
     <>
       <div className='flex flex-col'>
         <nav className=' flex flex-col h-[14vh] w-full'>
+          <div>
+            
+          </div>
           <section className='flex flex-col h-[7vh] bg-white justify-center'>
             <div className='flex flex-row justify-between'>
               <LogoComponent height={48} className=' mx-4 md:mx-8' />
@@ -140,8 +168,8 @@ const DoctorPage = () => {
           <div className='h-[4vh] bg-[#eb5b27]' />
         </nav>
         <div className='flex flex-row h-full w-full '>
-          <main className='flex flex-col h-[100vh] w-[75vw] overflow-auto scrollbar scrollbar-thumb-gray-500 scrollbar-thin scrollbar-thumb-rounded'>
-            <section className='flex flex-col mt-8 ml-8'>
+          <main className='flex flex-col h-[100vh] w-[77vw] overflow-auto scrollbar scrollbar-thumb-gray-500 scrollbar-thin scrollbar-thumb-rounded'>
+            <section className='  flex flex-col mt-8 ml-8'>
               <div className=' flex flex-row place-items-center'>
                 <img src={ECOP_IMG} alt="ECOP Image" className=' size-8' />
                 <h2 className='text-[#344054] font-bold ml-1'>ECOP</h2>
@@ -149,18 +177,27 @@ const DoctorPage = () => {
               <div className=' mt-4 border-[1px] border-solid border-[#344054] h-0 w-[98%]'></div>
             </section>
             <form onSubmit={handleSubmit(onSubmitHandler)}>
-              <GeneralComponent register={register} />
-              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
-              <ConstantesFComponent register={register}/>
-             
-              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
-              <ExamenCComponent register={register} />
-              
-              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
-              <MucosasComponent register={register}/>
-             
-              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
-              <div className='mt-16 ml-16'>
+              <section className='fondo py-16'>
+                <GeneralComponent register={register} />
+              </section>
+              <section className=' fondo'>
+                <div className=' border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
+                <ConstantesFComponent register={register}/>
+              </section>
+             <section className='fondo'>
+                <div className=' border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
+                <ExamenCComponent register={register} />
+                <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
+             </section>
+             <section className='fondo'>
+                <MucosasComponent register={register}/> 
+             </section>
+             <section className='fondo'>
+                <NódulosComponent register={register}/> 
+                <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
+             </section>
+             <section className=' fondo py-8'>
+              <div className=' ml-16'>
                 {deseaseComponents.map((_, index) => (
                   <SystemDeseaseComponent
                     key={index}
@@ -171,32 +208,36 @@ const DoctorPage = () => {
                     control= {control}
                   />
                 ))}
-                <button type='button' onClick={onButtonClickDesease} className=' bg-transparent border-none '>
+                <button type='button' onClick={onButtonClickDesease} className=' mt-4 bg-transparent border-none '>
                   <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
                 </button>
               </div>
+             </section>
+             <section className=' fondo'>
+                <div className=' border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
+                <section className=' flex flex-col ml-16 mt-16'>
+                    <h3>LISTA DE PROBLEMAS</h3>
+                    <div className=' flex flex-row mt-4'>
+                      <p className=' font-semibold text-[#eb5b27]  pl-2 ml-4 w-80'>Lista de problemas</p>
+                      <p className=' font-semibold text-[#eb5b27] border-solid border-y-0 border-r-0 pl-2 ml-2 w-80'>Lista Maestra</p>
+                      <p className=' font-semibold text-[#eb5b27] border-solid border-y-0 border-r-0 pl-2 ml-14'>{`Diagnóstico Diferencial (DAMNVVIT)`}</p>
+                    </div>
+                  
+                    {problemsComponents.map((_, index) => (
+                        <ProblemComponent
+                          key={index}
+                          index={index}
+                          register={register}
+                        />
+                      ))}
+                    <button type='button' onClick={onButtonClickProblem} className=' bg-transparent border-none place-self-start mt-8  '>
+                    <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
+                  </button>
+                </section>
               <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
-              <section className=' flex flex-col ml-16 mt-16'>
-                  <h3>LISTA DE PROBLEMAS</h3>
-                  <div className=' flex flex-row mt-4'>
-                    <p className=' font-semibold text-[#eb5b27]  pl-2 ml-4 w-80'>Lista de problemas</p>
-                    <p className=' font-semibold text-[#eb5b27] border-solid border-y-0 border-r-0 pl-2 ml-2 w-80'>Lista Maestra</p>
-                    <p className=' font-semibold text-[#eb5b27] border-solid border-y-0 border-r-0 pl-2 ml-14'>{`Diagnóstico Diferencial (DAMNVVIT)`}</p>
-                  </div>
-                 
-                  {problemsComponents.map((_, index) => (
-                      <ProblemComponent
-                        key={index}
-                        index={index}
-                        register={register}
-                      />
-                    ))}
-                  <button type='button' onClick={onButtonClickProblem} className=' bg-transparent border-none place-self-start mt-8  '>
-                  <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
-                </button>
-              </section>
-              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
-                <section className='flex flex-col ml-16 mt-8'>
+             </section>
+             <section className=' fondo'>
+                <section className='flex flex-col ml-16 py-8'>
                     <h3 className=' mb-8'>PLAN DIAGN&Oacute;STICO</h3>
                     {diagnosticComponents.map((_, index) => (
                       <DiagnosticComponent
@@ -209,13 +250,46 @@ const DoctorPage = () => {
                     <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
                   </button>
                 </section>
+             </section>
+             <section className=' fondo'>
+                <div className=' border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
+                <section className=' flex flex-col ml-16 mt-8'>
+                    <h3 className=' mb-8'>PLAN TERAP&Eacute;UTICO</h3>
+                    <div className=' flex flex-row mt-4'>
+                      <p className=' '>Tipo de tratamiento</p>
+                      <p className=' ml-6'>PRINCIPIO ACTIVO</p>
+                      <p className=' ml-6'>PRESENTACI&Oacute;N</p>
+                      <p className=' ml-6'>POSOLOG&Iacute;A</p>
+                      <p className=' ml-6'>DOSIS TOTAL</p>
+                      <p className=' ml-4'>V&Iacute;A</p>
+                      <p className=' ml-24'>FRECUENCIA</p>
+                      <p className=' ml-10'>DURACI&Oacute;N</p>
+                    </div>
+            <div className=' border-[1px] border-solid border-[#b5b7ba] h-0 my-2 w-[100%]' />
+
+                  
+                    {terapeuticComponents.map((_, index) => (
+                        <TerapeuticComponent
+                          key={index}
+                          index={index}
+                          register={register}
+                          control ={control}
+                          onSubmit={handleTreatmentChange}
+                        />
+                      ))}
+                    <button type='button' onClick={onButtonClickTerapeutic} className=' bg-transparent border-none place-self-start mt-8  '>
+                    <img src={ADD_IMG} alt="add iamge" className='size-8 bg-none'/>
+                  </button>
+                </section>
+              <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
+             </section>
               <div className='flex flex-row justify-around mt-8'>
                 <button onClick={() => { reset() }} className=' rounded-3xl h-10 w-36 mb-8'>Cancelar</button>
                 <button type='submit' className=' bg-[#eb5b27] text-white border-none rounded-3xl h-10 w-36 mb-8'>Guardar</button>
               </div>
             </form>
           </main>
-          <aside className='flex flex-col justify-start w-[25vw]  sticky top-0 h-screen '>
+          <aside className='flex flex-col justify-start w-[23vw]  sticky top-0 h-screen '>
             <div className='ml-12'>
 
               <h1 className=' mt-8 font-light'>MASCOTA</h1>

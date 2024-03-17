@@ -43,7 +43,7 @@ const SystemDeseaseComponent = ({control, register,index, ...props}) => {
   const systemOptions = systems.map(sistema => ({ value: sistema.name, label: sistema.name }));
   return (
     <>
-      <section className=' flex flex-row mt-8'>
+      <section className=' flex flex-row '>
         <div className=' flex-col'>
           <label className='flex flex-row mb-2'>Sistema de órgano <p className='text-red-500'>*</p> </label>
           <Controller
@@ -117,9 +117,9 @@ const SystemDeseaseComponent = ({control, register,index, ...props}) => {
           <textarea name="observation_enfermedad_organo" id="observation_enfermedad_organo" className='shadow resize-none rounded-sm w-80 h-32'{...register(`observation_enfermedad_organo${index}`)} />
         </div>
       </section>
-        <div className=" flex w-full justify-center">
-                        <div className=' flex  border-[1px] border-solid border-[#b5b7ba] h-0  w-[800px] my-8' />
-                    </div>
+      <div className=' flex  border-[1px]  border-[#d6d7d8] h-0 w-[98%] border-dashed my-4' />
+      
+        
     </>
   )
 }

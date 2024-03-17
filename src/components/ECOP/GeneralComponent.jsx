@@ -3,7 +3,7 @@ export const GeneralComponent = ({register}) => {
   return (
     <>
         <section className=' flex flex-col'>
-                <h3 className=' pt-10 ml-16'>GENERAL</h3>
+                <h3 className='  ml-16'>GENERAL</h3>
                 <div className='flex flex-row ml-16 mt-4'>
                   <div className='flex flex-col'>
                     <label className='flex flex-row mb-2'>Motivo de consulta <p className='text-red-500'>*</p> </label>
