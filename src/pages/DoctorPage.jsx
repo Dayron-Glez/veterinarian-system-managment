@@ -35,6 +35,8 @@ const DoctorPage = () => {
   // eslint-disable-next-line no-unused-vars
   const [treatment, setTreatment] = useState('');
   // eslint-disable-next-line no-unused-vars
+  const [exam, setExam] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [enfermedad, setEnfermedad] = useState(null);
   const [deseaseComponents, setDeseaseComponents] = useState([{}]);
   const [problemsComponents, setProblemsComponents] = useState([{}]);
@@ -47,6 +49,9 @@ const DoctorPage = () => {
   };
   const handleTreatmentChange = (sistemaSeleccionado) => {
     setTreatment(sistemaSeleccionado);
+  };
+  const handleExamChange = (sistemaSeleccionado) => {
+    setExam(sistemaSeleccionado);
   };
 
 
@@ -119,7 +124,7 @@ const DoctorPage = () => {
 
     const diagnosticos = diagnosticComponents.map((_, index) => {
       return {
-        tipo_examen: data[`tipo_examen${index}`],
+        tipo_examen: data[`tipo_examen${index}`] ? data[`tipo_examen${index}`].value : null,
         autorizacion_examen: data[`autorizacion_examen${index}`],
         fecha_plan_diagnostico: data[`fecha_pland${index}`],
         laboratorio: data[`laboratorio${index}`],
@@ -256,12 +261,14 @@ const DoctorPage = () => {
               </section>
               <section className=' fondo'>
                 <section className='flex flex-col ml-16 py-8'>
-                  <h3 className=' mb-8'>PLAN DIAGN&Oacute;STICO</h3>
+                  <h3 className=' mb-4'>PLAN DIAGN&Oacute;STICO</h3>
                   {diagnosticComponents.map((_, index) => (
                     <DiagnosticComponent
                       key={index}
                       index={index}
                       register={register}
+                      onSubmit={handleExamChange}
+                      control={control}
                     />
                   ))}
                   <button type='button' onClick={onButtonClickDiagnostic} className=' bg-transparent border-none place-self-start mt-8  '>
