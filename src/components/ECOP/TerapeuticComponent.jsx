@@ -27,35 +27,32 @@ export const TerapeuticComponent = ({ register, control, index, ...props }) => {
       };
     const options = [
         {
-            name: '1',
-            label: '1'
+            value: 'Terapia de sostén',
+            label: 'Terapia de sostén'
         },
         {
-            name: '2',
-            label: '2'
+            value: 'Tratamiento preventivo',
+            label: 'Tratamiento preventivo'
         },
         {
-            name: '3',
-            label: '3'
+            value: 'Tratamiento sintomático',
+            label: 'Tratamiento sintomático'
         },
         {
-            name: '4',
-            label: '4'
+            value: 'Tratamiento etológico',
+            label: 'Tratamiento etológico'
         },
-        {
-            name: '5',
-            label: '5'
-        },
+       
     ]
     const handleTipoTratamientoChange = (selectedOption) => {
         if (selectedOption) {
-            setTipoTratamiento(selectedOption.name);
-            props.onSubmit(selectedOption.name);
+            setTipoTratamiento(selectedOption.value);
+            props.onSubmit(selectedOption.value);
         }
         else {
             setTipoTratamiento([]);
             // eslint-disable-next-line react/prop-types
-            props.onSubmit(null, []);
+            props.onSubmit('', []);
           }
     };
 
@@ -66,14 +63,14 @@ export const TerapeuticComponent = ({ register, control, index, ...props }) => {
                 <Controller
                     name={`tipo_tratamiento${index}`}
                     control={control}
-                    defaultValue={null}
+                    defaultValue={''}
                     render={({ field }) => (
                         <Select
                             {...field}
                             options={options}
                             onChange={option => {
-                                field.onChange(option || null);
-                                handleTipoTratamientoChange(option || null);
+                                field.onChange(option || '');
+                                handleTipoTratamientoChange(option || '');
                             }}
                             isSearchable
                             isClearable

@@ -129,7 +129,7 @@ const DoctorPage = () => {
 
     const planes_terapeuticos = terapeuticComponents.map((_, index) => {
       return {
-        tipo_tratamiento: data[`tipo_tratamiento${index}`] ? data[`tipo_tratamiento${index}`].name : null,
+        tipo_tratamiento: data[`tipo_tratamiento${index}`] ? data[`tipo_tratamiento${index}`].value : null,
         principio_activo: data[`principio_activo${index}`],
         presentacion: data[`presentacion${index}`],
         posologia: data[`posologia${index}`],
@@ -307,8 +307,8 @@ const DoctorPage = () => {
 
               </section>
               <section className=' fondo'>
-                <section className=' flex flex-col ml-16 m-16 fondo'>
-                  <h3>{`Pasantes / Auxiliares / Rotantes`}</h3>
+                <section className=' flex flex-col ml-16 '>
+                  <h3 className=' py-8'>{`Pasantes / Auxiliares / Rotantes`}</h3>
 
                   <div className=' flex flex-row mt-4'>
                     <p className=' font-semibold text-[#eb5b27]  pl-2 ml-4'>Nombre y apellidos</p>
