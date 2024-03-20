@@ -29,7 +29,7 @@ const DoctorPage = () => {
   const [mascotas, setMascotas] = useState([]);
   const [mascota, setMascota] = useState(null);
   const [mascotaSeleccionada, setMascotaSeleccionada] = useState(null);
-  const { register, handleSubmit, reset, watch, control } = useForm()
+  const { register, handleSubmit, reset, watch, control,setValue } = useForm()
   // eslint-disable-next-line no-unused-vars
   const [sistema, setSistema] = useState(null);
   // eslint-disable-next-line no-unused-vars
@@ -150,11 +150,9 @@ const DoctorPage = () => {
         nombre_y_apellidos: data[`nombre_y_apellidos${index}`],
         documento: data[`documento${index}`],
         semestre: data[`semestre${index}`],
-        // posologia: data[`posologia${index}`],
-        // dosis_total: data[`dosis_total${index}`],
-        // via: data[`via${index}`],
-        // frecuencia: data[`frecuencia${index}`],
-        // duracion: data[`duracion${index}`],
+        firmaAuth: data[`firmaAuth${index}`],
+        firmaMVZ: data[`firmaMVZ${index}`],
+        
       };
     });
 
@@ -331,6 +329,7 @@ const DoctorPage = () => {
                       key={index}
                       index={index}
                       register={register}
+                      setValue={setValue}
                     />
                   ))}
                   <button type='button' onClick={onButtonClickPasantes} className=' bg-transparent border-none place-self-start mt-8  '>

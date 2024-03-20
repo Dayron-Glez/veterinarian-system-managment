@@ -1,3 +1,4 @@
+
 @tailwind components;
 @tailwind utilities;
 
@@ -52,10 +53,6 @@ main::-webkit-scrollbar {
     outline-color: #eb5b27;
   }
   
-  /* .fondo {
-    background: grey;
-  } */
-
   .fondo:nth-child(odd) {
     background-color: #f8f8f8
   }
@@ -85,4 +82,16 @@ main::-webkit-scrollbar {
 
   }
 
-  
+  /* input, textarea {
+    text-indent: 5px;
+    font-size: 14px;
+  }
+   */
+
+   .sigCanvas{
+    background-image: url('../public/favicon.ico');
+    background-repeat: no-repeat;
+    background-size: 5rem;
+    background-position: bottom left 20px;  
+    padding-left: 10px; 
+}
