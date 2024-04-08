@@ -23,17 +23,17 @@ export const GeneralComponent = ({register}) => {
                     <div className=' flex flex-row ml-[-14px]'>
                       <div className='flex flex-col  items-baseline'>
                         <label className='flex flex-row mb-2'>Tipo de vacuna</label>
-                        <textarea name="tipo_vacuna" id="tipo_vacuna" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' />
+                        <textarea name="tipo_vacuna" id="tipo_vacuna" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' {...register('tipo_vacuna')}/>
                       </div>
 
                       <div className=' flex flex-col  items-baseline'>
                         <label className='flex flex-row mb-2'>Producto</label>
-                        <textarea name="producto" id="producto" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' />
+                        <textarea name="producto_vacunacion" id="producto_vacunacion" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' {...register('producto_vacunacion')}/>
                       </div>
 
                       <div className=' flex flex-col  items-baseline'>
                         <label className='flex flex-row mb-2'>Fecha</label>
-                        <textarea name="fecha" id="fecha" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' />
+                        <input type="date" name="fecha_vacunacion" id="fecha_vacunacion" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' {...register('fecha_vacunacion')} />
                       </div>
                     </div>
                   </div>
@@ -48,12 +48,12 @@ export const GeneralComponent = ({register}) => {
 
                       <div className=' flex flex-col items-baseline'>
                         <label className='flex flex-row mb-2'>Producto</label>
-                        <textarea name="producto" id="producto" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' />
+                        <textarea name="producto_desparacitacion" id="producto_desparacitacion" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' {...register('producto_desparacitacion')}/>
                       </div>
 
                       <div className=' flex flex-col  items-baseline'>
                         <label className='flex flex-row mb-2'>Fecha</label>
-                        <textarea name="fecha" id="fecha" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' />
+                        <input type="date" name="fecha_desparacitacion" id="fecha_desparacitacion" cols="18" rows="1" className='shadow ml-4 rounded-sm h-8 resize-none' placeholder=' Ej. Text' {...register('fecha_desparacitacion')}/>
                       </div>
                     </div>
                   </div>

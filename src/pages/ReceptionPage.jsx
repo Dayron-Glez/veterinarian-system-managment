@@ -43,7 +43,7 @@ const ReceptionPage = () => {
   }, [selectedCheckbox, isSubmitting, getValues]);
 
   useEffect(() => {
-    axios.get(`https://g8k31qc7-8000.use.devtunnels.ms/recepcion/filtrarTutores/${inputValue}/`)
+    axios.get(`https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/filtrar/tutor/${inputValue}/`)
       .then(res => {
         setData(res.data);
         console.log(data);
@@ -107,7 +107,7 @@ const ReceptionPage = () => {
   };
 
   function obtenerHistoria(mascotaId) {
-    axios.get(`https://g8k31qc7-8000.use.devtunnels.ms/doctor/historias/${mascotaId}/`)
+    axios.get(`https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/filtrar/mascota/${mascotaId}/`)
       .then(response => {
         // Guarda los datos en el local storage en lugar de en el estado
         localStorage.setItem('historia', JSON.stringify(response.data));
@@ -133,12 +133,10 @@ const ReceptionPage = () => {
       edad: data.edad,
       color: data.color,
       sexo: data.sexo,
-      historia: {
-        consulta: selectedCheckbox, // Aquí se agrega el tipo de consulta seleccionado
-        fecha: data.dateForm,
-
-        observation_text: data.observation_text,
-      },
+      tipo_consulta: selectedCheckbox, // Aquí se agrega el tipo de consulta seleccionado
+      fecha_consulta: data.dateForm,
+      observacion_urgencia: data.observation_text,
+      
     };
     setMascotasData(prevMascotasData => [...prevMascotasData, newMascota]);
 
@@ -177,11 +175,12 @@ const ReceptionPage = () => {
         dni: clienteData.dni,
         telefono: clienteData.telefono,
         mascotas: mascotasData,
+        direccion: clienteData.direccion,
       };
 
       console.log("axios.post iniciado", dataToSend);
 
-      axios.post('https://g8k31qc7-8000.use.devtunnels.ms/recepcion/registrar/', dataToSend)
+      axios.post('https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/registrar/', dataToSend)
         .then(response => {
           console.log("Respuesta de axios.post", response);
           setClienteData(null);
@@ -226,7 +225,7 @@ const ReceptionPage = () => {
 
   function filtrarMascotas() {
     setIsClicked(true);
-    axios.get(`https://g8k31qc7-8000.use.devtunnels.ms/recepcion/filtrarMascota/${tutorId}/`)
+    axios.get(`https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/filtrar/mascota/${tutorId}/`)
       .then(res2 => {
         setMascotaFiltrada(res2.data);
         console.log(res2.data);
@@ -377,6 +376,14 @@ const ReceptionPage = () => {
               required: {
                 value: true,
                 message: 'EL número de teléfono es un campo requerido'
+              }
+            })} />
+
+            <label className='flex flex-row mb-2'>Dirección<p className='text-red-500'>*</p> </label>
+            <input className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="direccion" id="direccion"  {...register('direccion', {
+              required: {
+                value: true,
+                message: 'La direccion de teléfono es un campo requerido'
               }
             })} />
 

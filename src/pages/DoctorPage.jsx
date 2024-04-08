@@ -83,7 +83,8 @@ const DoctorPage = () => {
   useEffect(() => {
     const obtenerDatos = () => {
       const fechaActual = new Date().toLocaleDateString('en-CA');
-      axios.get(`https://g8k31qc7-8000.use.devtunnels.ms/doctor/citas/${fechaActual}/`)
+      console.log(fechaActual);
+      axios.get(`https://h3h9qmcq-8000.use2.devtunnels.ms/doctor/agenda/${fechaActual}/`)
         .then(res => {
           setMascotas(res.data);
           setMascota(res.data[0]); // Guarda la primera mascota en el estado
@@ -109,15 +110,15 @@ const DoctorPage = () => {
       return {
         sistema: data[`sistema${index}`].value,
         enfermedad: data[`enfermedad${index}`].value,
-        organoAfectado: data[`organoAfectado${index}`],
-        observacion_sistema: data[`observation_enfermedad_organo${index}`],
+        organo: data[`organoAfectado${index}`],
+        observacion: data[`observation_enfermedad_organo${index}`],
       };
     });
 
     const problemas = problemsComponents.map((_, index) => {
       return {
         problema: data[`problema${index}`],
-        problema_maestra: data[`problema_maestra${index}`],
+        maestra: data[`problema_maestra${index}`],
         diagnostico_diferencial: data[`diagnostico_diferencial${index}`],
       };
     });
@@ -125,16 +126,16 @@ const DoctorPage = () => {
     const diagnosticos = diagnosticComponents.map((_, index) => {
       return {
         tipo_examen: data[`tipo_examen${index}`] ? data[`tipo_examen${index}`].value : null,
-        autorizacion_examen: data[`autorizacion_examen${index}`],
-        fecha_plan_diagnostico: data[`fecha_pland${index}`],
+        autorizado: data[`autorizacion_examen${index}`],
+        fecha: data[`fecha_pland${index}`],
         laboratorio: data[`laboratorio${index}`],
-        resultados_lab: data[`resultados_lab${index}`],
+        resultados: data[`resultados_lab${index}`],
       };
     });
 
     const planes_terapeuticos = terapeuticComponents.map((_, index) => {
       return {
-        tipo_tratamiento: data[`tipo_tratamiento${index}`] ? data[`tipo_tratamiento${index}`].value : null,
+        tratamiento: data[`tipo_tratamiento${index}`] ? data[`tipo_tratamiento${index}`].value : null,
         principio_activo: data[`principio_activo${index}`],
         presentacion: data[`presentacion${index}`],
         posologia: data[`posologia${index}`],
@@ -147,11 +148,11 @@ const DoctorPage = () => {
 
     const pasantes = pasantesComponents.map((_, index) => {
       return {
-        nombre_y_apellidos: data[`nombre_y_apellidos${index}`],
-        documento: data[`documento${index}`],
+        nombre: data[`nombre_y_apellidos${index}`],
+        dni: data[`documento${index}`], //era documento
         semestre: data[`semestre${index}`],
-        firmaAuth: data[`firmaAuth${index}`],
-        firmaMVZ: data[`firmaMVZ${index}`],
+        // firmaAuth: data[`firmaAuth${index}`],
+        // firmaMVZ: data[`firmaMVZ${index}`],
         
       };
     });

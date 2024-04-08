@@ -10,21 +10,21 @@ export const ExamenCComponent = ({register}) => {
                     <label className='flex flex-row mb-2'>Actitud <p className='text-red-500'>*</p> </label>
                     <div className='flex flex-row'>
                       <label className='flex items-center mr-11'>
-                        <input type="radio" value="Alerta" name="Actitud" {...register('Actitud')} className='custom-radio' />
+                        <input type="radio" value="Alerta" name="actitud" {...register('actitud')} className='custom-radio' />
                         <span className="ml-2">Alerta</span>
                       </label>
                       <label className='flex items-center'>
-                        <input type="radio" value="Agresivo" name="Actitud" {...register('Actitud')} className='custom-radio' />
+                        <input type="radio" value="Agresivo" name="actitud" {...register('actitud')} className='custom-radio' />
                         <span className="ml-2">Agresivo</span>
                       </label>
                     </div>
                     <div className='flex flex-row'>
                       <label className='flex items-center mr-5'>
-                        <input type="radio" value="Depresivo" name="Actitud" {...register('Actitud')} className='custom-radio' />
+                        <input type="radio" value="Depresivo" name="actitud" {...register('actitud')} className='custom-radio' />
                         <span className="ml-2">Depresivo</span>
                       </label>
                       <label className='flex items-center'>
-                        <input type="radio" value="Comatoso" name="Actitud" {...register('Actitud')} className='custom-radio' />
+                        <input type="radio" value="Comatoso" name="actitud" {...register('actitud')} className='custom-radio' />
                         <span className="ml-2">Comatoso</span>
                       </label>
                     </div>
@@ -73,24 +73,24 @@ export const ExamenCComponent = ({register}) => {
                           <span className="ml-2">Normal</span>
                         </label>
                         <label className='flex items-center ml-[46px]'>
-                          <input type="radio" value="d_0_5" name="hidratacion" {...register('hidratacion')} className='custom-radio' />
+                          <input type="radio" value="Deshidratación 0-5%" name="hidratacion" {...register('hidratacion')} className='custom-radio' />
                           <span className="ml-2">{`Deshidratación 0-5%`}</span>
                         </label>
                       </div>
                       <div className=' flex flex-row'>
                         <label className='flex items-center'>
-                          <input type="radio" value="d_6_7" name="hidratacion" {...register('hidratacion')} className='custom-radio' />
+                          <input type="radio" value="Deshidratación 6-7%" name="hidratacion" {...register('hidratacion')} className='custom-radio' />
                           <span className="ml-2">{`Deshidratación 6-7%`}</span>
                         </label>
                         <label className='flex items-center ml-1 '>
-                          <input type="radio" value="d_8_9" name="hidratacion" {...register('hidratacion')} className='custom-radio' />
+                          <input type="radio" value="Deshidratación 8-9%" name="hidratacion" {...register('hidratacion')} className='custom-radio' />
                           <span className="ml-2">{`Deshidratación 8-9%`}</span>
                         </label>
                       </div>
                     </div>
                     <div className='flex flex-row'>
                       <label className='flex items-center mr-5'>
-                        <input type="radio" value="d_+10" name="hidratacion" {...register('hidratacion')} className='custom-radio' />
+                        <input type="radio" value="Deshidratación +10%" name="hidratacion" {...register('hidratacion')} className='custom-radio' />
                         <span className="ml-2">{`Deshidratación +10%`}</span>
                       </label>
                     </div>

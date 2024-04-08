@@ -35,7 +35,7 @@ export const PasantesComponent = ({ register, index,setValue }) => {
       <div className="flex flex-row">
         <input type="text" {...register(`nombre_y_apellidos${index}`)} className=" mb-0 ml-6 h-6" placeholder=" Ej.Text" />
         <input type="text" {...register(`documento${index}`)} className=" mb-0 ml-20 h-6" placeholder=" Ej.Text" />
-        <input type="text" {...register(`semestre${index}`)} className=" mb-0 ml-9 h-6" placeholder=" Ej.Text" />
+        <input type="number" {...register(`semestre${index}`)} className=" mb-0 ml-9 h-6" placeholder=" Ej.Text" />
         <button type="button" onClick={() => setOpenModal1(true)}>
           Firmar Auth
         </button>

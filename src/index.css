@@ -89,7 +89,7 @@ main::-webkit-scrollbar {
    */
 
    .sigCanvas{
-    background-image: url('../public/favicon.ico');
+    background-image: url('/favicon.ico');
     background-repeat: no-repeat;
     background-size: 5rem;
     background-position: bottom left 20px;  

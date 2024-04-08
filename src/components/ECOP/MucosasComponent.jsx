@@ -8,12 +8,12 @@ export const MucosasComponent = ({register}) => {
                   <label className='flex flex-row mb-6'>Mucosa Conjuntival <p className='text-red-500'>*</p> </label>
                   <div className='flex flex-row'>
                     <label className='flex items-center mr-5'>
-                      <input type="radio" value="Normal" name="mucosa_conjuntival" {...register('mucosa_conjuntival')} className='custom-radio' />
+                      <input type="radio" value="False" name="mucosa_conjuntival" {...register('mucosa_conjuntival')} className='custom-radio' />
                       <span className="ml-2">Normal</span>
                     </label>
 
                     <label className='flex items-center mr-5'>
-                      <input type="radio" value="Alterada" name="mucosa_conjuntival" {...register('mucosa_conjuntival')} className='custom-radio' />
+                      <input type="radio" value="True" name="mucosa_conjuntival" {...register('mucosa_conjuntival')} className='custom-radio' />
                       <span className="ml-2">Alterada</span>
                     </label>
                   </div>
@@ -26,12 +26,12 @@ export const MucosasComponent = ({register}) => {
                   <label className='flex flex-row mb-6'>Mucosa Vulvar/Prepucial <p className='text-red-500'>*</p> </label>
                   <div className='flex flex-row'>
                     <label className='flex items-center mr-5'>
-                      <input type="radio" value="Normal" name="mucosa_vulvar_prepucial" {...register('mucosa_vulvar_prepucial')} className='custom-radio' />
+                      <input type="radio" value="False" name="mucosa_vulvar_prepucial" {...register('mucosa_vulvar_prepucial')} className='custom-radio' />
                       <span className="ml-2">Normal</span>
                     </label>
 
                     <label className='flex items-center mr-5'>
-                      <input type="radio" value="Alterada" name="mucosa_vulvar_prepucial" {...register('mucosa_vulvar_prepucial')} className='custom-radio' />
+                      <input type="radio" value="True" name="mucosa_vulvar_prepucial" {...register('mucosa_vulvar_prepucial')} className='custom-radio' />
                       <span className="ml-2">Alterada</span>
                     </label>
                   </div>
@@ -44,12 +44,12 @@ export const MucosasComponent = ({register}) => {
                   <label className='flex flex-row mb-6'>Mucosa Rectal <p className='text-red-500'>*</p> </label>
                   <div className='flex flex-row'>
                     <label className='flex items-center mr-5'>
-                      <input type="radio" value="Normal" name="mucosa_rectal" {...register('mucosa_rectal')} className='custom-radio' />
+                      <input type="radio" value="False" name="mucosa_rectal" {...register('mucosa_rectal')} className='custom-radio' />
                       <span className="ml-2">Normal</span>
                     </label>
 
                     <label className='flex items-center mr-5'>
-                      <input type="radio" value="Alterada" name="mucosa_rectal" {...register('mucosa_rectal')} className='custom-radio' />
+                      <input type="radio" value="True" name="mucosa_rectal" {...register('mucosa_rectal')} className='custom-radio' />
                       <span className="ml-2">Alterada</span>
                     </label>
                   </div>

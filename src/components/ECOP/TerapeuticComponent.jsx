@@ -87,10 +87,10 @@ export const TerapeuticComponent = ({ register, control, index, ...props }) => {
 
                 <input type="text" className=' placeholder:font-bold placeholder:pl-4 w-36  ml-5 h-[38px] border-none  outline-1 focus:outline-[#eb5b27]  focus:rounded-sm' placeholder='Ej. Text' {...register(`principio_activo${index}`)} />
                 <input type="text" className=' placeholder:font-bold placeholder:pl-4 w-[120px] ml-6  h-[38px] border-none  outline-1  focus:outline-[#eb5b27] focus:rounded-sm' placeholder='Ej. Text' {...register(`presentacion${index}`)} />
-                <input type="text" className=' placeholder:font-bold placeholder:pl-4 w-24 ml-5  h-[38px] border-none  outline-1  focus:outline-[#eb5b27] focus:rounded-sm' placeholder='Ej. Text' {...register(`posologia${index}`)} />
-                <input type="text" className=' placeholder:font-bold placeholder:pl-4 w-[98px] ml-5  h-[38px] border-none  outline-1  focus:outline-[#eb5b27] focus:rounded-sm' placeholder='Ej. Text' {...register(`dosis_total${index}`)} />
+                <input type="number" className=' placeholder:font-bold placeholder:pl-4 w-24 ml-5  h-[38px] border-none  outline-1  focus:outline-[#eb5b27] focus:rounded-sm' placeholder='Ej. Text' {...register(`posologia${index}`)} />
+                <input type="number" className=' placeholder:font-bold placeholder:pl-4 w-[98px] ml-5  h-[38px] border-none  outline-1  focus:outline-[#eb5b27] focus:rounded-sm' placeholder='Ej. Text' {...register(`dosis_total${index}`)} />
                 <input type="text" className=' placeholder:font-bold placeholder:pl-4 w-28 ml-4  h-[38px] border-none  outline-1  focus:outline-[#eb5b27] focus:rounded-sm' placeholder='Ej. Text' {...register(`via${index}`)} />
-                <input type="text" className=' placeholder:font-bold placeholder:pl-4 w-[100px] ml-4  h-[38px] border-none  outline-1  focus:outline-[#eb5b27] focus:rounded-sm' placeholder='Ej. Text' {...register(`frecuencia${index}`)} />
+                <input type="number" className=' placeholder:font-bold placeholder:pl-4 w-[100px] ml-4  h-[38px] border-none  outline-1  focus:outline-[#eb5b27] focus:rounded-sm' placeholder='Ej. Text' {...register(`frecuencia${index}`)} />
                 <input type="text" className=' placeholder:font-bold placeholder:pl-4 w-32 ml-10  h-[38px] border-none  outline-1  focus:outline-[#eb5b27] focus:rounded-sm' placeholder='Ej. Text' {...register(`duracion${index}`)} />
             </div>
             <div className=' border-[1px] border-solid border-[#b5b7ba] h-0  w-[100%]' />

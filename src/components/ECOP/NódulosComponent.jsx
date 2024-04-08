@@ -9,12 +9,12 @@ export const NódulosComponent = ({register}) => {
                   <label className='flex flex-row mb-6'>Nódulos linfáticos <p className='text-red-500'>*</p> </label>
                   <div className='flex flex-row'>
                     <label className='flex items-center mr-5'>
-                      <input type="radio" value="Normal" name="nodulos_linfaticos" {...register('nodulos_linfaticos')} className='custom-radio' />
+                      <input type="radio" value="False" name="nodulos_linfaticos" {...register('nodulos_linfaticos')} className='custom-radio' />
                       <span className="ml-2">Normal</span>
                     </label>
 
                     <label className='flex items-center mr-5'>
-                      <input type="radio" value="Alterada" name="nodulos_linfaticos" {...register('nodulos_linfaticos')} className='custom-radio' />
+                      <input type="radio" value="True" name="nodulos_linfaticos" {...register('nodulos_linfaticos')} className='custom-radio' />
                       <span className="ml-2">Alterada</span>
                     </label>
                   </div>
