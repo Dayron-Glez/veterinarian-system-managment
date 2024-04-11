@@ -36,10 +36,10 @@ export const PasantesComponent = ({ register, index,setValue }) => {
         <input type="text" {...register(`nombre_y_apellidos${index}`)} className=" mb-0 ml-6 h-6" placeholder=" Ej.Text" />
         <input type="text" {...register(`documento${index}`)} className=" mb-0 ml-20 h-6" placeholder=" Ej.Text" />
         <input type="number" {...register(`semestre${index}`)} className=" mb-0 ml-9 h-6" placeholder=" Ej.Text" />
-        <button type="button" onClick={() => setOpenModal1(true)}>
+        <button type="button" onClick={() => setOpenModal1(true)} className=' bg-transparent border-[1px] rounded-sm ml-4'>
           Firmar Auth
         </button>
-        <button type="button" onClick={() => setOpenModal2(true)}>
+        <button type="button" onClick={() => setOpenModal2(true)} className=' bg-transparent border-[1px] rounded-sm ml-[200px]'>
           Firmar MVZ
         </button>
         {openModal1 && (
@@ -76,7 +76,7 @@ export const PasantesComponent = ({ register, index,setValue }) => {
     <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 
       <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3xl">
-        <div className="bg-white pb-4 pt-5 sm:pb-4">
+        <div className="bg-transparent pb-4 pt-5 sm:pb-4">
 
           <SignatureCanvas ref={firmaAuth2} penColor='black' canvasProps={{ width: 768, height: 194, className: 'sigCanvas' }} />
         </div>

@@ -250,9 +250,7 @@ const ReceptionPage = () => {
               <button className=' border-none bg-transparent mx-4'>
                 <li className='text-white font-semibold'>MASCOTAS</li>
               </button>
-              <button className=' border-none bg-transparent mx-4'>
-                <li className='text-white font-semibold'>HISTORIAS</li>
-              </button>
+             
             </ul>
           </div>
         </nav>
@@ -482,7 +480,7 @@ const ReceptionPage = () => {
                 <div className='grid-cols-3 flex space-x-3'>
                   <div>
                     <label className='flex flex-row mb-2'>Edad<p className='text-red-500'>*</p> </label>
-                    <input className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type='number' name="edad" id="edad"   {...register('edad', {
+                    <input className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type='text' name="edad" id="edad"   {...register('edad', {
                       autoComplete: {
                         value: 'off'
                       },

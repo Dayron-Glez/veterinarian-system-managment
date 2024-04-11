@@ -390,7 +390,7 @@ const DoctorPage = () => {
                     </p>
                     <p>
 
-                      {mascota.edad + ' años'}
+                      {mascota.edad}
                     </p>
                     <p>
 
