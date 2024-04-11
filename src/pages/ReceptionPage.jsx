@@ -107,7 +107,7 @@ const ReceptionPage = () => {
   };
 
   function obtenerHistoria(mascotaId) {
-    axios.get(`https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/filtrar/mascota/${mascotaId}/`)
+    axios.get(`https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/historia/${mascotaId}/`)
       .then(response => {
         // Guarda los datos en el local storage en lugar de en el estado
         localStorage.setItem('historia', JSON.stringify(response.data));
@@ -116,13 +116,6 @@ const ReceptionPage = () => {
       .catch(err => console.log(err));
   }
 
-  // eslint-disable-next-line no-unused-vars
-  // const onSubmit = (formData) => {
-
-  //   console.log('la form data es');
-  //   console.log(formData);
-  //   // reset()
-  // };
 
   const agregarMascota = (data) => {
     console.log("agregarMascota iniciado", data);
@@ -565,41 +558,7 @@ const ReceptionPage = () => {
             </div>
             <div className=' flex flex-row my-4'>
               <input type="datetime-local" name="datetime-local" id="datetime-local" {...register('dateForm')} />
-              {/* <LocalizationProvider >
-              <Controller
-              name="dateForm"
-              control={control}
-              defaultValue={fecha} // Aquí establecemos el valor por defecto
-              render={({ field }) => (
-                <DatePicker
-                  label="Fecha"
-                  value={field.value} // Aquí utilizamos el valor del formulario
-                  onChange={(date) => field.onChange(date)}
-                />
-              )}
-            />
-  <Controller
-    name="HourForm"
-    control={control}
-    defaultValue={hora} // Aquí establecemos el valor por defecto
-    render={({ field }) => (
-      <TimePicker
-        label="Hora"
-        viewRenderers={{
-          hours: renderTimeViewClock,
-          minutes: renderTimeViewClock,
-          seconds: renderTimeViewClock,
-        }}
-        value={field.value} // Aquí utilizamos el valor del formulario
-        onChange={(time) => field.onChange(time)}
-      />
-    )}
-  />
-              </LocalizationProvider> */}
             </div>
-
-
-
             <div className='flex space-x-80'>
               <button type='button' className=' bg-[#eb5b27] text-white border-none rounded-3xl h-10 w-36 mb-8' onClick={() => { agregarMascota(getValues()) }}>Aceptar</button>
               <button type='button' className=' bg-[#eb5b27] text-white border-none rounded-3xl h-10 w-36 mb-8' id='btn-close-modal'>Cerrar</button>

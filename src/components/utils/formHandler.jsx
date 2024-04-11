@@ -27,9 +27,9 @@ export const onSubmit =
       alimentacion: data.Alimentación,
       habitat: data.Hábitat,
       alergias: data.alergias,
-      cirugia: data.cirugías,
+      cirugias: data.cirugías,
       enfermedades_anteriores: data.enfermedades,
-      antecedentes: data.antecedentes,
+      antescedentes_familiares: data.antecedentes,
       tllc: data.TLLC,
       pulso: data.Pulso,
       fc: data.FC,
@@ -85,5 +85,5 @@ export const onSubmit =
     });
 
   console.log(mascotaData);
-  // reset();
+  reset()
 };

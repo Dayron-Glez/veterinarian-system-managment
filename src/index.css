@@ -95,3 +95,7 @@ main::-webkit-scrollbar {
     background-position: bottom left 20px;  
     padding-left: 10px; 
 }
+
+label {
+  color: #344054;
+}

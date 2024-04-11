@@ -279,16 +279,6 @@ const DoctorPage = () => {
                 <div className=' border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
                 <section className=' flex flex-col ml-16 mt-8'>
                   <h3 className=' mb-8'>PLAN TERAP&Eacute;UTICO</h3>
-                  <div className=' flex flex-row mt-4'>
-                    <p className=' '>Tipo de tratamiento</p>
-                    <p className=' ml-6'>PRINCIPIO ACTIVO</p>
-                    <p className=' ml-6'>PRESENTACI&Oacute;N</p>
-                    <p className=' ml-6'>POSOLOG&Iacute;A</p>
-                    <p className=' ml-6'>DOSIS TOTAL</p>
-                    <p className=' ml-4'>V&Iacute;A</p>
-                    <p className=' ml-24'>FRECUENCIA</p>
-                    <p className=' ml-10'>DURACI&Oacute;N</p>
-                  </div>
                   <div className=' border-[1px] border-solid border-[#b5b7ba] h-0 my-2 w-[100%]' />
 
 
