@@ -25,8 +25,11 @@ import { onSubmit } from '../components/utils/formHandler';
 import { NódulosComponent } from '../components/ECOP/NódulosComponent';
 import { EstadoPComponent } from '../components/ECOP/EstadoPComponent';
 import { PasantesComponent } from '../components/ECOP/PasantesComponent';
+import { ToastContainer} from 'react-toastify'
+
 const DoctorPage = () => {
   const [mascotas, setMascotas] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [mascota, setMascota] = useState(null);
   const [mascotaSeleccionada, setMascotaSeleccionada] = useState(null);
   const { register, handleSubmit, reset, watch, control,setValue } = useForm()
@@ -157,7 +160,7 @@ const DoctorPage = () => {
       };
     });
 
-    onSubmit(data, watchAlimentacion, watchHabitat, mascota, sistemas, problemas, diagnosticos, planes_terapeuticos,pasantes, reset);
+    onSubmit(data, watchAlimentacion, watchHabitat, mascotaSeleccionada, sistemas, problemas, diagnosticos, planes_terapeuticos,pasantes, reset);
     setDeseaseComponents([{}]);
     setProblemsComponents([{}]);
     setDiagnosticComponents([{}]);
@@ -189,6 +192,7 @@ const DoctorPage = () => {
           </section>
           <div className='h-[4vh] bg-[#eb5b27]' />
         </nav>
+        <ToastContainer/>
         <div className='flex flex-row h-full w-full '>
           <main className='flex flex-col h-[100vh] w-[77vw] overflow-auto scrollbar scrollbar-thumb-gray-500 scrollbar-thin scrollbar-thumb-rounded'>
             <section className='  flex flex-col mt-8 ml-8'>

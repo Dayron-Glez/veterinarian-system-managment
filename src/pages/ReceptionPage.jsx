@@ -6,7 +6,7 @@ import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import LogoComponent from '../components/LogoComponent'
 import notificationIcon from '../assets/notificationIcon.svg'
-
+import {toast, ToastContainer} from 'react-toastify'
 import Select from 'react-select'
 
 const ReceptionPage = () => {
@@ -22,7 +22,7 @@ const ReceptionPage = () => {
   const [mascotaFiltrada, setMascotaFiltrada] = useState([])
   const [tutorId, setTutorId] = useState(null)
   const location = useLocation();
-
+  const [modalOpen, setModalOpen] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, reset, getValues, control } = useForm()
@@ -134,6 +134,7 @@ const ReceptionPage = () => {
     setMascotasData(prevMascotasData => [...prevMascotasData, newMascota]);
 
     console.log("agregarMascota terminado");
+    setModalOpen(false);
   };
 
   const onSubmit = (data) => {
@@ -176,11 +177,13 @@ const ReceptionPage = () => {
       axios.post('https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/registrar/', dataToSend)
         .then(response => {
           console.log("Respuesta de axios.post", response);
+          toast.success("Datos enviados correctamente", {position: 'top-center'});
           setClienteData(null);
           setMascotasData([]);
         })
         .catch(error => {
           console.error("Error en axios.post", error);
+          toast.error('Algo falló en la petición', {position: 'top-center'});	
         });
 
       console.log("axios.post terminado");
@@ -197,19 +200,19 @@ const ReceptionPage = () => {
 
 
 
-  useEffect(() => {
-    const modal = document.querySelector('#modal');
-    const btnOpenModal = document.querySelector("#btn-open-modal");
-    const btnCloseModal = document.querySelector('#btn-close-modal');
+  // useEffect(() => {
+  //   const modal = document.querySelector('#modal');
+  //   const btnOpenModal = document.querySelector("#btn-open-modal");
+  //   const btnCloseModal = document.querySelector('#btn-close-modal');
 
-    btnOpenModal.addEventListener('click', () => {
-      modal.classList.remove('hidden')
-    });
+  //   btnOpenModal.addEventListener('click', () => {
+  //     modal.classList.remove('hidden')
+  //   });
 
-    btnCloseModal.addEventListener('click', () => {
-      modal.classList.add('hidden')
-    });
-  }, []);
+  //   btnCloseModal.addEventListener('click', () => {
+  //     modal.classList.add('hidden')
+  //   });
+  // }, []);
 
 
   useEffect(() => {
@@ -254,7 +257,7 @@ const ReceptionPage = () => {
             </ul>
           </div>
         </nav>
-
+        <ToastContainer className=' w-72 text-xl'/>
         <div className=' flex flex-col justify-center place-items-center  w-[50%]'>
 
           <input type="text" onChange={e => setInputValue(e.target.value)} className=' w-full mt-10 h-10 rounded-md' placeholder='Buscar por usuario' />
@@ -381,188 +384,193 @@ const ReceptionPage = () => {
             {errors.telefono && <span>{errors.telefono.message}</span>}
 
             <div className='flex flex-row w-full justify-center gap-10'>
-              <button className="bg-orange-600 my-10 text-white h-8 w-40 rounded-md border-none shadow-md focus:ring " type='button' id='btn-open-modal'>Añadir Mascota</button>
-              <button className="bg-orange-600 my-10 text-white h-8 w-40 rounded-md border-none shadow-md focus:ring " onClick={() => { console.log("Botón Enviar clickeado"); enviarDatos(); }} type='submit'>Enviar</button>
+              <button className="bg-orange-600 hover:bg-orange-500 my-10 text-white h-8 w-40 rounded-md border-none shadow-md focus:ring " onClick={() => {setModalOpen(true)}} type='button' id='btn-open-modal'>Añadir Mascota</button>
+              <button className="bg-orange-600 hover:bg-orange-500 my-10 text-white h-8 w-40 rounded-md border-none shadow-md focus:ring " onClick={() => { console.log("Botón Enviar clickeado"); enviarDatos(); }} type='submit'>Enviar</button>
             </div>
           </div>
-          <div id='modal' className='bg-white border-none w-[800px] rounded-md flex-col hidden z-20 px-10'>
-            <div>
-              <h2 className='text-[#344054] py-10'>Motivo de llegada</h2>
-              <ul className=' flex flex-row  gap-2 pl-0 list-none  text-[#344054] border-2 space-x-4'>
+          {
+            modalOpen && (
 
-                <li>
-                  <label>
-                    <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Consulta' {...register('Consulta')} onChange={handleCheckboxChange} />Consulta
-                  </label>
-                </li>
-                <li>
-                  <label>
-                    <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Continuación' {...register('Continuación')} onChange={handleCheckboxChange} />Continuación
-                  </label>
-                </li>
-                <li>
-                  <label>
-                    <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Planificada' {...register('Planificada')} onChange={handleCheckboxChange} />Planificada
-                  </label>
-                </li>
-                <li>
-                  <label>
-                    <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Emergencia' {...register('Emergencia')} onChange={handleCheckboxChange} />Emergencia
-                  </label>
-                </li>
-                <li>
-                  <label>
-                    <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name="Urgencia" id="Urgencia"{...register('Urgencia')} onChange={handleUrgencyChange} />Urgencia
-                  </label>
-                </li>
-                <Controller
-                  name="specialized"
-                  control={control}
+            <div id='modal' className='bg-white border-none w-[900px] rounded-md flex-col  z-20 px-10'>
+              <div>
+                <h2 className='text-[#344054] py-10'>Motivo de llegada</h2>
+                <ul className=' flex flex-row  gap-2 pl-0 list-none  text-[#344054] border-2 space-x-4 items-baseline'>
 
-                  defaultValue=""
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      options={[
-                        { value: 'cardiología', label: 'Cardiología' },
-                        { value: 'cirugía', label: 'Cirugía' },
-                        { value: 'oftalmología', label: 'Oftalmología' },
-                        { value: 'dermatología', label: 'Dermatología' },
-                        { value: 'nutrición', label: 'Nutrición' },
-                        { value: 'ortopedia', label: 'Ortopedia' },
-                        { value: 'neurología', label: 'Neurología' },
-                        { value: 'neonatología', label: 'Neonatología' },
-                        { value: 'reproducción', label: 'Reproducción' },
-                        { value: 'exóticos', label: 'Exóticos' },
-                        { value: 'gerontología', label: 'Gerontología' },
-                        { value: 'odontología', label: 'Odontología' },
-                      ]}
-                      onChange={option => field.onChange(option)}
-                      placeholder='Especializadas'
-                      isSearchable
-                      isClearable
-                      noOptionsMessage={() => 'No existe esa opción'}
-                      styles={{
-                        clearIndicator: (baseStyles) => ({
-                          ...baseStyles,
-                          color: 'red',
+                  <li>
+                    <label>
+                      <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Consulta' {...register('Consulta')} onChange={handleCheckboxChange} />Consulta
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Continuación' {...register('Continuación')} onChange={handleCheckboxChange} />Continuación
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Planificada' {...register('Planificada')} onChange={handleCheckboxChange} />Planificada
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Emergencia' {...register('Emergencia')} onChange={handleCheckboxChange} />Emergencia
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name="Urgencia" id="Urgencia"{...register('Urgencia')} onChange={handleUrgencyChange} />Urgencia
+                    </label>
+                  </li>
+                  <Controller
+                    name="specialized"
+                    control={control}
 
-                        }),
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={[
+                          { value: 'cardiología', label: 'Cardiología' },
+                          { value: 'cirugía', label: 'Cirugía' },
+                          { value: 'oftalmología', label: 'Oftalmología' },
+                          { value: 'dermatología', label: 'Dermatología' },
+                          { value: 'nutrición', label: 'Nutrición' },
+                          { value: 'ortopedia', label: 'Ortopedia' },
+                          { value: 'neurología', label: 'Neurología' },
+                          { value: 'neonatología', label: 'Neonatología' },
+                          { value: 'reproducción', label: 'Reproducción' },
+                          { value: 'exóticos', label: 'Exóticos' },
+                          { value: 'gerontología', label: 'Gerontología' },
+                          { value: 'odontología', label: 'Odontología' },
+                        ]}
+                        onChange={option => field.onChange(option)}
+                        placeholder='Especializadas'
+                        isSearchable
+                        isClearable
+                        noOptionsMessage={() => 'No existe esa opción'}
+                        styles={{
+                          clearIndicator: (baseStyles) => ({
+                            ...baseStyles,
+                            color: 'red',
 
-                      }}
-                      isMulti
-                      className=' w-[200px] text-orange-600 border-none'
-                      id='specialized'
-                    />
-                  )}
-                />
-              </ul>
-            </div>
-            <div className='  flex-col hidden ' id='observation_container'>
-              <h2>Observación</h2>
-              <textarea name="observation_text" id="observation_text" cols="106" rows="6" {...register('observation_text')}></textarea>
-            </div>
-            <div className=' flex flex-col'>
+                          }),
 
-              <h2 className='text-[#344054] py-10' id='pet_h2'>Mascota</h2>
-              <div className=' grid-cols-3 flex space-x-40 p-0'>
-                <div>
-                  <label className='flex flex-row mb-2'>Nombre de la mascota<p className='text-red-500'>*</p> </label>
-                  <input className='shadow rounded-md resize-none h-6 w-50' placeholder='Nombre de la mascota' type="text" name="nombre_mascota" id="nombre_mascota"   {...register('nombre_mascota', {
-                    required: selectedCheckbox !== 'Urgencia' ? {
-                      value: true,
-                      message: 'El nombre de la mascota es un campo requerido'
-                    } : false
-                  })} />
-                  {errors.nombre_mascota && <span>{errors.nombre_mascota.message}</span>}
-                </div>
+                        }}
+                        isMulti
+                        className=' w-[200px] text-orange-600 border-none'
+                        id='specialized'
+                      />
+                    )}
+                  />
+                </ul>
+              </div>
+              <div className='  flex-col hidden ' id='observation_container'>
+                <h2>Observación</h2>
+                <textarea name="observation_text" id="observation_text" cols="106" rows="6" {...register('observation_text')}></textarea>
+              </div>
+              <div className=' flex flex-col'>
 
-                <div className='grid-cols-3 flex space-x-3'>
+                <h2 className='text-[#344054] py-10' id='pet_h2'>Mascota</h2>
+                <div className=' grid-cols-3 flex space-x-40 p-0'>
                   <div>
-                    <label className='flex flex-row mb-2'>Edad<p className='text-red-500'>*</p> </label>
-                    <input className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type='text' name="edad" id="edad"   {...register('edad', {
-                      autoComplete: {
-                        value: 'off'
-                      },
+                    <label className='flex flex-row mb-2'>Nombre de la mascota<p className='text-red-500'>*</p> </label>
+                    <input className='shadow rounded-md resize-none h-6 w-50' placeholder='Nombre de la mascota' type="text" name="nombre_mascota" id="nombre_mascota"   {...register('nombre_mascota', {
                       required: selectedCheckbox !== 'Urgencia' ? {
                         value: true,
-                        message: 'La edad es un campo requerido'
+                        message: 'El nombre de la mascota es un campo requerido'
                       } : false
                     })} />
-
-                    {errors.edad && <span>{errors.edad.message}</span>}
+                    {errors.nombre_mascota && <span>{errors.nombre_mascota.message}</span>}
                   </div>
 
-                  <div><label className='flex flex-row mb-2'>Color<p className='text-red-500'>*</p> </label>
-                    <input className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type="text" name="color" id="color"   {...register('color', {
-                      autoComplete: {
-                        value: 'off'
-                      },
-                      required: selectedCheckbox !== 'Urgencia' ? {
-                        value: true,
-                        message: 'El color es un campo requerido'
-                      } : false
-                    })} />
+                  <div className='grid-cols-3 flex space-x-3'>
+                    <div>
+                      <label className='flex flex-row mb-2'>Edad<p className='text-red-500'>*</p> </label>
+                      <input className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type='text' name="edad" id="edad"   {...register('edad', {
+                        autoComplete: {
+                          value: 'off'
+                        },
+                        required: selectedCheckbox !== 'Urgencia' ? {
+                          value: true,
+                          message: 'La edad es un campo requerido'
+                        } : false
+                      })} />
 
-                    {errors.color && <span>{errors.color.message}</span>}
-                  </div>
+                      {errors.edad && <span>{errors.edad.message}</span>}
+                    </div>
 
-                  <div><label className='flex flex-row mb-2'>Sexo<p className='text-red-500'>*</p> </label>
-                    <input className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type="text" name="sexo" id="sexo"   {...register('sexo', {
-                      autoComplete: {
-                        value: 'off'
-                      },
-                      required: selectedCheckbox !== 'Urgencia' ? {
-                        value: true,
-                        message: 'EL sexo es un campo requerido'
-                      } : false
-                    })} />
+                    <div><label className='flex flex-row mb-2'>Color<p className='text-red-500'>*</p> </label>
+                      <input className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type="text" name="color" id="color"   {...register('color', {
+                        autoComplete: {
+                          value: 'off'
+                        },
+                        required: selectedCheckbox !== 'Urgencia' ? {
+                          value: true,
+                          message: 'El color es un campo requerido'
+                        } : false
+                      })} />
 
-                    {errors.sexo && <span>{errors.sexo.message}</span>}
+                      {errors.color && <span>{errors.color.message}</span>}
+                    </div>
+
+                    <div><label className='flex flex-row mb-2'>Sexo<p className='text-red-500'>*</p> </label>
+                      <input className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type="text" name="sexo" id="sexo"   {...register('sexo', {
+                        autoComplete: {
+                          value: 'off'
+                        },
+                        required: selectedCheckbox !== 'Urgencia' ? {
+                          value: true,
+                          message: 'EL sexo es un campo requerido'
+                        } : false
+                      })} />
+
+                      {errors.sexo && <span>{errors.sexo.message}</span>}
+                    </div>
                   </div>
                 </div>
-              </div>
 
 
-              <div className='flex grid-cols-2 space-x-40'><div>
-                <label className='flex flex-row mb-2'>Raza<p className='text-red-500'>*</p> </label>
-                <input className='shadow rounded-md resize-none h-6 w-50' placeholder='Ej.texto' type="text" name="raza" id="raza"   {...register('raza', {
-                  autoComplete: {
-                    value: 'off'
-                  },
-                  required: selectedCheckbox !== 'Urgencia' ? {
-                    value: true,
-                    message: 'La raza es un campo requerido'
-                  } : false
-                })} />
-
-                {errors.raza && <span>{errors.raza.message}</span>}
-              </div>
-
-                <div><label className='flex flex-row mb-2'>Especie<p className='text-red-500'>*</p> </label>
-                  <input className='shadow rounded-md resize-none h-6 w-50' placeholder='Ej.texto' type="text" name="especie" id="especie"   {...register('especie', {
+                <div className='flex grid-cols-2 space-x-40'><div>
+                  <label className='flex flex-row mb-2'>Raza<p className='text-red-500'>*</p> </label>
+                  <input className='shadow rounded-md resize-none h-6 w-50' placeholder='Ej.texto' type="text" name="raza" id="raza"   {...register('raza', {
                     autoComplete: {
                       value: 'off'
                     },
                     required: selectedCheckbox !== 'Urgencia' ? {
                       value: true,
-                      message: 'La especie es un campo requerido'
+                      message: 'La raza es un campo requerido'
                     } : false
                   })} />
 
-                  {errors.especie && <span>{errors.especie.message}</span>}
+                  {errors.raza && <span>{errors.raza.message}</span>}
+                </div>
+
+                  <div><label className='flex flex-row mb-2'>Especie<p className='text-red-500'>*</p> </label>
+                    <input className='shadow rounded-md resize-none h-6 w-50' placeholder='Ej.texto' type="text" name="especie" id="especie"   {...register('especie', {
+                      autoComplete: {
+                        value: 'off'
+                      },
+                      required: selectedCheckbox !== 'Urgencia' ? {
+                        value: true,
+                        message: 'La especie es un campo requerido'
+                      } : false
+                    })} />
+
+                    {errors.especie && <span>{errors.especie.message}</span>}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className=' flex flex-row my-4'>
-              <input type="datetime-local" name="datetime-local" id="datetime-local" {...register('dateForm')} />
-            </div>
-            <div className='flex space-x-80'>
-              <button type='button' className=' bg-[#eb5b27] text-white border-none rounded-3xl h-10 w-36 mb-8' onClick={() => { agregarMascota(getValues()) }}>Aceptar</button>
-              <button type='button' className=' bg-[#eb5b27] text-white border-none rounded-3xl h-10 w-36 mb-8' id='btn-close-modal'>Cerrar</button>
-            </div>
+              <div className=' flex flex-row my-4'>
+                <input type="datetime-local" name="datetime-local" id="datetime-local" {...register('dateForm')} />
+              </div>
+              <div className='flex space-x-80'>
+                <button type='button' className=' bg-[#eb5b27] hover:bg-orange-500 text-white border-none rounded-3xl h-10 w-36 mb-8' onClick={() => { agregarMascota(getValues()) }}>Aceptar</button>
+                <button type='button' className=' bg-[#eb5b27] hover:bg-orange-500 text-white border-none rounded-3xl h-10 w-36 mb-8' onClick={() => { setModalOpen(false)}} id='btn-close-modal'>Cerrar</button>
+              </div>
 
-          </div>
+            </div>
+            )
+          }
 
 
         </form>

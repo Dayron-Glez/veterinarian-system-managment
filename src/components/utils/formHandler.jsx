@@ -1,9 +1,10 @@
 import axios from 'axios';
+import {toast} from 'react-toastify'
 
 
 export const onSubmit =
  (
-  data, watchAlimentacion, watchHabitat, mascota,sistemas,
+  data, watchAlimentacion, watchHabitat, mascotaSeleccionada,sistemas,
   problemas,diagnosticos,planes_terapeuticos,pasantes, reset,
 ) => {
   if (watchAlimentacion !== 'Otro1') {
@@ -19,7 +20,7 @@ export const onSubmit =
   }
 
   const mascotaData = {
-    mascota_id: mascota.id,
+    mascota_id: mascotaSeleccionada.id,
     ecop: {
       motivo_consulta: data.motivo,
       anamnesis: data.anamnesis,
@@ -79,9 +80,12 @@ export const onSubmit =
   axios.post('https://h3h9qmcq-8000.use2.devtunnels.ms/doctor/ecop/', mascotaData)
     .then(response => {
       console.log("Respuesta de axios.post", response);
+      toast.success('Datos enviados correctamente', {position: 'top-center'});
     })
     .catch(error => {
       console.error("Error en axios.post", error);
+      toast.error('Petición fallida', {position: 'top-center'});
+
     });
 
   console.log(mascotaData);
