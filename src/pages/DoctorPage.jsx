@@ -26,6 +26,7 @@ import { NódulosComponent } from '../components/ECOP/NódulosComponent';
 import { EstadoPComponent } from '../components/ECOP/EstadoPComponent';
 import { PasantesComponent } from '../components/ECOP/PasantesComponent';
 import { ToastContainer} from 'react-toastify'
+import { Link } from 'react-router-dom';
 
 const DoctorPage = () => {
   const [mascotas, setMascotas] = useState([]);
@@ -190,7 +191,14 @@ const DoctorPage = () => {
               <img height={32} width={32} src={notificationIcon} alt="notification Icon" className='mx-4 md:mx-8' />
             </div>
           </section>
-          <div className='h-[4vh] bg-[#eb5b27]' />
+          <div className='flex flex-row h-[5vh] bg-[#eb5b27] items-center'>
+            <li className=' flex flex-row list-none mx-8'>
+              <Link className=' no-underline text-white text-lg'>Clientes</Link>
+            </li>
+            <li className=' flex flex-row list-none mx-8'>
+              <Link className=' no-underline text-white text-lg'>Mascotas</Link>
+            </li>
+          </div>
         </nav>
         <ToastContainer/>
         <div className='flex flex-row h-full w-full '>
@@ -335,7 +343,7 @@ const DoctorPage = () => {
               </section>
               <div className='flex flex-row justify-around mt-8'>
                 <button onClick={() => { reset() }} className=' rounded-3xl h-10 w-36 mb-8'>Cancelar</button>
-                <button type='submit' className=' bg-[#eb5b27] text-white border-none rounded-3xl h-10 w-36 mb-8'>Guardar</button>
+                <button type='submit' className=' bg-[#eb5b27] hover:bg-orange-500 text-white border-none rounded-3xl h-10 w-36 mb-8'>Guardar</button>
               </div>
             </form>
           </main>

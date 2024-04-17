@@ -1,20 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
-import { useNavigate } from "react-router-dom";
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import LogoComponent from '../components/LogoComponent'
 import notificationIcon from '../assets/notificationIcon.svg'
 import {toast, ToastContainer} from 'react-toastify'
 import Select from 'react-select'
+import { ClockLoader } from 'react-spinners';
 
 const ReceptionPage = () => {
   // eslint-disable-next-line no-unused-vars
   const [formData, setFormData] = useState([]);
   const [data, setData] = useState([]);
-  const [selectedCheckbox, setSelectedCheckbox] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedRadio, setSelectedRadio] = useState(null);
   const [clienteData, setClienteData] = useState(null);
   const [mascotasData, setMascotasData] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -23,24 +22,26 @@ const ReceptionPage = () => {
   const [tutorId, setTutorId] = useState(null)
   const location = useLocation();
   const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   // eslint-disable-next-line no-unused-vars
-  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, reset, getValues, control } = useForm()
+  const divRef = useRef(null);
 
+ 
+  const CustomToast = () => (
+    <div style={{ display: 'flex', alignItems: 'baseline' }}>
+      <div>Enviando datos...</div>
+      <div className=' self-end ml-2'>
+        <ClockLoader color="#eb5b27" size={18}/>
+      </div>
+    </div>
+  );
   useEffect(() => {
     if (location.pathname === '/ReceptionPage') {
       localStorage.removeItem('historia');
     }
   }, [location]);
-  useEffect(() => {
-    if (isSubmitting && selectedCheckbox !== null) {
-      const formData = getValues();
-      formData.consulta = selectedCheckbox;
-      onSubmit(formData);
-      setIsSubmitting(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCheckbox, isSubmitting, getValues]);
+  
 
   useEffect(() => {
     axios.get(`https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/filtrar/tutor/${inputValue}/`)
@@ -55,34 +56,42 @@ const ReceptionPage = () => {
       .catch(err => { console.log(err); })
   }, [inputValue])
 
-  const handleCheckboxChange = (e) => {
-    if (e.target.checked) {
-      setSelectedCheckbox(e.target.name);
-    } else if (selectedCheckbox === e.target.name) {
-      setSelectedCheckbox(null);
+  useEffect(() => {
+    if (modalOpen) {
+      // Restablece los campos del formulario de mascotas
+      reset({
+        nombre_mascota: '',
+        especie: '',
+        raza: '',
+        edad: '',
+        color: '',
+        sexo: '',
+        tipo_consulta: '', 
+        fecha_consulta: '',
+        observacion_urgencia: '',
+      });
     }
-  };
+  }, [modalOpen]);
+  
 
-
-  const handleUrgencyChange = (e) => {
-    // Selecciona todos los inputs que no sean de tipo checkbox
-    const inputs = document.querySelectorAll('input:not([type="checkbox"])');
-    const pet_h2 = document.querySelector('#pet_h2')
+  const handleRadioChange = (e) => {
+  
+    
+    
     const observation_container = document.querySelector('#observation_container')
     const specializedSelect = document.querySelector('#specialized')
-
-    if (e.target.checked) {
-      setSelectedCheckbox(e.target.name);
-
-      pet_h2.classList.add('hidden')
-      observation_container.classList.remove('hidden')
-      specializedSelect.classList.add('hidden')
-
-      // Agrega la clase 'hidden' a todos los inputs seleccionados
-      inputs.forEach(input => {
-        input.classList.add('hidden');
-      });
-
+  
+    if (e.target.value === "Urgencia" && e.target.checked) {
+      setSelectedRadio('Urgencia')
+      observation_container.classList.remove('hidden');
+      specializedSelect.classList.add('hidden');
+  
+      if (divRef.current) {
+        divRef.current.classList.add('hidden');
+      }
+      
+      
+  
       // Resetea los campos del formulario de la mascota
       reset({
         nombre_mascota: '',
@@ -93,19 +102,18 @@ const ReceptionPage = () => {
         especie: '',
       });
     } else {
-      setSelectedCheckbox(null); // Si "Urgencia" se deselecciona, borra el valor de selectedCheckbox
-
-      pet_h2.classList.remove('hidden')
-      observation_container.classList.add('hidden')
-      specializedSelect.classList.remove('hidden')
-
-      // Remueve la clase 'hidden' de todos los inputs seleccionados
-      inputs.forEach(input => {
-        input.classList.remove('hidden');
-      });
+      setSelectedRadio(null)
+      observation_container.classList.add('hidden');
+      specializedSelect.classList.remove('hidden');
+  
+      // Remueve la clase 'hidden' de todos los inputs, labels y span seleccionados
+      if (divRef.current) {
+        divRef.current.classList.remove('hidden');
+      }
+      
     }
   };
-
+  
   function obtenerHistoria(mascotaId) {
     axios.get(`https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/historia/${mascotaId}/`)
       .then(response => {
@@ -126,7 +134,7 @@ const ReceptionPage = () => {
       edad: data.edad,
       color: data.color,
       sexo: data.sexo,
-      tipo_consulta: selectedCheckbox, // Aquí se agrega el tipo de consulta seleccionado
+      tipo_consulta: data.tipo_consulta, // Aquí se agrega el tipo de consulta seleccionado
       fecha_consulta: data.dateForm,
       observacion_urgencia: data.observation_text,
       
@@ -138,28 +146,16 @@ const ReceptionPage = () => {
   };
 
   const onSubmit = (data) => {
-    const dataToSend = Object.keys(formData).reduce((obj, key) => {
-      if (!['Consulta', 'Continuación', 'Planificada', 'Emergencia', 'Urgencia'].includes(key)) {
-        obj[key] = formData[key];
-      }
-      return obj;
-    }, {});
-    console.log("Fecha enviada: ", data.dateForm);
-    console.log("Hora enviada: ", data.HourForm);
-
-    dataToSend.consulta = selectedCheckbox;
-    console.log(dataToSend);
-    console.log("onSubmit iniciado", data);
-
+    
     if (!clienteData) {
       console.log("setClienteData iniciado");
       setClienteData(data);
       console.log("setClienteData terminado");
     }
+    enviarDatos();
 
-    // reset();
+    
 
-    console.log("onSubmit terminado");
   };
 
   const enviarDatos = () => {
@@ -173,19 +169,31 @@ const ReceptionPage = () => {
       };
 
       console.log("axios.post iniciado", dataToSend);
-
+      
+      const toastId = toast.info(<CustomToast/>, {
+        position: 'top-center',
+        autoClose: false
+      });
+      setLoading(true);
+      
       axios.post('https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/registrar/', dataToSend)
         .then(response => {
           console.log("Respuesta de axios.post", response);
+          toast.dismiss(toastId);
           toast.success("Datos enviados correctamente", {position: 'top-center'});
           setClienteData(null);
           setMascotasData([]);
+          reset();
         })
         .catch(error => {
           console.error("Error en axios.post", error);
+          toast.dismiss(toastId);
           toast.error('Algo falló en la petición', {position: 'top-center'});	
+          reset();
+        })
+        .finally(() => {
+          setLoading(false);
         });
-
       console.log("axios.post terminado");
     }
   };
@@ -196,24 +204,6 @@ const ReceptionPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clienteData, mascotasData]);
-
-
-
-
-  // useEffect(() => {
-  //   const modal = document.querySelector('#modal');
-  //   const btnOpenModal = document.querySelector("#btn-open-modal");
-  //   const btnCloseModal = document.querySelector('#btn-close-modal');
-
-  //   btnOpenModal.addEventListener('click', () => {
-  //     modal.classList.remove('hidden')
-  //   });
-
-  //   btnCloseModal.addEventListener('click', () => {
-  //     modal.classList.add('hidden')
-  //   });
-  // }, []);
-
 
   useEffect(() => {
     console.log(formData);
@@ -243,18 +233,18 @@ const ReceptionPage = () => {
             </div>
           </section>
           <div className=' flex flex-row h-[7vh] place-items-center bg-[#eb5b27]'>
-            <ul className=' list-none mx-8'>
+            {/* <ul className=' list-none mx-8'>
               <button className=' border-none bg-transparent mx-4'>
-                <li className='text-white font-semibold'>INICIO</li>
+                <Link to={'/'} className='text-white font-semibold'>INICIO</Link>
               </button>
               <button className=' border-none bg-transparent mx-4'>
-                <li className='text-white font-semibold'>CLIENTES</li>
+                <Link className='text-white font-semibold'>Doctor</Link>
               </button>
               <button className=' border-none bg-transparent mx-4'>
                 <li className='text-white font-semibold'>MASCOTAS</li>
               </button>
              
-            </ul>
+            </ul> */}
           </div>
         </nav>
         <ToastContainer className=' w-72 text-xl'/>
@@ -333,7 +323,7 @@ const ReceptionPage = () => {
           <div className=' justify-center items-center absolute' id='client_form'>
             <h2 className='text-[#344054]'>Cliente</h2>
             <label className='flex flex-row mb-2'>Nombre del cliente<p className='text-red-500'>*</p> </label>
-            <input className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="nombre_tutor" id="nombre_tutor"  {...register('nombre_tutor', {
+            <input  className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="nombre_tutor" id="nombre_tutor"  {...register('nombre_tutor', {
               required: {
                 value: true,
                 message: 'Nombre del cliente es un campo requerido'
@@ -354,7 +344,7 @@ const ReceptionPage = () => {
             {errors.nombre_tutor && <span>{errors.nombre_tutor.message}</span>}
 
             <label className='flex flex-row mb-2'>Carnet de identidad<p className='text-red-500'>*</p> </label>
-            <input className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="dni" id="dni"  {...register('dni', {
+            <input  className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="dni" id="dni"  {...register('dni', {
               required: {
                 value: true,
                 message: 'CI es un campo requerido'
@@ -366,7 +356,7 @@ const ReceptionPage = () => {
 
 
             <label className='flex flex-row mb-2'>Número de teléfono<p className='text-red-500'>*</p> </label>
-            <input className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="tel" name="telefono" id="telefono"  {...register('telefono', {
+            <input  className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="tel" name="telefono" id="telefono"  {...register('telefono', {
               required: {
                 value: true,
                 message: 'EL número de teléfono es un campo requerido'
@@ -374,7 +364,7 @@ const ReceptionPage = () => {
             })} />
 
             <label className='flex flex-row mb-2'>Dirección<p className='text-red-500'>*</p> </label>
-            <input className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="direccion" id="direccion"  {...register('direccion', {
+            <input  className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="direccion" id="direccion"  {...register('direccion', {
               required: {
                 value: true,
                 message: 'La direccion de teléfono es un campo requerido'
@@ -383,44 +373,39 @@ const ReceptionPage = () => {
 
             {errors.telefono && <span>{errors.telefono.message}</span>}
 
-            <div className='flex flex-row w-full justify-center gap-10'>
+            <div className='flex flex-row max-w-80 justify-center gap-10'>
               <button className="bg-orange-600 hover:bg-orange-500 my-10 text-white h-8 w-40 rounded-md border-none shadow-md focus:ring " onClick={() => {setModalOpen(true)}} type='button' id='btn-open-modal'>Añadir Mascota</button>
-              <button className="bg-orange-600 hover:bg-orange-500 my-10 text-white h-8 w-40 rounded-md border-none shadow-md focus:ring " onClick={() => { console.log("Botón Enviar clickeado"); enviarDatos(); }} type='submit'>Enviar</button>
+              <button className="bg-orange-600 hover:bg-orange-500 my-10 text-white h-8 w-40 rounded-md border-none shadow-md focus:ring " type='submit'>Enviar</button>
             </div>
           </div>
           {
             modalOpen && (
 
-            <div id='modal' className='bg-white border-none w-[900px] rounded-md flex-col  z-20 px-10'>
+            <div id='modal' className='bg-white border-none w-[900px] rounded-md flex flex-col  z-20 px-10 mb-14'>
               <div>
                 <h2 className='text-[#344054] py-10'>Motivo de llegada</h2>
                 <ul className=' flex flex-row  gap-2 pl-0 list-none  text-[#344054] border-2 space-x-4 items-baseline'>
 
-                  <li>
-                    <label>
-                      <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Consulta' {...register('Consulta')} onChange={handleCheckboxChange} />Consulta
+                   <label className='flex items-center mr-8'>
+                      <input type="radio" value="Consulta" name="tipo_consulta" {...register('tipo_consulta')} className='custom-radio' />
+                      <span className="ml-2">Consulta</span>
                     </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Continuación' {...register('Continuación')} onChange={handleCheckboxChange} />Continuación
+                    <label className='flex items-center mr-8'>
+                      <input type="radio" value="Continuación" name="tipo_consulta" {...register('tipo_consulta')} className='custom-radio' onChange={handleRadioChange} />
+                      <span className="ml-2">Continuación</span>
                     </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Planificada' {...register('Planificada')} onChange={handleCheckboxChange} />Planificada
+                    <label className='flex items-center mr-8'>
+                      <input type="radio" value="Planificada" name="tipo_consulta" {...register('tipo_consulta')} className='custom-radio' onChange={handleRadioChange} />
+                      <span className="ml-2">Planificada</span>
                     </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name='Emergencia' {...register('Emergencia')} onChange={handleCheckboxChange} />Emergencia
+                    <label className='flex items-center mr-8'>
+                      <input type="radio" value="Emergencia" name="tipo_consulta" {...register('tipo_consulta')} className='custom-radio'  onChange={handleRadioChange} />
+                      <span className="ml-2">Emergencia</span>
                     </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input type="checkbox" className=" accent-orange-600 focus:accent-orange-600" name="Urgencia" id="Urgencia"{...register('Urgencia')} onChange={handleUrgencyChange} />Urgencia
+                    <label className='flex items-center mr-8'>
+                      <input type="radio" value="Urgencia" name="tipo_consulta" {...register('tipo_consulta')} className='custom-radio'    onChange={handleRadioChange} />
+                      <span className="ml-2">Urgencia</span>
                     </label>
-                  </li>
                   <Controller
                     name="specialized"
                     control={control}
@@ -468,14 +453,14 @@ const ReceptionPage = () => {
                 <h2>Observación</h2>
                 <textarea name="observation_text" id="observation_text" cols="106" rows="6" {...register('observation_text')}></textarea>
               </div>
-              <div className=' flex flex-col'>
+              <div ref={divRef} className=' flex flex-col'>
 
                 <h2 className='text-[#344054] py-10' id='pet_h2'>Mascota</h2>
                 <div className=' grid-cols-3 flex space-x-40 p-0'>
                   <div>
                     <label className='flex flex-row mb-2'>Nombre de la mascota<p className='text-red-500'>*</p> </label>
-                    <input className='shadow rounded-md resize-none h-6 w-50' placeholder='Nombre de la mascota' type="text" name="nombre_mascota" id="nombre_mascota"   {...register('nombre_mascota', {
-                      required: selectedCheckbox !== 'Urgencia' ? {
+                    <input  className='shadow rounded-md resize-none h-6 w-50' placeholder='Nombre de la mascota' type="text" name="nombre_mascota" id="nombre_mascota"   {...register('nombre_mascota', {
+                      required: selectedRadio !== 'Urgencia' ? {
                         value: true,
                         message: 'El nombre de la mascota es un campo requerido'
                       } : false
@@ -486,11 +471,11 @@ const ReceptionPage = () => {
                   <div className='grid-cols-3 flex space-x-3'>
                     <div>
                       <label className='flex flex-row mb-2'>Edad<p className='text-red-500'>*</p> </label>
-                      <input className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type='text' name="edad" id="edad"   {...register('edad', {
+                      <input  className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type='text' name="edad" id="edad"   {...register('edad', {
                         autoComplete: {
                           value: 'off'
                         },
-                        required: selectedCheckbox !== 'Urgencia' ? {
+                        required: selectedRadio !== 'Urgencia' ? {
                           value: true,
                           message: 'La edad es un campo requerido'
                         } : false
@@ -500,11 +485,11 @@ const ReceptionPage = () => {
                     </div>
 
                     <div><label className='flex flex-row mb-2'>Color<p className='text-red-500'>*</p> </label>
-                      <input className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type="text" name="color" id="color"   {...register('color', {
+                      <input  className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type="text" name="color" id="color"   {...register('color', {
                         autoComplete: {
                           value: 'off'
                         },
-                        required: selectedCheckbox !== 'Urgencia' ? {
+                        required: selectedRadio !== 'Urgencia' ? {
                           value: true,
                           message: 'El color es un campo requerido'
                         } : false
@@ -514,11 +499,11 @@ const ReceptionPage = () => {
                     </div>
 
                     <div><label className='flex flex-row mb-2'>Sexo<p className='text-red-500'>*</p> </label>
-                      <input className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type="text" name="sexo" id="sexo"   {...register('sexo', {
+                      <input  className='shadow rounded-md resize-none h-6 w-20' placeholder='Ej.texto' type="text" name="sexo" id="sexo"   {...register('sexo', {
                         autoComplete: {
                           value: 'off'
                         },
-                        required: selectedCheckbox !== 'Urgencia' ? {
+                        required: selectedRadio !== 'Urgencia' ? {
                           value: true,
                           message: 'EL sexo es un campo requerido'
                         } : false
@@ -532,11 +517,11 @@ const ReceptionPage = () => {
 
                 <div className='flex grid-cols-2 space-x-40'><div>
                   <label className='flex flex-row mb-2'>Raza<p className='text-red-500'>*</p> </label>
-                  <input className='shadow rounded-md resize-none h-6 w-50' placeholder='Ej.texto' type="text" name="raza" id="raza"   {...register('raza', {
+                  <input  className='shadow rounded-md resize-none h-6 w-50' placeholder='Ej.texto' type="text" name="raza" id="raza"   {...register('raza', {
                     autoComplete: {
                       value: 'off'
                     },
-                    required: selectedCheckbox !== 'Urgencia' ? {
+                    required: selectedRadio !== 'Urgencia' ? {
                       value: true,
                       message: 'La raza es un campo requerido'
                     } : false
@@ -546,11 +531,11 @@ const ReceptionPage = () => {
                 </div>
 
                   <div><label className='flex flex-row mb-2'>Especie<p className='text-red-500'>*</p> </label>
-                    <input className='shadow rounded-md resize-none h-6 w-50' placeholder='Ej.texto' type="text" name="especie" id="especie"   {...register('especie', {
+                    <input  className='shadow rounded-md resize-none h-6 w-50' placeholder='Ej.texto' type="text" name="especie" id="especie"   {...register('especie', {
                       autoComplete: {
                         value: 'off'
                       },
-                      required: selectedCheckbox !== 'Urgencia' ? {
+                      required: selectedRadio !== 'Urgencia' ? {
                         value: true,
                         message: 'La especie es un campo requerido'
                       } : false
