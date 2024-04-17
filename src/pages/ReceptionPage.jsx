@@ -1,6 +1,7 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { DevTool } from '@hookform/devtools';
+// import { DevTool } from '@hookform/devtools';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import LogoComponent from '../components/LogoComponent'
@@ -22,11 +23,13 @@ const ReceptionPage = () => {
   const [tutorId, setTutorId] = useState(null)
   const location = useLocation();
   const [modalOpen, setModalOpen] = useState(false);
+  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const { register, handleSubmit, formState: { errors }, reset, getValues, control } = useForm()
   const divRef = useRef(null);
-
+  const modalRef = useRef(null);
  
   const CustomToast = () => (
     <div style={{ display: 'flex', alignItems: 'baseline' }}>
@@ -113,6 +116,23 @@ const ReceptionPage = () => {
       
     }
   };
+
+
+  const handleCloseModal = () => {
+    // Obtén una referencia al modal
+    const modal = document.getElementById('modal');
+  
+    // Agrega la clase de animación de salida
+    modal.classList.remove('animate__fadeIn');
+
+    modal.classList.add('animate__fadeOut');
+  
+    // Espera la duración de la animación y luego quita la clase de animación y cierra el modal
+    setTimeout(() => {
+      modal.classList.remove('animate__fadeOut');
+      setModalOpen(false);
+    }, 900);  // Reemplaza DURACION_DE_TU_ANIMACION con el tiempo que dura tu animación en milisegundos
+  };
   
   function obtenerHistoria(mascotaId) {
     axios.get(`https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/historia/${mascotaId}/`)
@@ -145,7 +165,7 @@ const ReceptionPage = () => {
     setModalOpen(false);
 
   };
-  const MascotaAgregada = ({ nombre, sexo, raza, especie }) => (
+  const MascotaAgregada = ({ nombre, especie }) => (
     <div className=' flex flex-col my-8 bg-[#eb5b27] py-2 rounded-md w-[12vw] items-center'>
       <p className=' my-1 text-white text-lg'>Nombre: {nombre}</p>
       <p className=' my-1 text-white text-lg'>Especie: {especie}</p>
@@ -231,28 +251,15 @@ const ReceptionPage = () => {
     <>
 
 
-      <div className='flex flex-col h-[100vh] w-full'>
-        <nav className=' flex flex-col h-[14vh] w-full'>
+      
+        <nav className=' flex flex-col w-full'>
           <section className='flex flex-col h-[7vh] bg-white justify-center'>
             <div className='flex flex-row justify-between'>
               <LogoComponent height={48} className=' mx-4 md:mx-8' />
               <img height={32} width={32} src={notificationIcon} alt="notification Icon" className='mx-4 md:mx-8' />
             </div>
           </section>
-          <div className=' flex flex-row h-[7vh] place-items-center bg-[#eb5b27]'>
-            {/* <ul className=' list-none mx-8'>
-              <button className=' border-none bg-transparent mx-4'>
-                <Link to={'/'} className='text-white font-semibold'>INICIO</Link>
-              </button>
-              <button className=' border-none bg-transparent mx-4'>
-                <Link className='text-white font-semibold'>Doctor</Link>
-              </button>
-              <button className=' border-none bg-transparent mx-4'>
-                <li className='text-white font-semibold'>MASCOTAS</li>
-              </button>
-             
-            </ul> */}
-          </div>
+          <div className=' flex flex-row h-[5vh] place-items-center bg-[#eb5b27]' />
         </nav>
         <div className=' flex flex-row justify-between'>
 
@@ -261,7 +268,7 @@ const ReceptionPage = () => {
             <ToastContainer className=' w-72 text-xl'/>
             <div className=' flex flex-col justify-center place-items-center items-center  w-[50%]'>
 
-              <input type="text" onChange={e => setInputValue(e.target.value)} className=' w-full mt-10 h-10 rounded-md' placeholder='Buscar por usuario' />
+              <input type="text" onChange={e => setInputValue(e.target.value)} className=' w-full mt-10 h-10 rounded-md' placeholder='Buscar por usuario'  disabled={modalOpen}/>
 
               {inputValue && (
                 <table className="table-auto w-full ">
@@ -331,8 +338,8 @@ const ReceptionPage = () => {
             )}
 
             <form onSubmit={handleSubmit(onSubmit)} className='client-pet-form '>
-              <div className=' justify-center items-center absolute' id='client_form'>
-                <h2 className='text-[#344054]'>Cliente</h2>
+              <div className=' justify-center items-center fixed mt-8' id='client_form'>
+                <h2 className='text-[#344054] mb-4'>Cliente</h2>
                 <label className='flex flex-row mb-2'>Nombre del cliente<p className='text-red-500'>*</p> </label>
                 <input  className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="nombre_tutor" id="nombre_tutor"  {...register('nombre_tutor', {
                   required: {
@@ -390,10 +397,7 @@ const ReceptionPage = () => {
                 </div>
               </div>
              
-              {
-                modalOpen && (
-
-                <div id='modal' className='bg-white border-none w-[900px] rounded-md flex flex-col  z-20 px-10 mb-14'>
+                <div ref={modalRef} id='modal' className={`bg-white border-none w-[900px] rounded-md flex flex-col  z-20 px-10 absolute top-20 ${modalOpen ? 'flex animate__animated ' + (isAnimatingOut ? 'animate__fadeOut' : 'animate__fadeIn') : 'hidden'}`}>
                   <div>
                     <h2 className='text-[#344054] py-10'>Motivo de llegada</h2>
                     <ul className=' flex flex-row  gap-2 pl-0 list-none  text-[#344054] border-2 space-x-4 items-baseline'>
@@ -558,25 +562,23 @@ const ReceptionPage = () => {
                     </div>
                   </div>
                   <div className=' flex flex-row my-4'>
-                    <input type="datetime-local" name="datetime-local" id="datetime-local" {...register('dateForm')} />
+                    <input type="datetime-local" name="datetime-local" id="datetime-local" {...register('dateForm')}  className='shadow rounded-md resize-none h-6 w-[165.6px]'/>
                   </div>
-                  <div className='flex space-x-80'>
+                  <div className='flex flex-row justify-between'>
                     <button type='button' className=' bg-[#eb5b27] hover:bg-orange-500 text-white border-none rounded-3xl h-10 w-36 mb-8' onClick={() => { agregarMascota(getValues()) }}>Aceptar</button>
-                    <button type='button' className=' bg-[#eb5b27] hover:bg-orange-500 text-white border-none rounded-3xl h-10 w-36 mb-8' onClick={() => { setModalOpen(false)}} id='btn-close-modal'>Cerrar</button>
+                    <button type='button' className=' bg-[#eb5b27] hover:bg-orange-500 text-white border-none rounded-3xl h-10 w-36 mb-8' onClick={() => {handleCloseModal()}} id='btn-close-modal'>Cerrar</button>
                   </div>
 
                 </div>
-                )
-              }
-
+            
 
             </form>
           </div>
           <div className=' flex flex-col'>
-          <aside className="flex flex-col justify-start w-[20vw]  sticky top-0 right-0 h-screen ">
+          <aside className="flex flex-col justify-start w-[20vw]  sticky top-0 right-0 h-[85vh] ">
             <div className="absolute w-[2px] ml-4 border-[1px] inset-0 bg-[#a4a4a4]"></div>
             <h3 className=" mt-8 ml-12 text-[#344054]">Mascotas Agregadas</h3>
-            <div className=" ml-11 mt-1 border-[1px] border-solid border-[#a4a4a4] h-0 w-[87%]"></div>
+            <div className=" ml-11 mt-1 border-[1px] border-solid border-[#a4a4a4] h-0 w-[85%]"></div>
             <div className="flex flex-col place-items-centers"></div>
             <div className=' flex flex-col items-center'>
         {mascotasData.map((mascota, index) => (
@@ -592,8 +594,8 @@ const ReceptionPage = () => {
           </aside>
           </div>
         </div>
-        <DevTool control={control} />
-      </div>
+        {/* <DevTool control={control} /> */}
+     
 
     </>
   )

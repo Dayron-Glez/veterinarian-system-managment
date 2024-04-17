@@ -15,7 +15,6 @@
 }
 
 .client-pet-form {
-    justify-content: center;
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -29,8 +28,7 @@ input,span {
 }
 
 #modal {
-    -webkit-box-shadow: 0px 2px 12px 2px #000000; 
-box-shadow: 0px 2px 12px 2px #000000;
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.8);
     
 }
 
