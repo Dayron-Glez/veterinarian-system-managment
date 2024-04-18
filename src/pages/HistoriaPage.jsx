@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import { jsPDF } from "jspdf";
 import LogoComponent from "../components/LogoComponent";
 import notificationIcon from "../assets/notificationIcon.svg";
 import ECOP_IMG from "../assets/ecop_image.png";
@@ -165,7 +164,7 @@ function HistoriaPage() {
                   <div className=" ml-16">
                     <p className=" text-lg text-[#344054] mb-1">Estado</p>
                     <p className=" bg-[#eb5b27] rounded-md  pl-1 text-white w-[125px] text-lg">
-                      {historia.general[0].estado}
+                    {historia?.general?.[0]?.estado}
                     </p>
                   </div>
                 </section>
@@ -184,7 +183,7 @@ function HistoriaPage() {
                               Tipo de vacuna
                             </p>
                             <p className=" pl-1 w-[125px] text-lg">
-                              {historia.vacunaciones[0][0].tipo_vacuna}
+                              {historia?.vacunaciones?.[0][0]?.tipo_vacuna}
                             </p>
                           </div>
                           <div className=" ml-8">
@@ -192,7 +191,7 @@ function HistoriaPage() {
                               Producto
                             </p>
                             <p className=" pl-1 w-[125px] text-lg">
-                              {historia.vacunaciones[0][0].producto}
+                              {historia?.vacunaciones?.[0][0]?.producto}
                             </p>
                           </div>
                           <div className=" flex items-end ml-8">
@@ -225,7 +224,7 @@ function HistoriaPage() {
                               Producto
                             </p>
                             <p className=" pl-1 w-[125px]  text-lg max-w-[144px]">
-                              {historia.desparacitaciones[0][0].producto}
+                              {historia?.desparacitaciones?.[0][0]?.producto}
                             </p>
                           </div>
                           <div className=" flex items-end ml-8">
@@ -257,14 +256,14 @@ function HistoriaPage() {
                           <p className=" text-xl text-[#344054]">
                             TLLC
                           </p>
-                          <p className=" text-lg">{historia.general[0].tllc}</p>
+                          <p className=" text-lg">{historia?.general?.[0]?.tllc}</p>
                         </div>
                         <div className=" ml-14">
                           <p className=" text-xl text-[#344054]">
                           Pulso
                           </p>
                           <p className=" text-lg">
-                          {historia.general[0].pulso}
+                          {historia?.general?.[0]?.pulso}
                           </p>
                         </div>
 
@@ -272,28 +271,28 @@ function HistoriaPage() {
                           <p className=" text-xl text-[#344054]">
                           FC
                           </p>
-                          <p className=" text-lg">{historia.general[0].fc}</p>
+                          <p className=" text-lg">{historia?.general?.[0]?.fc}</p>
                         </div>
 
                         <div className=" ml-14">
                           <p className=" text-xl text-[#344054]">
                           FR
                           </p>
-                          <p className=" text-lg">{historia.general[0].fr}</p>
+                          <p className=" text-lg">{historia?.general?.[0]?.fr}</p>
                         </div>
 
                         <div className=" ml-14">
                           <p className=" text-xl text-[#344054]">
                           Temperaura
                           </p>
-                          <p className=" text-lg">{historia.general[0].temperatura}</p>
+                          <p className=" text-lg">{historia?.general?.[0]?.temperatura}</p>
                         </div>
 
                         <div className=" ml-14">
                           <p className=" text-xl text-[#344054]">
                           Peso
                           </p>
-                          <p className=" text-lg">{historia.general[0].peso}</p>
+                          <p className=" text-lg">{historia?.general?.[0]?.peso}</p>
                         </div>
                         <div className=" flex items-end ml-8">
                           <button className=" border-[1px] border-[#eb5b27]  hover:bg-[#eb5b27] hover:text-white hover:border-transparent text-center rounded-md h-7 px-4 text-[#eb5b27] w-24 bg-transparent">
@@ -311,74 +310,8 @@ function HistoriaPage() {
                   >
                     <img src={ADD_IMG} alt="add image" className=" size-7" />
                   </button>
-                </div>
-                {/* <p><strong>Anamnesis:</strong> {historia.general[0].anamnesis}</p>
-              <p><strong>Estado Reproductivo:</strong> {historia.general[0].estado_reproductivo}</p>
-              <p><strong>Habitat:</strong> {historia.general[0].habitat}</p>
-              <p><strong>Alimentación:</strong> {historia.general[0].alimentacion}</p>
-              <p><strong>Alergia:</strong> {historia.general[0].alergias}</p>
-              <p><strong>TLLC:</strong> {historia.general[0].tllc}</p>
-              <p><strong>Pulso:</strong> {historia.general[0].pulso}</p>
-              <p><strong>FC:</strong> {historia.general[0].fc}</p>
-              <p><strong>FR:</strong> {historia.general[0].fr}</p>
-              <p><strong>Temperatura:</strong> {historia.general[0].temperatura}</p>
-              <p><strong>Peso:</strong> {historia.general[0].peso}</p>
-              <p><strong>Fecha:</strong> {new Date(historia.mascota[0].fecha_consulta).toLocaleDateString()}</p>
-              <p><strong>ID de la Mascota:</strong> {historia.general[0].mascota}</p>
-
-              <p><strong>DNI del Tutor:</strong> {historia.tutor[0].dni}</p>
-              <p><strong>Teléfono del Tutor:</strong> {historia.tutor[0].telefono}</p> */}
+                </div>     
               </div>
-              {/* {historia.plan_terapeutico[0].map((item, index) => (
-              <div key={index}>
-                <h3>Plan Terapéutico {index + 1}</h3>
-                <p><strong>Tratamiento:</strong> {item.tratamiento}</p>
-                <p><strong>Principio Activo:</strong> {item.principio_activo}</p>
-                <p><strong>Posología:</strong> {item.posologia}</p>
-                <p><strong>Frecuencia:</strong> {item.frecuencia}</p>
-                <p><strong>Duración:</strong> {item.duracion}</p>
-                <p><strong>Vía:</strong> {item.via}</p>
-              </div>
-            ))}
-
-            {historia.problemas[0].map((item, index) => (
-              <div key={index}>
-                <h3>Problema {index + 1}</h3>
-                <p><strong>Problema:</strong> {item.problema}</p>
-                <p><strong>Diagnóstico Diferencial:</strong> {item.diagnostico_diferencial}</p>
-              </div>
-            ))}
-
-            {historia.diagnosticos[0].map((item, index) => (
-              <div key={index}>
-                <h3>Diagnóstico {index + 1}</h3>
-                <p><strong>Tipo de Examen:</strong> {item.tipo_examen}</p>
-                <p><strong>Resultados:</strong> {item.resultados}</p>
-                <p><strong>Laboratorio:</strong> {item.laboratorio}</p>
-              </div>
-            ))}
-
-            {historia.sistemas[0].map((item, index) => (
-              <div key={index}>
-                <h3>Sistema {index + 1}</h3>
-                <p><strong>Sistema:</strong> {item.sistema}</p>
-                <p><strong>Órgano:</strong> {item.organo}</p>
-                <p><strong>Enfermedad:</strong> {item.enfermedad}</p>
-                <p><strong>Observación:</strong> {item.observacion}</p>
-              </div>
-            ))}
-
-            {historia.pasantes[0].map((item, index) => (
-              <div key={index}>
-                <h3>Pasantes/Rotantes {index + 1}</h3>
-                <p><strong>DNI:</strong> {item.dni}</p>
-                <p><strong>Nombre:</strong> {item.nombre}</p>
-                <p><strong>Semestre:</strong> {item.semestre}</p>
-                <p><strong>Observación:</strong> {item.observacion}</p>
-              </div>
-            ))} */}
-
-              {/* <button onClick={descargarPDF}>Descargar PDF</button> */}
             </div>
           )}
         </div>

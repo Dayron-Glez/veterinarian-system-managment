@@ -8,12 +8,12 @@ import LogoComponent from '../components/LogoComponent'
 import notificationIcon from '../assets/notificationIcon.svg'
 import {toast, ToastContainer} from 'react-toastify'
 import Select from 'react-select'
-import { ClockLoader } from 'react-spinners';
+import CustomToast from '../components/ToastComponent';
 
 const ReceptionPage = () => {
   // eslint-disable-next-line no-unused-vars
   const [formData, setFormData] = useState([]);
-  const [data, setData] = useState([]);
+  const [inputData, setInputData] = useState([]);
   const [selectedRadio, setSelectedRadio] = useState(null);
   const [clienteData, setClienteData] = useState(null);
   const [mascotasData, setMascotasData] = useState([]);
@@ -23,7 +23,6 @@ const ReceptionPage = () => {
   const [tutorId, setTutorId] = useState(null)
   const location = useLocation();
   const [modalOpen, setModalOpen] = useState(false);
-  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -31,14 +30,7 @@ const ReceptionPage = () => {
   const divRef = useRef(null);
   const modalRef = useRef(null);
  
-  const CustomToast = () => (
-    <div style={{ display: 'flex', alignItems: 'baseline' }}>
-      <div>Enviando datos...</div>
-      <div className=' self-end ml-2'>
-        <ClockLoader color="#eb5b27" size={18}/>
-      </div>
-    </div>
-  );
+ 
   useEffect(() => {
     if (location.pathname === '/ReceptionPage') {
       localStorage.removeItem('historia');
@@ -49,8 +41,8 @@ const ReceptionPage = () => {
   useEffect(() => {
     axios.get(`https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/filtrar/tutor/${inputValue}/`)
       .then(res => {
-        setData(res.data);
-        console.log(data);
+        setInputData(res.data);
+        console.log(inputData);
         // Asume que res.data es un array y accede al primer elemento
         if (res.data[0]) {
           setTutorId(res.data[0].id);
@@ -165,6 +157,7 @@ const ReceptionPage = () => {
     setModalOpen(false);
 
   };
+
   const MascotaAgregada = ({ nombre, especie }) => (
     <div className=' flex flex-col my-8 bg-[#eb5b27] py-2 rounded-md w-[12vw] items-center'>
       <p className=' my-1 text-white text-lg'>Nombre: {nombre}</p>
@@ -250,8 +243,6 @@ const ReceptionPage = () => {
   return (
     <>
 
-
-      
         <nav className=' flex flex-col w-full'>
           <section className='flex flex-col h-[7vh] bg-white justify-center'>
             <div className='flex flex-row justify-between'>
@@ -259,19 +250,19 @@ const ReceptionPage = () => {
               <img height={32} width={32} src={notificationIcon} alt="notification Icon" className='mx-4 md:mx-8' />
             </div>
           </section>
-          <div className=' flex flex-row h-[5vh] place-items-center bg-[#eb5b27]' />
+          <div className=' flex flex-row h-[4vh] place-items-center bg-[#eb5b27]' />
         </nav>
         <div className=' flex flex-row justify-between'>
 
           <div className=' flex flex-col w-[80vw] items-center'>
 
             <ToastContainer className=' w-72 text-xl'/>
-            <div className=' flex flex-col justify-center place-items-center items-center  w-[50%]'>
+            <div className=' flex flex-col justify-center place-items-center items-center w-[50%]'>
 
-              <input type="text" onChange={e => setInputValue(e.target.value)} className=' w-full mt-10 h-10 rounded-md' placeholder='Buscar por usuario'  disabled={modalOpen}/>
+              <input type="text" onChange={e => setInputValue(e.target.value)} className=' w-full mt-4 h-10 rounded-md' placeholder='Buscar por usuario'  disabled={modalOpen}/>
 
               {inputValue && (
-                <table className="table-auto w-full ">
+                <table className="table-auto w-full z-10 ">
                   <thead className="bg-orange-600">
                     <tr className=' text-center'>
                       <th className="  place-self-center h-10 text-white">Nombre del tutor</th>
@@ -280,11 +271,11 @@ const ReceptionPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((d, i) => {
+                    {inputData.map((d, i) => {
                       return (
                         <tr key={i} className=' bg-white text-center text-black h-8'>
                           <td>
-                            <button className=' w-32 h-6 rounded-md border-none bg-[#eb5b27] hover:bg-[#f6622d] text-white text-md' onClick={() => { filtrarMascotas() }} disabled={!data}>
+                            <button className=' w-32 h-6 rounded-md border-none bg-[#eb5b27] hover:bg-[#f6622d] text-white text-md' onClick={() => { filtrarMascotas() }} disabled={!inputData}>
                               {d.nombre_tutor}
                             </button>
                           </td>
@@ -323,7 +314,7 @@ const ReceptionPage = () => {
                     <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                       <button
                         type="button"
-                        className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                        className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer"
                         onClick={(event) => {
                           event.stopPropagation();
                           setIsClicked(false);
@@ -338,66 +329,69 @@ const ReceptionPage = () => {
             )}
 
             <form onSubmit={handleSubmit(onSubmit)} className='client-pet-form '>
-              <div className=' justify-center items-center fixed mt-8' id='client_form'>
-                <h2 className='text-[#344054] mb-4'>Cliente</h2>
-                <label className='flex flex-row mb-2'>Nombre del cliente<p className='text-red-500'>*</p> </label>
-                <input  className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="nombre_tutor" id="nombre_tutor"  {...register('nombre_tutor', {
-                  required: {
-                    value: true,
-                    message: 'Nombre del cliente es un campo requerido'
-                  },
-                  minLength: {
-                    value: 3,
-                    message: 'Mínimo de 3 caracteres'
-                  },
-                  maxLength: {
-                    value: 30,
-                    message: 'Máximo de 20 caracteres'
-                  },
-                  autoComplete: {
-                    value: 'off'
-                  }
-                })} />
+              {!inputValue && (
 
-                {errors.nombre_tutor && <span>{errors.nombre_tutor.message}</span>}
+                <div className=' justify-center items-center fixed mt-8 z-0' id='client_form'>
+                  <h2 className='text-[#344054] mb-4'>Cliente</h2>
+                  <label className='flex flex-row mb-2'>Nombre del cliente<p className='text-red-500'>*</p> </label>
+                  <input  className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="nombre_tutor" id="nombre_tutor"  {...register('nombre_tutor', {
+                    required: {
+                      value: true,
+                      message: 'Nombre del cliente es un campo requerido'
+                    },
+                    minLength: {
+                      value: 3,
+                      message: 'Mínimo de 3 caracteres'
+                    },
+                    maxLength: {
+                      value: 30,
+                      message: 'Máximo de 20 caracteres'
+                    },
+                    autoComplete: {
+                      value: 'off'
+                    }
+                  })} />
 
-                <label className='flex flex-row mb-2'>Carnet de identidad<p className='text-red-500'>*</p> </label>
-                <input  className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="dni" id="dni"  {...register('dni', {
-                  required: {
-                    value: true,
-                    message: 'CI es un campo requerido'
-                  },
-                  autoComplete: 'off'
-                })} />
+                  {errors.nombre_tutor && <span>{errors.nombre_tutor.message}</span>}
 
-                {errors.dni && <span>{errors.dni.message}</span>}
+                  <label className='flex flex-row mb-2'>Carnet de identidad<p className='text-red-500'>*</p> </label>
+                  <input  className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="dni" id="dni"  {...register('dni', {
+                    required: {
+                      value: true,
+                      message: 'CI es un campo requerido'
+                    },
+                    autoComplete: 'off'
+                  })} />
+
+                  {errors.dni && <span>{errors.dni.message}</span>}
 
 
-                <label className='flex flex-row mb-2'>Número de teléfono<p className='text-red-500'>*</p> </label>
-                <input  className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="tel" name="telefono" id="telefono"  {...register('telefono', {
-                  required: {
-                    value: true,
-                    message: 'EL número de teléfono es un campo requerido'
-                  }
-                })} />
+                  <label className='flex flex-row mb-2'>Número de teléfono<p className='text-red-500'>*</p> </label>
+                  <input  className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="tel" name="telefono" id="telefono"  {...register('telefono', {
+                    required: {
+                      value: true,
+                      message: 'EL número de teléfono es un campo requerido'
+                    }
+                  })} />
 
-                <label className='flex flex-row mb-2'>Dirección<p className='text-red-500'>*</p> </label>
-                <input  className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="direccion" id="direccion"  {...register('direccion', {
-                  required: {
-                    value: true,
-                    message: 'La direccion de teléfono es un campo requerido'
-                  }
-                })} />
+                  <label className='flex flex-row mb-2'>Dirección<p className='text-red-500'>*</p> </label>
+                  <input  className='shadow rounded-md resize-none h-8 w-80 ' placeholder='Ej.texto' type="text" name="direccion" id="direccion"  {...register('direccion', {
+                    required: {
+                      value: true,
+                      message: 'La direccion de teléfono es un campo requerido'
+                    }
+                  })} />
 
-                {errors.telefono && <span>{errors.telefono.message}</span>}
+                  {errors.telefono && <span>{errors.telefono.message}</span>}
 
-                <div className='flex flex-row max-w-80 justify-center gap-10'>
-                  <button className="bg-orange-600 hover:bg-orange-500 my-10 text-white h-8 w-40 rounded-md border-none shadow-md focus:ring " onClick={() => {setModalOpen(true)}} type='button' id='btn-open-modal'>Añadir Mascota</button>
-                  <button className="bg-orange-600 hover:bg-orange-500 my-10 text-white h-8 w-40 rounded-md border-none shadow-md focus:ring " type='submit'>Enviar</button>
+                  <div className='flex flex-row max-w-80 justify-center gap-10'>
+                    <button className="bg-orange-600 hover:bg-orange-500 my-10 text-white h-8 w-40 rounded-md border-none shadow-md focus:ring cursor-pointer" onClick={() => {setModalOpen(true)}} type='button' id='btn-open-modal'>Añadir Mascota</button>
+                    <button className="bg-orange-600 hover:bg-orange-500 my-10 text-white h-8 w-40 rounded-md border-none shadow-md focus:ring cursor-pointer" type='submit'>Enviar</button>
+                  </div>
                 </div>
-              </div>
+              )}
              
-                <div ref={modalRef} id='modal' className={`bg-white border-none w-[900px] rounded-md flex flex-col  z-20 px-10 absolute top-20 ${modalOpen ? 'flex animate__animated ' + (isAnimatingOut ? 'animate__fadeOut' : 'animate__fadeIn') : 'hidden'}`}>
+                <div ref={modalRef} id='modal' className={`bg-white border-none w-[900px] rounded-md flex flex-col  z-20 px-10 absolute top-20 ${modalOpen ? 'flex animate__animated animate__fadeIn '  : 'hidden'}`}>
                   <div>
                     <h2 className='text-[#344054] py-10'>Motivo de llegada</h2>
                     <ul className=' flex flex-row  gap-2 pl-0 list-none  text-[#344054] border-2 space-x-4 items-baseline'>
@@ -565,8 +559,8 @@ const ReceptionPage = () => {
                     <input type="datetime-local" name="datetime-local" id="datetime-local" {...register('dateForm')}  className='shadow rounded-md resize-none h-6 w-[165.6px]'/>
                   </div>
                   <div className='flex flex-row justify-between'>
-                    <button type='button' className=' bg-[#eb5b27] hover:bg-orange-500 text-white border-none rounded-3xl h-10 w-36 mb-8' onClick={() => { agregarMascota(getValues()) }}>Aceptar</button>
-                    <button type='button' className=' bg-[#eb5b27] hover:bg-orange-500 text-white border-none rounded-3xl h-10 w-36 mb-8' onClick={() => {handleCloseModal()}} id='btn-close-modal'>Cerrar</button>
+                    <button type='button' className=' bg-[#eb5b27] hover:bg-orange-500 text-white border-none rounded-3xl h-10 w-36 mb-8 cursor-pointer' onClick={() => { agregarMascota(getValues()) }}>Aceptar</button>
+                    <button type='button' className=' bg-[#eb5b27] hover:bg-orange-500 text-white border-none rounded-3xl h-10 w-36 mb-8 cursor-pointer' onClick={() => {handleCloseModal()}} id='btn-close-modal'>Cerrar</button>
                   </div>
 
                 </div>
