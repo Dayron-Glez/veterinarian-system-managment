@@ -195,11 +195,14 @@ function HistoriaPage() {
                             </p>
                           </div>
                           <div className=" flex items-end ml-8">
-                            <button className=" border-[1px] border-[#eb5b27]  hover:bg-[#eb5b27] hover:text-white hover:border-transparent text-center rounded-md h-7 px-4 text-[#eb5b27] w-24 bg-transparent">
-                              {new Date(
-                                historia.vacunaciones[0][0].fecha
-                              ).toLocaleDateString()}
-                            </button>
+                            {historia?.vacunaciones?.[0][0]?.fecha && (
+
+                              <button className=" border-[1px] border-[#eb5b27]  hover:bg-[#eb5b27] hover:text-white hover:border-transparent text-center rounded-md h-7 px-4 text-[#eb5b27] w-24 bg-transparent">
+                                {new Date(
+                                  historia.vacunaciones[0][0].fecha
+                                ).toLocaleDateString()}
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -228,11 +231,16 @@ function HistoriaPage() {
                             </p>
                           </div>
                           <div className=" flex items-end ml-8">
-                            <button className="border-[1px] border-[#eb5b27] hover:bg-[#eb5b27] hover:text-white hover:border-transparent text-center text-sm rounded-md h-7 px-4 text-[#eb5b27] mt-2 w-24 bg-transparent">
-                              {new Date(
-                                historia.desparacitaciones[0][0].fecha
-                              ).toLocaleDateString()}
-                            </button>
+                            {
+                              historia?.desparacitaciones?.[0][0]?.fecha && (
+
+                              <button className="border-[1px] border-[#eb5b27] hover:bg-[#eb5b27] hover:text-white hover:border-transparent text-center text-sm rounded-md h-7 px-4 text-[#eb5b27] mt-2 w-24 bg-transparent">
+                                {new Date(
+                                  historia.desparacitaciones[0][0].fecha
+                                ).toLocaleDateString()}
+                              </button>
+                              )
+                            }
                           </div>
                         </div>
                       </div>
@@ -295,11 +303,14 @@ function HistoriaPage() {
                           <p className=" text-lg">{historia?.general?.[0]?.peso}</p>
                         </div>
                         <div className=" flex items-end ml-8">
-                          <button className=" border-[1px] border-[#eb5b27]  hover:bg-[#eb5b27] hover:text-white hover:border-transparent text-center rounded-md h-7 px-4 text-[#eb5b27] w-24 bg-transparent">
-                            {new Date(
-                              historia.vacunaciones[0][0].fecha
-                            ).toLocaleDateString()}
-                          </button>
+                          {historia?.vacunaciones?.[0][0]?.fecha && (
+
+                            <button className=" border-[1px] border-[#eb5b27]  hover:bg-[#eb5b27] hover:text-white hover:border-transparent text-center rounded-md h-7 px-4 text-[#eb5b27] w-24 bg-transparent">
+                              {new Date(
+                                historia.vacunaciones[0][0].fecha
+                              ).toLocaleDateString()}
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>

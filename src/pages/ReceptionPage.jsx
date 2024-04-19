@@ -29,7 +29,7 @@ const ReceptionPage = () => {
   const { register, handleSubmit, formState: { errors }, reset, getValues, control } = useForm()
   const divRef = useRef(null);
   const modalRef = useRef(null);
- 
+  
  
   useEffect(() => {
     if (location.pathname === '/ReceptionPage') {
@@ -204,12 +204,15 @@ const ReceptionPage = () => {
           setClienteData(null);
           setMascotasData([]);
           reset();
+          console.log('mascotasData', mascotasData);
         })
         .catch(error => {
           console.error("Error en axios.post", error);
           toast.dismiss(toastId);
           toast.error('Algo falló en la petición', {position: 'top-center'});	
+          setMascotasData([]);
           reset();
+
         })
         .finally(() => {
           setLoading(false);
@@ -245,15 +248,35 @@ const ReceptionPage = () => {
 
         <nav className=' flex flex-col w-full'>
           <section className='flex flex-col h-[7vh] bg-white justify-center'>
-            <div className='flex flex-row justify-between'>
+            <div className='flex flex-row justify-between items-center'>
               <LogoComponent height={48} className=' mx-4 md:mx-8' />
-              <img height={32} width={32} src={notificationIcon} alt="notification Icon" className='mx-4 md:mx-8' />
+              <img height={28} width={28} src={notificationIcon} alt="notification Icon" className='mx-4 md:mx-8' />
             </div>
           </section>
           <div className=' flex flex-row h-[4vh] place-items-center bg-[#eb5b27]' />
         </nav>
+        
         <div className=' flex flex-row justify-between'>
 
+        {/* <div className=' flex flex-col'>
+          <aside className="flex flex-col justify-start w-[20vw]  sticky top-0 right-0 h-[85vh] ">
+            <div className="absolute w-[2px] ml-64 border-[1px] inset-0 bg-[#a4a4a4]"></div>
+            <h3 className=" mt-8 ml-6  text-[#344054]">Citas Programadas</h3>
+            <div className=" mt-1 ml-6 border-[1px] border-solid border-[#a4a4a4] h-0 w-[76%]"></div>
+            <div className="flex flex-col place-items-centers"></div>
+            <div className=' flex flex-col items-center'>
+        {mascotasData.map((mascota, index) => (
+          <MascotaAgregada
+            key={index}
+            nombre={mascota.nombre_mascota}
+            sexo={mascota.sexo}
+            raza={mascota.raza}
+            especie={mascota.especie}
+          />
+        ))}
+      </div>
+          </aside>
+          </div> */}
           <div className=' flex flex-col w-[80vw] items-center'>
 
             <ToastContainer className=' w-72 text-xl'/>
