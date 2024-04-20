@@ -3,6 +3,7 @@ import LogoComponent from "../components/LogoComponent";
 import notificationIcon from "../assets/notificationIcon.svg";
 import ECOP_IMG from "../assets/ecop_image.png";
 import ADD_IMG from "../assets/añadir.png";
+import { Link } from "react-router-dom";
 
 let fecha = new Date();
 let horas = fecha.getHours();
@@ -103,7 +104,11 @@ function HistoriaPage() {
             />
           </div>
         </section>
-        <div className="h-[4vh] bg-[#eb5b27]" />
+        <div className="h-[4vh] bg-[#eb5b27]">
+        <li className=' flex flex-row list-none ml-12'>
+              <Link to={'/DoctorPage'} className=' no-underline text-white text-lg'>Inicio</Link>
+            </li>
+        </div>
       </nav>
       <section className=" flex flex-row">
         <div className=" flex flex-col w-full ml-8">

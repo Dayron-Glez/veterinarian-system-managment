@@ -32,7 +32,19 @@ input,span {
     
 }
 
+
 #modal::backdrop {
+    background-color: rgba(0,0,0,0.10);
+    filter: drop-shadow();
+}
+
+.modals {
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.8);
+    
+}
+
+
+.modals::backdrop {
     background-color: rgba(0,0,0,0.10);
     filter: drop-shadow();
 }

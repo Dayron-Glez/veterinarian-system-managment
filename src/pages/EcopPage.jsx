@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios'
 import { useForm } from 'react-hook-form';
 import ECOP_IMG from '../assets/ecop_image.png'
 import ECOP_IMG2 from '../assets/eccop_image_2.png'
@@ -29,7 +28,7 @@ import { ToastContainer} from 'react-toastify'
 import { Link } from 'react-router-dom';
 
 const EcopPage = () => {
-  const [mascotas, setMascotas] = useState([]);
+  // const [mascotas, setMascotas] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [mascota, setMascota] = useState(null);
   const [mascotaSeleccionada, setMascotaSeleccionada] = useState(null);
@@ -84,31 +83,28 @@ const EcopPage = () => {
   minutos = minutos < 10 ? '0' + minutos : minutos;
   let strTiempo = horas + ':' + minutos + ' ' + ampm;
 
+  // useEffect(() => {
+  //   const obtenerDatos = () => {
+  //     const fechaActual = new Date().toLocaleDateString('en-CA');
+  //     console.log(fechaActual);
+  //     axios.get(`https://h3h9qmcq-8000.use2.devtunnels.ms/doctor/agenda/${fechaActual}/`)
+  //       .then(res => {
+  //         setMascotas(res.data);
+  //         setMascota(res.data[0]); // Guarda la primera mascota en el estado
+  //       })
+  //       .catch(err => console.error(err));
+  //   };
+
+  //   obtenerDatos(); // Ejecutar al montar el componente
+    
+  // }, []);
+
   useEffect(() => {
-    const obtenerDatos = () => {
-      const fechaActual = new Date().toLocaleDateString('en-CA');
-      console.log(fechaActual);
-      axios.get(`https://h3h9qmcq-8000.use2.devtunnels.ms/doctor/agenda/${fechaActual}/`)
-        .then(res => {
-          setMascotas(res.data);
-          setMascota(res.data[0]); // Guarda la primera mascota en el estado
-        })
-        .catch(err => console.error(err));
-    };
-
-    obtenerDatos(); // Ejecutar al montar el componente
-    const intervalId = setInterval(obtenerDatos, 24 * 60 * 60 * 1000); // Ejecutar cada 24 horas
-
-    return () => {
-      clearInterval(intervalId); // Limpiar el intervalo al desmontar el componente
-    };
+    const mascotaStorage = localStorage.getItem('mascotaSeleccionada');
+    if (mascotaStorage) {
+      setMascotaSeleccionada(JSON.parse(mascotaStorage));
+    }
   }, []);
-
-  const handleClick = mascota => {
-    setMascotaSeleccionada(mascota);
-  };
-
-
   const onSubmitHandler = (data) => {
     const sistemas = deseaseComponents.map((_, index) => {
       return {
@@ -192,12 +188,10 @@ const EcopPage = () => {
             </div>
           </section>
           <div className='flex flex-row h-[5vh] bg-[#eb5b27] items-center'>
-            <li className=' flex flex-row list-none mx-8'>
-              <Link className=' no-underline text-white text-lg'>Clientes</Link>
+            <li className=' flex flex-row list-none ml-12'>
+              <Link to={'/DoctorPage'} className=' no-underline text-white text-lg'>Inicio</Link>
             </li>
-            <li className=' flex flex-row list-none mx-8'>
-              <Link className=' no-underline text-white text-lg'>Mascotas</Link>
-            </li>
+            
           </div>
         </nav>
         <ToastContainer/>
@@ -342,7 +336,11 @@ const EcopPage = () => {
                 <div className=' mt-10 border-[1px] border-solid border-[#344054] h-0 ml-8 w-[95%]' />
               </section>
               <div className='flex flex-row justify-around mt-8'>
-                <button onClick={() => { reset() }} className=' rounded-3xl h-10 w-36 mb-8'>Cancelar</button>
+                <button onClick={() => { 
+                  reset();
+                  localStorage.removeItem('mascotaSeleccionada')
+                
+                }} className=' rounded-3xl h-10 w-36 mb-8'>Cancelar</button>
                 <button type='submit' className=' bg-[#eb5b27] hover:bg-orange-500 text-white border-none rounded-3xl h-10 w-36 mb-8'>Guardar</button>
               </div>
             </form>
@@ -381,7 +379,7 @@ const EcopPage = () => {
               )}
 
             </div>
-            <div className=' mt-1 border-[1px] border-solid border-[#a4a4a4] h-0 w-[95%] ml-4'></div>
+            {/* <div className=' mt-1 border-[1px] border-solid border-[#a4a4a4] h-0 w-[95%] ml-4'></div>
             <h3 className=' mt-8 ml-12 text-[#344054]'>Citas programadas</h3>
             <div className=' ml-11 mt-1 border-[1px] border-solid border-[#a4a4a4] h-0 w-[87%]'></div>
             <div className='flex flex-col place-items-centers'>
@@ -411,7 +409,7 @@ const EcopPage = () => {
                   </div>
                 </button>
               ))}
-            </div>
+            </div> */}
           </aside>
         </div>
       </div>
