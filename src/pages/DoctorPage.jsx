@@ -50,7 +50,7 @@ const DoctorPage = () => {
     setIsClicked(true);
     axios
       .get(
-        `https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/filtrar/mascota/${tutorId}/`
+        `https://mascolive.onrender.com/recepcion/filtrar/mascota/${tutorId}/`
       )
       .then((res2) => {
         setMascotaFiltrada(res2.data);
@@ -64,7 +64,7 @@ const DoctorPage = () => {
   function obtenerHistoria(mascotaId) {
     axios
       .get(
-        `https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/historia/${mascotaId}/`
+        `https://mascolive.onrender.com/recepcion/historia/${mascotaId}/`
       )
       .then((response) => {
         // Guarda los datos en el local storage en lugar de en el estado
@@ -75,7 +75,7 @@ const DoctorPage = () => {
   }
   useEffect(() => {
     const fechaActual = new Date().toLocaleDateString('en-CA');
-    axios.get(`https://h3h9qmcq-8000.use2.devtunnels.ms/doctor/searchagenda/${fechaActual}/${inputValueCitas}/`)
+    axios.get(`https://mascolive.onrender.com/doctor/searchagenda/${fechaActual}/${inputValueCitas}/`)
       .then(res => {
         console.log(res.data);
         setArregloMascotasFiltradas(res.data);
@@ -93,7 +93,7 @@ const DoctorPage = () => {
   useEffect(() => {
     axios
       .get(
-        `https://h3h9qmcq-8000.use2.devtunnels.ms/recepcion/filtrar/tutor/${inputValue}/`
+        `https://mascolive.onrender.com/recepcion/filtrar/tutor/${inputValue}/`
       )
       .then((res) => {
         setInputData(res.data);
@@ -116,7 +116,7 @@ const DoctorPage = () => {
     const obtenerDatos = () => {
       const fechaActual = new Date().toLocaleDateString('en-CA');
       console.log(fechaActual);
-      axios.get(`https://h3h9qmcq-8000.use2.devtunnels.ms/doctor/agenda/${fechaActual}/`)
+      axios.get(`https://mascolive.onrender.com/doctor/agenda/${fechaActual}/`)
         .then(res => {
           setMascotas(res.data);
         })
