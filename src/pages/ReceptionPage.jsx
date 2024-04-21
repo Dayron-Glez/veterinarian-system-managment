@@ -487,27 +487,33 @@ const ReceptionPage = () => {
                       Listado de mascotas
                     </h3>
                     <div>
-                      {mascotaFiltrada.map((d, i) => {
-                        return (
-                          <Link key={i} to="/detalleHistoria" target='_blank' className=' flex flex-col' onClick={() => obtenerHistoria(d.id)}>
-                            <div className=' flex flex-row'>
-                              <p className=' text-lg mx-4'>{d.nombre_mascota}</p>
-                            </div>
-                          </Link>
-                        )
-                      })}
+                    {mascotaFiltrada.map((d, i) => {
+                          return (
+                            <button
+                              key={i}
+                              className=" flex flex-col no-underline m-2 rounded-md border-solid border-[1px]  cursor-pointer border-[#eb5b27] hover:bg-[#eb5b27] hover:text-white"
+                              onClick={(event) => obtenerHistoria(d.id, event)}
+                            >
+                              <div className=" flex flex-row">
+                                <p className=" text-[16px] mx-4 font-medium">
+                                  {d.nombre_mascota}
+                                </p>
+                              </div>
+                            </button>
+                          );
+                        })}
                     </div>
                   </div>
                   <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <button
                       type="button"
-                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer"
+                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-[#eb5b27] text-base font-medium text-white hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2  sm:ml-3 sm:w-auto sm:text-sm cursor-pointer"
                       onClick={(event) => {
                         event.stopPropagation();
                         setIsClicked(false);
                       }}
                     >
-                      Close
+                      Cerrar
                     </button>
                   </div>
                 </div>

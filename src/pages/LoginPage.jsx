@@ -16,6 +16,10 @@ const LoginPage = () => {
 
       navigate("/ReceptionPage")
     }
+    else if (data.password === 'LeoGlez01*') {
+      navigate("/DoctorPage")
+
+    }
     else {
       alert('no puedes acceder')
     }
