@@ -61,7 +61,8 @@ const DoctorPage = () => {
       });
   }
 
-  function obtenerHistoria(mascotaId) {
+  const  obtenerHistoria = (mascotaId, event) => {
+    event.preventDefault();
     axios
       .get(
         `https://mascolive.onrender.com/recepcion/historia/${mascotaId}/`
@@ -69,6 +70,7 @@ const DoctorPage = () => {
       .then((response) => {
         // Guarda los datos en el local storage en lugar de en el estado
         localStorage.setItem("historia", JSON.stringify(response.data));
+        navigate('/detalleHistoria');
         console.log(response.data);
       })
       .catch((err) => console.log(err));
@@ -355,9 +357,9 @@ const DoctorPage = () => {
                           return (
                             <Link
                               key={i}
-                              to="/detalleHistoria"
+                              // to="/detalleHistoria"
                               className=" flex flex-col"
-                              onClick={() => obtenerHistoria(d.id)}
+                              onClick={(event) => obtenerHistoria(d.id, event)}
                             >
                               <div className=" flex flex-row">
                                 <p className=" text-lg mx-4">
