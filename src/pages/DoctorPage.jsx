@@ -1,6 +1,7 @@
 import LogoComponent from "../components/LogoComponent";
 import notificationIcon from "../assets/notificationIcon.svg";
 import {  useNavigate } from "react-router-dom";
+import {motion} from 'framer-motion'
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -171,7 +172,12 @@ const DoctorPage = () => {
   // Luego puedes llamar a esta función en tu renderizado:
   {renderMascotas()}
   return (
-    <>
+    <motion.div
+      initial={{opacity: 0}}
+      animate={{opacity: 1}}
+      exit={{opacity: 0}}
+      transition={{duration: 0.75}}
+    > 
       <nav className=" flex flex-col w-full">
         <section className="flex flex-col h-[7vh] bg-white justify-center">
           <div className="flex flex-row justify-between">
@@ -282,7 +288,7 @@ const DoctorPage = () => {
               </div>
             ) : null
           }
-          <div className=" flex flex-col justify-center place-items-center items-center w-[50%]">
+          <div className=" flex flex-col justify-center place-items-center items-center w-[60%]">
             <input
               type="text"
               onChange={(e) => setInputValue(e.target.value)}
@@ -298,9 +304,8 @@ const DoctorPage = () => {
                       Nombre del tutor
                     </th>
                     <th className=" place-self-center h-10 text-white">CI</th>
-                    <th className="  place-self-center h-10 text-white">
-                      Telefono
-                    </th>
+                    <th className="  place-self-center h-10 text-white">Teléfono</th>
+                    <th className="  place-self-center h-10 text-white">Dirección</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -323,6 +328,7 @@ const DoctorPage = () => {
                         </td>
                         <td>{d.dni}</td>
                         <td>{d.telefono}</td>
+                        <td>{d.direccion}</td>
                       </tr>
                     );
                   })}
@@ -360,9 +366,13 @@ const DoctorPage = () => {
                               className=" flex flex-col no-underline m-2 rounded-md border-solid border-[1px]  cursor-pointer border-[#eb5b27] hover:bg-[#eb5b27] hover:text-white"
                               onClick={(event) => obtenerHistoria(d.id, event)}
                             >
-                              <div className=" flex flex-row">
-                                <p className=" text-[16px] mx-4 font-medium">
+                               <div className=" flex flex-row p-1">
+                                <p className=" flex text-[16px] m font-medium items-center">
                                   {d.nombre_mascota}
+                                </p>
+                                <p className=" flex text-[16px] mx-2 font-medium items-center">/</p>
+                                <p className=" flex text-[16px]  font-medium items-center">
+                                  {d.especie}
                                 </p>
                               </div>
                             </button>
@@ -395,7 +405,7 @@ const DoctorPage = () => {
           <div className="flex flex-col place-items-centers"></div>
         </aside>
       </div>
-    </>
+    </motion.div>
   );
 };
 

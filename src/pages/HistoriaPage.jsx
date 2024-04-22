@@ -4,7 +4,7 @@ import notificationIcon from "../assets/notificationIcon.svg";
 import ECOP_IMG from "../assets/ecop_image.png";
 import ADD_IMG from "../assets/añadir.png";
 import { Link } from "react-router-dom";
-
+import {motion} from 'framer-motion'
 let fecha = new Date();
 let horas = fecha.getHours();
 let minutos = fecha.getMinutes();
@@ -53,40 +53,15 @@ function HistoriaPage() {
     };
   }, []);
 
-  // function descargarPDF() {
-  //   const doc = new jsPDF();
-
-  //   doc.text("Historia de la Mascota", 10, 10);
-  //   doc.text(`Nombre de la Mascota: ${historia.mascota[0].nombre_mascota}`, 10, 20);
-  //   doc.text(`Motivo: ${historia.general[0].motivo_consulta}`, 10, 30);
-  //   doc.text(`Consulta: ${historia.general[0].consulta}`, 10, 40);
-  //   doc.text(`Anamnesis: ${historia.general[0].anamnesis}`, 10, 50);
-  //   doc.text(`Estado Reproductivo: ${historia.general[0].estado_reproductivo}`, 10, 60);
-  //   doc.text(`Habitat: ${historia.general[0].habitat}`, 10, 70);
-  //   doc.text(`Alimentación: ${historia.general[0].alimentacion}`, 10, 80);
-  //   doc.text(`Alergia: ${historia.general[0].alergias}`, 10, 90);
-  //   doc.text(`TLLC: ${historia.general[0].tllc}`, 10, 100);
-  //   doc.text(`Pulso: ${historia.general[0].pulso}`, 10, 110);
-  //   doc.text(`FC: ${historia.general[0].fc}`, 10, 120);
-  //   doc.text(`FR: ${historia.general[0].fr}`, 10, 130);
-  //   doc.text(`Temperatura: ${historia.general[0].temperatura}`, 10, 140);
-  //   doc.text(`Peso: ${historia.general[0].peso}`, 10, 150);
-  //   doc.text(`Fecha: ${new Date(historia.general[0].fecha_consulta).toLocaleDateString()}`, 10, 160);
-  //   doc.text(`ID de la Mascota: ${historia.general[0].mascota}`, 10, 170);
-  //   doc.text(`Especie: ${historia.mascota[0].especie}`, 10, 180);
-  //   doc.text(`Raza: ${historia.mascota[0].raza}`, 10, 190);
-  //   doc.text(`Edad: ${historia.mascota[0].edad}`, 10, 200);
-  //   doc.text(`Color: ${historia.mascota[0].color}`, 10, 210);
-  //   doc.text(`Sexo: ${historia.mascota[0].sexo}`, 10, 220);
-  //   doc.text(`Nombre del Tutor: ${historia.tutor[0].nombre_tutor}`, 10, 230);
-  //   doc.text(`DNI del Tutor: ${historia.tutor[0].dni}`, 10, 240);
-  //   doc.text(`Teléfono del Tutor: ${historia.tutor[0].telefono}`, 10, 250);
-
-  //   doc.save(`historia de ${historia.mascota[0].nombre_mascota}.pdf`);
-  // }
+ 
 
   return (
-    <div className="">
+    <motion.div className=""
+      initial={{opacity: 0}}
+      animate={{opacity: 1}}
+      exit={{opacity: 0}}
+      transition={{duration: 0.75}}
+    >
       <nav className=" flex flex-col h-[14vh] w-full">
         <section className="flex flex-col h-[7vh] bg-white justify-center">
           <div className="flex flex-row justify-between">
@@ -338,7 +313,7 @@ function HistoriaPage() {
           <div className="flex flex-col place-items-centers"></div>
         </aside>
       </section>
-    </div>
+    </motion.div>
   );
 }
 

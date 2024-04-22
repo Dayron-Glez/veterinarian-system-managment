@@ -26,7 +26,7 @@ import { EstadoPComponent } from '../components/ECOP/EstadoPComponent';
 import { PasantesComponent } from '../components/ECOP/PasantesComponent';
 import { ToastContainer} from 'react-toastify'
 import { Link } from 'react-router-dom';
-
+import { motion } from 'framer-motion';
 const EcopPage = () => {
   // const [mascotas, setMascotas] = useState([]);
   // eslint-disable-next-line no-unused-vars
@@ -172,7 +172,12 @@ const EcopPage = () => {
 
   return (
     <>
-      <div className='flex flex-col'>
+      <motion.div className='flex flex-col'
+        initial={{opacity: 0}}
+        animate={{opacity: 1}}
+        exit={{opacity: 0}}
+        transition={{duration: 0.75}}
+      >
         <nav className=' flex flex-col h-[14vh] w-full'>
           <div>
 
@@ -412,7 +417,7 @@ const EcopPage = () => {
             </div> */}
           </aside>
         </div>
-      </div>
+      </motion.div>
     </>
   )
 }

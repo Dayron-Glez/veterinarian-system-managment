@@ -11,7 +11,7 @@ import ECOP_IMG2 from '../assets/eccop_image_2.png'
 import { toast, ToastContainer } from 'react-toastify'
 import Select from 'react-select'
 import CustomToast from '../components/ToastComponent';
-
+import {motion} from 'framer-motion'
 const ReceptionPage = () => {
   // eslint-disable-next-line no-unused-vars
   const [formData, setFormData] = useState([]);
@@ -343,7 +343,12 @@ const ReceptionPage = () => {
 
 
   return (
-    <>
+    <motion.div
+      initial={{opacity: 0}}
+      animate={{opacity: 1}}
+      exit={{opacity: 0}}
+      transition={{duration: 0.75}}
+    >
 
       <nav className=' flex flex-col w-full'>
         <section className='flex flex-col h-[7vh] bg-white justify-center'>
@@ -444,7 +449,7 @@ const ReceptionPage = () => {
               </div>
             ) : null
           }
-          <div className=' flex flex-col justify-center place-items-center items-center w-[50%]'>
+          <div className=' flex flex-col justify-center place-items-center items-center w-[60%]'>
 
             <input type="text" onChange={e => setInputValue(e.target.value)} className=' w-full mt-4 h-10 rounded-md border-[1px]' placeholder='Buscar por usuario' disabled={modalOpen} />
 
@@ -454,7 +459,8 @@ const ReceptionPage = () => {
                   <tr className=' text-center'>
                     <th className="  place-self-center h-10 text-white">Nombre del tutor</th>
                     <th className=" place-self-center h-10 text-white">CI</th>
-                    <th className="  place-self-center h-10 text-white">Telefono</th>
+                    <th className="  place-self-center h-10 text-white">Teléfono</th>
+                    <th className="  place-self-center h-10 text-white">Dirección</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -468,6 +474,7 @@ const ReceptionPage = () => {
                         </td>
                         <td>{d.dni}</td>
                         <td>{d.telefono}</td>
+                        <td>{d.direccion}</td>
                       </tr>
                     )
                   })}
@@ -491,12 +498,15 @@ const ReceptionPage = () => {
                           return (
                             <button
                               key={i}
-                              className=" flex flex-col no-underline m-2 rounded-md border-solid border-[1px]  cursor-pointer border-[#eb5b27] hover:bg-[#eb5b27] hover:text-white"
-                              onClick={(event) => obtenerHistoria(d.id, event)}
+                              className=" flex flex-col no-underline m-2 rounded-md border-solid border-[1px]  border-[#eb5b27] bg-[#eb5b27] text-white"
                             >
-                              <div className=" flex flex-row">
-                                <p className=" text-[16px] mx-4 font-medium">
+                              <div className=" flex flex-row p-1">
+                                <p className=" flex text-[16px] m font-medium items-center">
                                   {d.nombre_mascota}
+                                </p>
+                                <p className=" flex text-[16px] mx-2 font-medium items-center">/</p>
+                                <p className=" flex text-[16px]  font-medium items-center">
+                                  {d.especie}
                                 </p>
                               </div>
                             </button>
@@ -784,7 +794,7 @@ const ReceptionPage = () => {
       {/* <DevTool control={control} /> */}
 
 
-    </>
+    </motion.div>
   )
 }
 
